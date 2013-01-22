@@ -39,8 +39,9 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(IncludePath)</IncludePath>
+    <IncludePath>L:\projects\Rain2\Rain\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
+    <SourcePath>L:\projects\Rain2\Rain\systems;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -75,6 +76,8 @@
     <ClCompile Include="util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="components\geoComponent.h" />
+    <ClInclude Include="components\renderableComponent.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="GLCheck.hpp" />
     <ClInclude Include="shader.h" />
