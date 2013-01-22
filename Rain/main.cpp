@@ -4,10 +4,11 @@
 #include <SFML/Window.hpp>
 #include <GL/glew.h>
 #include "shader.h"
-#include "include/Artemis-Cpp/EntityManager.h"
-#include "include/glm/glm.hpp"
-#include "include/glm/gtc/matrix_transform.hpp"
-#include "include/glm/gtc/type_ptr.hpp"
+#include <Artemis-Cpp/EntityManager.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include "systems/renderSystem.h"
 
 GLuint program;
 GLint attribute_coord2d;
@@ -75,22 +76,14 @@ void onDisplay(){
     glUseProgram(shader.program);
     glEnableVertexAttribArray(attribute_coord2d);
 
-    GLfloat sValues[] = {
+    GLfloat verts[] = {
       0.0f, 0.5f, 0.0f,
       -0.5f, -0.5f, 0.0f,
       0.5f, -0.5f, 0.0f
     };
 
-    glVertexAttribPointer(
-        attribute_coord2d, // attribute
-        3,                 // number of elements per vertex, here (x,y)
-        GL_FLOAT,          // the type of each element
-        GL_FALSE,          // take our values as-is
-        0,                 // no extra data between each position
-        sValues  // pointer to the C array
-    );
+    glVertexAttribPointer(attribute_coord2d,3,GL_FLOAT,GL_FALSE,0,verts);
 
-    /* Push each element in buffer_vertices to the vertex shader */
     glDrawArrays(GL_TRIANGLES, 0, 3);
     glDisableVertexAttribArray(attribute_coord2d);
 }

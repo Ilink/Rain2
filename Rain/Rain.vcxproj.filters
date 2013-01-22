@@ -29,16 +29,22 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="shader.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="GLCheck.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="util.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="shader.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\geoComponent.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="GLCheck.hpp">
+    <ClInclude Include="components\renderableComponent.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
