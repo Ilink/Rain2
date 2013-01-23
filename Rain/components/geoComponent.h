@@ -13,14 +13,14 @@ using namespace std;
 
 class GeoComponent : public artemis::Component{
 public:
-    GLuint VAO;
-    GLuint VBO;
+    GLuint vao;
+    GLuint vbo;
     int start;
     int end;
 
     // i could have the vbos and vaos as constructor parameters
     // that way the geometry manager would provide them
-    GeoComponent(int& start, int& end, GLuint& VBO, GLuint& VAO){
+    GeoComponent(int& start, int& end, GLuint& vbp, GLuint& vao){
         
     };
     ~GeoComponent(){};
