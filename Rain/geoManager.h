@@ -4,14 +4,33 @@
 #include <vector>
 #include <GL/glew.h>
 
-class GeoManager(){
+struct geo {
+	int start;
+	int end;
+	GLuint vbo;
+	vector<int> triIndex;
+};
+
+class GeoManager {
 	vector<GLuint> VBOs;
 	vector<GLuint> VAOs;
-	db index;
+	int highestVBO = 0;
+	int highestVAO = 0;
+	// need a structure to index by ID
 public:
 	GeoManager();
 	~GeoManager();
-	start, end, geo get(enum geoToFetch); // so you can draw with start end and the vbo
-}
+	int add(vector <GLfloat> verts, vector<int> triIndex); // returns an ID of the inserted geometry or -1 if fail
+	geo get(int id);
+};
+
+/*
+data structure needs to hold:
+	vbo & vao & start & end
+indexed by
+	id
+
+probably other things as well. Until I need it, im not making it!
+*/
 
 #endif

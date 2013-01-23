@@ -4,7 +4,7 @@
 #include <SFML/Window.hpp>
 #include <GL/glew.h>
 #include "shader.h"
-#include <Artemis-Cpp/EntityManager.h>
+#include <Artemis-Cpp/Artemis.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -17,53 +17,6 @@ Shader shader;
 using namespace std;
 
 int initResources(){
-    /*
-    GLint compile_ok = GL_FALSE, link_ok = GL_FALSE;
-
-    string _vs = getFileContents("shaders/vs.glsl");
-    string _fs = getFileContents("shaders/fs.glsl");
-    GLchar const *vs_source = _vs.c_str();
-    GLchar const *fs_source = _fs.c_str();
-
-    GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vs, 1, &vs_source, NULL);
-    glCompileShader(vs);
-    glGetShaderiv(vs, GL_COMPILE_STATUS, &compile_ok);
-    if (!compile_ok) {
-        fprintf(stderr, "Error in vertex shader\n");
-        return 0;
-    }
-
-    GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fs, 1, &fs_source, NULL);
-    glCompileShader(fs);
-    glGetProgramiv(fs, GL_COMPILE_STATUS, &compile_ok);
-    if (!compile_ok) {
-        fprintf(stderr, "Error in fragment shader\n");
-        return 0;
-    }
-
-    program = glCreateProgram();
-    bool loaded = shader.load("shaders/vs.glsl", "shaders/fs.glsl");
-
-    glAttachShader(program, vs);
-    glAttachShader(program, fs);
-    glLinkProgram(program);
-    glGetProgramiv(program, GL_LINK_STATUS, &link_ok);
-    if (!link_ok) {
-        fprintf(stderr, "glLinkProgram:");
-        return 0;
-    }
-
-    const char* attribute_name = "coord2d";
-    attribute_coord2d = glGetAttribLocation(program, attribute_name);
-    if (attribute_coord2d == -1) {
-        fprintf(stderr, "Could not bind attribute %s\n", attribute_name);
-        return 0;
-    }
-
-    return 1;
-    */
     bool loaded = shader.load("shaders/vs.glsl", "shaders/fs.glsl");
     return 1;
 }
