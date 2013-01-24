@@ -2,35 +2,28 @@
 #define GEOMANAGER_H
 
 #include <vector>
+#include "geo.h"
 #include <GL/glew.h>
 
-struct geo {
-	int start;
-	int end;
-	GLuint vbo;
-	vector<int> triIndex;
-};
+// struct geo {
+//     uint start;
+//     uint end;
+//     GLuint vboGeo; // ref
+//     GLuint vao; // ref
+//     vector<int> triIndex;
+// };
 
 class GeoManager {
-	vector<GLuint> VBOs;
-	vector<GLuint> VAOs;
-	int highestVBO = 0;
-	int highestVAO = 0;
-	// need a structure to index by ID
+    int highestVBO = 0;
+    int highestVAO = 0;
+    // need a structure to index by ID
 public:
-	GeoManager();
-	~GeoManager();
-	int add(vector <GLfloat> verts, vector<int> triIndex); // returns an ID of the inserted geometry or -1 if fail
-	geo get(int id);
+    vector<GLuint> vboGeos; // unused until i start doing batched geometry stuff
+    vector<GLuint> VAOs; // unused until i start doing batched geometry stuff
+    vector<geo> geometry;
+    GeoManager();
+    ~GeoManager();
+    geo getGeo(vector <GLfloat>& verts, vector<int>& triIndex);
 };
-
-/*
-data structure needs to hold:
-	vbo & vao & start & end
-indexed by
-	id
-
-probably other things as well. Until I need it, im not making it!
-*/
 
 #endif

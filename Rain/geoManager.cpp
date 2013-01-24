@@ -4,14 +4,24 @@ GeoManager::GeoManager(){
 
 }
 
-GeoManager::add(vector <GLfloat> verts, vector<int> triIndex){
-	GLuint vbo = 0;
-	GLuint vao = 0;
+// note that we do not destroy verts - they might be modified later.
+GeoManager::getGeo(vector <GLfloat>& verts, vector<GLuint>& triIndex){
+	GLuint vboGeo = highestVBO+1;
+	GLuint vao = highestVAO+1; // until i have things working i am not going to bother using VAOs
+	highestVAO++;
+	highestVBO++;
 
-	glGenBuffers(1, &vbo);
+	glGenBuffers(1, &vboGeo);
 	glGenVertexArrays(1, &vao);
 
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vboGeo);
 	glBindVertexArray(vao);
-	// this->VBOs.push(VBO);
+
+	// do the rest of the initialization..
+
+	// unused until i actually start doing batched geometry stuff
+	// this->vboGeos.push(vboGeo);
+	// this->VAOs.push(vao);
+
+	return new GeoComponent(verts, triIndex, &vbo, &triIndexBuffer, &vao);
 }
