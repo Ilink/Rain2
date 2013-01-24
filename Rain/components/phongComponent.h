@@ -2,8 +2,8 @@
 shader stuff goes here
 */
 
-#ifndef RENDERABLE_COMPONENT_H
-#define RENDERABLE_COMPONENT_H
+#ifndef PHONG_COMPONENT_H
+#define PHONG_COMPONENT_H
 
 #include "../shader.h"
 #include <GL/glew.h>
@@ -13,16 +13,17 @@ shader stuff goes here
 
 using namespace std;
 
-class RenderableComponent : public artemis::Component{
+class PhongComponent : public artemis::Component{
 public:
     Shader shader;
-    Mesh mesh;
+    const double brightness;
+    const double specularity;
 
-    RenderableComponent(const char* vsFilename, const char* fsFilename){
+    PhongComponent(const char* vsFilename, const char* fsFilename, const double& brightness, const double& specularity){
         this->shader.load(vsFilename, fsFilename);
 
     };
-    ~RenderableComponent(){};
+    ~PhongComponent(){};
 };
 
 #endif
