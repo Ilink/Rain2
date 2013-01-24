@@ -8,11 +8,27 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "systems/renderSystem.h"
+// #include "systems/renderSystem.h"
 
 GLuint program;
-GLint attribute_coord2d;
+GLint attributePos;
 Shader shader;
+
+GLfloat verts[] = {
+  0.0f, 0.5f, 0.0f,
+  -0.5f, -0.5f, 0.0f,
+  0.5f, -0.5f, 0.0f,
+  0.0f, 0.0f, 0.0f
+};
+
+GLuint indexes[] = {
+    0, 1, 2,
+    0, 2, 3
+};
+
+GLuint vao = 0;
+GLuint vbo = 0;
+GLuint vboIndexes = 0;
 
 using namespace std;
 
@@ -21,24 +37,43 @@ int initResources(){
     return 1;
 }
 
-void onDisplay(){
+void initVao(){
+    attributePos = glGetAttribLocation(shader.program, "coord2d");
+
+    glGenVertexArrays(1, &vao);
+    glGenBuffers(1, &vbo);
+    glGenBuffers(1, &vboIndexes);
+
+    glBindVertexArray(vao);
+
+    glEnableVertexAttribArray(attributePos);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+    glVertexAttribPointer(attributePos, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndexes);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3*sizeof(GLfloat), &vboIndexes, GL_STATIC_DRAW);
+
+    // cleanup here
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
     glClearColor(1.0, 1.0, 1.0, 1.0);
+}
+
+void onDisplay(){
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // glUseProgram(program);
     glUseProgram(shader.program);
-    glEnableVertexAttribArray(attribute_coord2d);
+    // glBindVertexArray(vao);
 
-    GLfloat verts[] = {
-      0.0f, 0.5f, 0.0f,
-      -0.5f, -0.5f, 0.0f,
-      0.5f, -0.5f, 0.0f
-    };
+    glBindBuffer(GL_ARRAY_BUFFER, vboIndexes);
 
-    glVertexAttribPointer(attribute_coord2d,3,GL_FLOAT,GL_FALSE,0,verts);
+    glDrawElements(GL_TRIANGLES, 1, GL_UNSIGNED_BYTE, 0);
+    // glDrawArrays(GL_TRIANGLES, 0, 3);
 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-    glDisableVertexAttribArray(attribute_coord2d);
+    // there should be cleanup here but oh well
 }
 
 void freeResources(){
@@ -66,6 +101,7 @@ int main(int argc, char* argv[]) {
     // shader.setParameter("uMVPmat",  (const float*) glm::value_ptr(MVP));
 
     initResources();
+    initVao();
 
     bool running = true;
     while (running){

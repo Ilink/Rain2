@@ -39,14 +39,14 @@ bool Shader::compile(string& _vs, string& _fs){
     if (success == GL_FALSE){
         char log[1024];
         glCheck(glGetShaderInfoLog(vertexShader, sizeof(log), 0, log));
-        cout << "Failed to compile vertex shader:" << std::endl
+        cout << "Shader: Failed to compile vertex shader:" << std::endl
                 << log << std::endl;
         glCheck(glDeleteShader(vertexShader));
         glCheck(glDeleteProgram(program));
         program = 0;
         return false;
     } else {
-        cout << "compiled vert shader?" << endl;
+        cout << "Shader: compiled vert shader" << endl;
     }
 
     // Attach the shader to the program, and delete it (not needed anymore)
@@ -64,14 +64,14 @@ bool Shader::compile(string& _vs, string& _fs){
     if (success == GL_FALSE){
         char log[1024];
         glCheck(glGetShaderInfoLog(fragmentShader, sizeof(log), 0, log));
-        cout << "Failed to compile fragment shader:" << std::endl
+        cout << "Shader: Failed to compile fragment shader:" << std::endl
                 << log << std::endl;
         glCheck(glDeleteShader(fragmentShader));
         glCheck(glDeleteProgram(program));
         program = 0;
         return false;
     } else {
-        cout << "compiled frag shader?" << endl;
+        cout << "Shader: compiled frag shader" << endl;
     }
 
     // Attach the shader to the program, and delete it (not needed anymore)
