@@ -7,7 +7,7 @@ Rendering system.
 
 #include <Artemis-Cpp/Artemis.h>
 #include "../components/geoComponent.h"
-#include "../components/renderableComponent.h"
+#include "../components/phongComponent.h"
 
 class RenderSystem : public artemis::EntityProcessingSystem {
 private:
