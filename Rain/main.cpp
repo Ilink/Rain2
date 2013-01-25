@@ -23,7 +23,7 @@ GLfloat verts[] = {
 
 GLuint indexes[] = {
     0, 1, 2,
-    0, 2, 3
+    2, 1, 3
 };
 
 GLuint vao = 0;
@@ -37,25 +37,31 @@ int initResources(){
     return 1;
 }
 
-void initVao(){
+void init(){
     attributePos = glGetAttribLocation(shader.program, "coord2d");
 
-    glGenVertexArrays(1, &vao);
+    // VBO Setup
     glGenBuffers(1, &vbo);
-    glGenBuffers(1, &vboIndexes);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*4, verts, GL_STATIC_DRAW);
 
+    glGenBuffers(1, &vboIndexes);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndexes);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(GLfloat), &vboIndexes, GL_STATIC_DRAW);
+
+    // VAO Setup
+    glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glVertexAttribPointer(attributePos, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat), NULL);
     glEnableVertexAttribArray(attributePos);
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
-    glVertexAttribPointer(attributePos, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndexes);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3*sizeof(GLfloat), &vboIndexes, GL_STATIC_DRAW);
 
     // cleanup here
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -66,11 +72,12 @@ void onDisplay(){
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(shader.program);
-    // glBindVertexArray(vao);
+    glBindVertexArray(vao);
 
-    glBindBuffer(GL_ARRAY_BUFFER, vboIndexes);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndexes);
 
-    glDrawElements(GL_TRIANGLES, 1, GL_UNSIGNED_BYTE, 0);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    // glDrawRangeElements(GL_TRIANGLES, 0, 3, 3, GL_UNSIGNED_INT, NULL);
     // glDrawArrays(GL_TRIANGLES, 0, 3);
 
     // there should be cleanup here but oh well
@@ -101,7 +108,7 @@ int main(int argc, char* argv[]) {
     // shader.setParameter("uMVPmat",  (const float*) glm::value_ptr(MVP));
 
     initResources();
-    initVao();
+    init();
 
     bool running = true;
     while (running){
