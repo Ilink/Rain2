@@ -24,6 +24,27 @@ bool Shader::load(const char* vsFilename, const char* fsFilename){
 Shader::~Shader(){
 }
 
+// printShaderInfoLog
+// From OpenGL Shading Language 3rd Edition, p215-216
+// Display (hopefully) useful error messages if shader fails to compile
+void printShaderInfoLog(GLint shader)
+{
+    int infoLogLen = 0;
+    int charsWritten = 0;
+    GLchar *infoLog;
+ 
+    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLen);
+ 
+    if (infoLogLen > 0)
+    {
+        infoLog = new GLchar[infoLogLen];
+        // error check for fail to allocate memory omitted
+        glGetShaderInfoLog(shader, infoLogLen, &charsWritten, infoLog);
+        cout << "InfoLog : " << endl << infoLog << endl;
+        delete [] infoLog;
+    }
+}
+
 bool Shader::compile(string& _vs, string& _fs){
 	GLchar const *vs = _vs.c_str();
 	GLchar const *fs = _fs.c_str();
@@ -35,19 +56,20 @@ bool Shader::compile(string& _vs, string& _fs){
     glCheck(glCompileShader(vertexShader));
 
     // Check the compile log
-    glCheck(glGetProgramiv(vertexShader, GL_OBJECT_COMPILE_STATUS_ARB, &success));
-    if (success == GL_FALSE){
-        char log[1024];
-        glCheck(glGetShaderInfoLog(vertexShader, sizeof(log), 0, log));
-        cout << "Shader: Failed to compile vertex shader:" << std::endl
-                << log << std::endl;
-        glCheck(glDeleteShader(vertexShader));
-        glCheck(glDeleteProgram(program));
-        program = 0;
-        return false;
-    } else {
-        cout << "Shader: compiled vert shader" << endl;
-    }
+    // glCheck(glGetProgramiv(vertexShader, GL_OBJECT_COMPILE_STATUS_ARB, &success));
+    // printShaderInfoLog(vertexShader);
+    // if (success == GL_FALSE){
+    //     char log[1024];
+    //     glCheck(glGetShaderInfoLog(vertexShader, sizeof(log), 0, log));
+    //     cout << "Shader: Failed to compile vertex shader:" << std::endl
+    //             << log << std::endl;
+    //     glCheck(glDeleteShader(vertexShader));
+    //     glCheck(glDeleteProgram(program));
+    //     program = 0;
+    //     return false;
+    // } else {
+    //     cout << "Shader: compiled vert shader" << endl;
+    // }
 
     // Attach the shader to the program, and delete it (not needed anymore)
     glCheck(glAttachShader(program, vertexShader));
@@ -60,19 +82,19 @@ bool Shader::compile(string& _vs, string& _fs){
     glCheck(glCompileShader(fragmentShader));
 
     // Check the compile log
-    glCheck(glGetProgramiv(fragmentShader, GL_OBJECT_COMPILE_STATUS_ARB, &success));
-    if (success == GL_FALSE){
-        char log[1024];
-        glCheck(glGetShaderInfoLog(fragmentShader, sizeof(log), 0, log));
-        cout << "Shader: Failed to compile fragment shader:" << std::endl
-                << log << std::endl;
-        glCheck(glDeleteShader(fragmentShader));
-        glCheck(glDeleteProgram(program));
-        program = 0;
-        return false;
-    } else {
-        cout << "Shader: compiled frag shader" << endl;
-    }
+    // glCheck(glGetProgramiv(fragmentShader, GL_OBJECT_COMPILE_STATUS_ARB, &success));
+    // if (success == GL_FALSE){
+    //     char log[1024];
+    //     glCheck(glGetShaderInfoLog(fragmentShader, sizeof(log), 0, log));
+    //     cout << "Shader: Failed to compile fragment shader:" << std::endl
+    //             << log << std::endl;
+    //     glCheck(glDeleteShader(fragmentShader));
+    //     glCheck(glDeleteProgram(program));
+    //     program = 0;
+    //     return false;
+    // } else {
+    //     cout << "Shader: compiled frag shader" << endl;
+    // }
 
     // Attach the shader to the program, and delete it (not needed anymore)
     glCheck(glAttachShader(program, fragmentShader));

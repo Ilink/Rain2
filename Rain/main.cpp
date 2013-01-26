@@ -8,17 +8,19 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "main.h"
 // #include "systems/renderSystem.h"
 
 GLuint program;
 GLint attributePos;
 Shader shader;
+GLenum error;
 
 GLfloat verts[] = {
-  0.0f, 0.5f, 0.0f,
-  -0.5f, -0.5f, 0.0f,
-  0.5f, -0.5f, 0.0f,
-  0.0f, 0.0f, 0.0f
+  0.5f, 0.5f, 0.0f,
+  0.5f, 1.5f, 0.0f,
+  0.5f, 0.75f, 0.0f,
+  0.0f, 1.0f, 0.0f
 };
 
 GLuint indexes[] = {
@@ -28,7 +30,9 @@ GLuint indexes[] = {
 
 GLuint vao = 0;
 GLuint vbo = 0;
+GLuint vbo2 = 0;
 GLuint vboIndexes = 0;
+GLuint vboIndexes2 = 0;
 
 using namespace std;
 
@@ -37,27 +41,41 @@ int initResources(){
     return 1;
 }
 
+void printGlError(GLenum error){
+    fprintf(stderr, "GL Error: %s\n", glewGetErrorString(error));
+}
+
 void init(){
-    attributePos = glGetAttribLocation(shader.program, "coord2d");
+    attributePos = glGetAttribLocation(shader.program, "pos");
+    cout << attributePos << endl;
 
     // VBO Setup
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*4, verts, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*9, &verts, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0); 
 
     glGenBuffers(1, &vboIndexes);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndexes);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(GLfloat), &vboIndexes, GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     // VAO Setup
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
+
+    error = glGetError();
+    printGlError(error);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glVertexAttribPointer(attributePos, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat), NULL);
     glEnableVertexAttribArray(attributePos);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndexes);
+    //////////////////
+
+    error = glGetError();
+    printGlError(error);
 
     // cleanup here
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -65,7 +83,7 @@ void init(){
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    glClearColor(1.0, 1.0, 1.0, 1.0);
+    glClearColor(0.8, 1.0, 0.85, 1.0);
 }
 
 void onDisplay(){
@@ -74,17 +92,27 @@ void onDisplay(){
     glUseProgram(shader.program);
     glBindVertexArray(vao);
 
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndexes);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    // glDrawRangeElements(GL_TRIANGLES, 0, 3, 3, GL_UNSIGNED_INT, NULL);
+    // glDrawRangeElements(GL_TRIANGLES, 0, 3, 6, GL_UNSIGNED_INT, NULL);
     // glDrawArrays(GL_TRIANGLES, 0, 3);
 
     // there should be cleanup here but oh well
 }
 
 void freeResources(){
+    glBindVertexArray(0);
+    glDisableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glUseProgram(0);
     glDeleteProgram(program);
+    glDeleteBuffers(1, &vbo);
+    glDeleteBuffers(1, &vbo2);
+    glDeleteBuffers(1, &vboIndexes);
+    glDeleteBuffers(1, &vboIndexes2);
 }
 
 
@@ -119,6 +147,7 @@ int main(int argc, char* argv[]) {
             } else if (event.type == sf::Event::Resized){
                 glViewport(0, 0, event.size.width, event.size.height);
             }
+
             onDisplay();
             window.display();
         }

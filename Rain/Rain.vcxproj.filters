@@ -47,5 +47,8 @@
     <ClInclude Include="components\renderableComponent.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
