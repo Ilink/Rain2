@@ -80,6 +80,7 @@
     <ClInclude Include="components\renderableComponent.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="GLCheck.hpp" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>

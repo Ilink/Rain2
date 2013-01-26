@@ -1,19 +1,13 @@
 L:\PROJECTS\RAIN2\RAIN\DEBUG\GLCHECK.OBJ
+L:\PROJECTS\RAIN2\RAIN\DEBUG\MAIN.OBJ
 L:\PROJECTS\RAIN2\RAIN\DEBUG\SHADER.OBJ
 L:\PROJECTS\RAIN2\RAIN\DEBUG\UTIL.OBJ
-L:\PROJECTS\RAIN2\RAIN\DEBUG\MAIN.OBJ
-L:\PROJECTS\RAIN2\RAIN\DEBUG\RENDER.OBJ
 L:\PROJECTS\RAIN2\RAIN\DEBUG\VC100.PDB
-L:\PROJECTS\RAIN2\RAIN\DEBUG\RENDERABLECOMPONENT.OBJ
-L:\PROJECTS\RAIN2\RAIN\DEBUG\GEOCOMPONENT.OBJ
 L:\PROJECTS\RAIN2\DEBUG\RAIN.ILK
 L:\PROJECTS\RAIN2\DEBUG\RAIN.EXE
 L:\PROJECTS\RAIN2\RAIN\DEBUG\RAIN.EXE.INTERMEDIATE.MANIFEST
 L:\PROJECTS\RAIN2\DEBUG\RAIN.PDB
-L:\projects\Rain2\Rain\Debug\geoComponent.obj
 L:\projects\Rain2\Rain\Debug\GLCheck.obj
-L:\projects\Rain2\Rain\Debug\main.obj
-L:\projects\Rain2\Rain\Debug\renderableComponent.obj
 L:\projects\Rain2\Rain\Debug\shader.obj
 L:\projects\Rain2\Rain\Debug\util.obj
 L:\projects\Rain2\Rain\Debug\cl.command.1.tlog
@@ -29,3 +23,5 @@ L:\projects\Rain2\Rain\Debug\Rain.exe.intermediate.manifest
 L:\projects\Rain2\Rain\Debug\vc100.idb
 L:\projects\Rain2\Rain\Debug\vc100.pdb
 L:\projects\Rain2\Debug\Rain.pdb
+L:\projects\Rain2\Debug\Rain.exe
+L:\projects\Rain2\Debug\Rain.ilk
