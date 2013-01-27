@@ -1,17 +1,33 @@
-﻿Build started 1/25/2013 5:02:24 PM.
+﻿Build started 1/27/2013 1:32:42 AM.
      1>Project "L:\projects\Rain2\Rain\Rain.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IL:\projects\Rain\Rain\Rain\include /IL:\lib\SFML\include /ZI /nologo /W3 /WX- /Od /Oy- /D GLEW_STATIC /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IL:\projects\Rain\Rain\Rain\include /IL:\lib\SFML\include /ZI /nologo /W3 /WX- /Od /Oy- /D GLEW_STATIC /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt geoManager.cpp main.cpp
+         geoManager.cpp
+     1>l:\projects\rain2\rain\artemis-cpp\typeinfocomparator.h(17): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
+         Generating Code...
+         Skipping... (no relevant changes detected)
          main.cpp
-     1>l:\projects\rain\rain\rain\include\artemis-cpp\typeinfocomparator.h(17): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
-     1>l:\projects\rain2\rain\main.cpp(86): warning C4305: 'argument' : truncation from 'double' to 'GLclampf'
-     1>l:\projects\rain2\rain\main.cpp(86): warning C4305: 'argument' : truncation from 'double' to 'GLclampf'
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"L:\projects\Rain2\Debug\Rain.exe" /NOLOGO /LIBPATH:L:\lib\SFML\lib\Debug glew.lib "sfml-graphics-d.lib" "sfml-window-d.lib" "sfml-system-d.lib" "sfml-main-d.lib" opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\Rain.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"L:\projects\Rain2\Debug\Rain.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"L:\projects\Rain2\Debug\Rain.lib" /MACHINE:X86 Debug\GLCheck.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"L:\projects\Rain2\Debug\Rain.exe" /NOLOGO /LIBPATH:L:\lib\SFML\lib\Debug glew.lib "sfml-graphics-d.lib" "sfml-window-d.lib" "sfml-system-d.lib" "sfml-main-d.lib" opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\Rain.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"L:\projects\Rain2\Debug\Rain.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"L:\projects\Rain2\Debug\Rain.lib" /MACHINE:X86 Debug\Component.obj
+         Debug\ComponentType.obj
+         Debug\ComponentTypeManager.obj
+         Debug\DelayedEntityProcessingSystem.obj
+         Debug\DelayedEntitySystem.obj
+         Debug\Entity.obj
+         Debug\EntityManager.obj
+         Debug\EntityProcessingSystem.obj
+         Debug\EntitySystem.obj
+         Debug\GroupManager.obj
+         Debug\SystemBitManager.obj
+         Debug\SystemManager.obj
+         Debug\TagManager.obj
+         Debug\World.obj
+         Debug\geoManager.obj
+         Debug\GLCheck.obj
          Debug\main.obj
          Debug\shader.obj
+         Debug\renderSystem.obj
          Debug\util.obj
-         LINK : L:\projects\Rain2\Debug\Rain.exe not found or not built by the last incremental link; performing full link
          Rain.vcxproj -> L:\projects\Rain2\Debug\Rain.exe
        Manifest:
          C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"L:\projects\Rain2\Debug\Rain.exe;#1" /manifest Debug\Rain.exe.intermediate.manifest
@@ -19,4 +35,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.69
+Time Elapsed 00:00:00.82

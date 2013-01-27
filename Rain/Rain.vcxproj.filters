@@ -27,6 +27,54 @@
     <ClCompile Include="GLCheck.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="geoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\Component.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\ComponentType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\ComponentTypeManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\DelayedEntityProcessingSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\DelayedEntitySystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\Entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\EntityManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\EntityProcessingSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\EntitySystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\GroupManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\SystemBitManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\SystemManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\TagManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\World.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="systems\renderSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLCheck.hpp">
@@ -44,11 +92,85 @@
     <ClInclude Include="components\geoComponent.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="components\renderableComponent.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="main.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="geoManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="geo.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\phongComponent.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\Artemis.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\BitSize.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\Component.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\ComponentMapper.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\ComponentType.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\ComponentTypeManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\DelayedEntityProcessingSystem.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\DelayedEntitySystem.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\Entity.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\EntityManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\EntityProcessingSystem.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\EntitySystem.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\GroupManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\ImmutableBag.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\SystemBitManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\SystemManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\TagManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\TypeInfoComparator.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\World.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\renderSystem.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="include\Artemis-Cpp\README.md">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="Artemis-Cpp\README.md">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

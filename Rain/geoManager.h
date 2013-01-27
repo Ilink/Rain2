@@ -1,29 +1,33 @@
 #ifndef GEOMANAGER_H
 #define GEOMANAGER_H
 
-#include <vector>
-#include "geo.h"
 #include <GL/glew.h>
+#include <vector>
+// #include "geo.h"
+#include "Artemis-Cpp/Artemis.h"
+#include "components/geoComponent.h"
 
-// struct geo {
-//     uint start;
-//     uint end;
-//     GLuint vboGeo; // ref
-//     GLuint vao; // ref
-//     vector<int> triIndex;
-// };
+
+using namespace std;
+
+struct basicGeo {
+    int start;
+    int end;
+    GLuint vbo; // ref
+    GLuint vao; // ref
+    GLuint ibo; // ref
+};
 
 class GeoManager {
-    int highestVBO = 0;
-    int highestVAO = 0;
-    // need a structure to index by ID
+    // need a structure to index by ID?
 public:
-    vector<GLuint> vboGeos; // unused until i start doing batched geometry stuff
-    vector<GLuint> VAOs; // unused until i start doing batched geometry stuff
-    vector<geo> geometry;
+    vector<GLuint> VBOs;
+    vector<GLuint> VAOs;
+    vector<GLuint> IBOs;
+    //vector<geo> geometry;
     GeoManager();
     ~GeoManager();
-    geo getGeo(vector <GLfloat>& verts, vector<int>& triIndex);
+    GeoComponent* create(vector <GLfloat>& verts, vector<GLuint>& triIndex);
 };
 
 #endif
