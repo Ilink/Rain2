@@ -7,16 +7,15 @@
 #include "Artemis-Cpp/Artemis.h"
 #include "components/geoComponent.h"
 
-
 using namespace std;
 
-struct basicGeo {
-    int start;
-    int end;
-    GLuint vbo; // ref
-    GLuint vao; // ref
-    GLuint ibo; // ref
-};
+/*
+GeoManager
+This is designed to be the centralized data storage/factory for all geometry.
+Right now, I don't want to get bogged down with implementing it.
+So it just creates a new VBO and IBO every time the user calls create.
+Don't need anything fancy yet.
+*/
 
 class GeoManager {
     // need a structure to index by ID?
