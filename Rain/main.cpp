@@ -4,23 +4,27 @@
 #include <SFML/Window.hpp>
 #include <GL/glew.h>
 #include "shader.h"
-#include <Artemis-Cpp/Artemis.h>
+#include "Artemis-Cpp/Artemis.h"
+#include "systems/renderSystem.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "main.h"
-// #include "systems/renderSystem.h"
+#include "geoManager.h"
+#include <string>
+
 
 GLuint program;
 GLint attributePos;
+GLint uniformMVP;
 Shader shader;
 GLenum error;
 
 GLfloat verts[] = {
-  0.5f, 0.5f, 0.0f,
-  0.5f, 1.5f, 0.0f,
-  0.5f, 0.75f, 0.0f,
-  0.0f, 1.0f, 0.0f
+  0.5f, 0.5f, -10.0f,
+  0.5f, 0.25f, -10.0f,
+  0.5f, 0.35f, -10.0f,
+  0.0f, 0.60f, -10.0f
 };
 
 GLuint indexes[] = {
@@ -30,9 +34,15 @@ GLuint indexes[] = {
 
 GLuint vao = 0;
 GLuint vbo = 0;
-GLuint vbo2 = 0;
-GLuint vboIndexes = 0;
-GLuint vboIndexes2 = 0;
+GLuint ibo = 0;
+
+glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.f);
+glm::mat4 ViewTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+glm::mat4 ViewRotateX = glm::rotate(ViewTranslate,0.0f, glm::vec3(-1.0f, 0.0f, 0.0f));
+glm::mat4 View = glm::rotate(ViewRotateX,0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+glm::mat4 Model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
+glm::mat4 MVP = Projection;
+// glm::mat4 MVP = glm::mat4(1.0f); // identity
 
 using namespace std;
 
@@ -41,23 +51,19 @@ int initResources(){
     return 1;
 }
 
-void printGlError(GLenum error){
-    fprintf(stderr, "GL Error: %s\n", glewGetErrorString(error));
-}
-
 void init(){
     attributePos = glGetAttribLocation(shader.program, "pos");
-    cout << attributePos << endl;
+    uniformMVP = glGetUniformLocation(shader.program, "uMVPmat");
 
     // VBO Setup
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*9, &verts, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0); 
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    glGenBuffers(1, &vboIndexes);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndexes);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(GLfloat), &vboIndexes, GL_STATIC_DRAW);
+    glGenBuffers(1, &ibo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(GLfloat), &indexes, GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     // VAO Setup
@@ -71,7 +77,7 @@ void init(){
     glVertexAttribPointer(attributePos, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat), NULL);
     glEnableVertexAttribArray(attributePos);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndexes);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     //////////////////
 
     error = glGetError();
@@ -93,13 +99,19 @@ void onDisplay(){
     glBindVertexArray(vao);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndexes);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+
+    // glUniformMatrix4fv(uniformMVP, 1, FALSE, (const GLfloat*) glm::value_ptr(MVP)); 
+    glUniformMatrix4fv(uniformMVP, 1, FALSE, &MVP[0][0]);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     // glDrawRangeElements(GL_TRIANGLES, 0, 3, 6, GL_UNSIGNED_INT, NULL);
-    // glDrawArrays(GL_TRIANGLES, 0, 3);
 
-    // there should be cleanup here but oh well
+    // cleanup
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    glUseProgram(0);
 }
 
 void freeResources(){
@@ -110,9 +122,7 @@ void freeResources(){
     glUseProgram(0);
     glDeleteProgram(program);
     glDeleteBuffers(1, &vbo);
-    glDeleteBuffers(1, &vbo2);
-    glDeleteBuffers(1, &vboIndexes);
-    glDeleteBuffers(1, &vboIndexes2);
+    glDeleteBuffers(1, &ibo);
 }
 
 
@@ -120,20 +130,28 @@ int main(int argc, char* argv[]) {
     sf::Window window(sf::VideoMode(800, 600), "OpenGL");
     window.setVerticalSyncEnabled(true);
 
+    artemis::World world;
+    artemis::SystemManager * sm = world.getSystemManager();
+    RenderSystem * renderSystem = (RenderSystem*)sm->setSystem(new RenderSystem());
+    artemis::EntityManager * em = world.getEntityManager();
+
+    sm->initializeAll();
+
+    // artemis::Entity & player = em->create();
+
+    // player.addComponent(new MovementComponent(2,4));
+    // player.addComponent(new PositionComponent(0,0));
+    // player.refresh();
+    // PositionComponent * comp = (PositionComponent*)player.getComponent<PositionComponent>();
+
+
+    GeoManager geoManager;
+
     GLenum glew_status = glewInit();
     if (glew_status != GLEW_OK) {
         fprintf(stderr, "Error: %s\n", glewGetErrorString(glew_status));
         return 1;
     }
-
-    glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.f);
-    glm::mat4 ViewTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-    glm::mat4 ViewRotateX = glm::rotate(ViewTranslate,0.0f, glm::vec3(-1.0f, 0.0f, 0.0f));
-    glm::mat4 View = glm::rotate(ViewRotateX,0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::mat4 Model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
-    glm::mat4 MVP = Projection * View * Model;
-
-    // shader.setParameter("uMVPmat",  (const float*) glm::value_ptr(MVP));
 
     initResources();
     init();

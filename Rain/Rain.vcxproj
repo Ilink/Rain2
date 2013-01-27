@@ -70,19 +70,61 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Artemis-Cpp\Component.cpp" />
+    <ClCompile Include="Artemis-Cpp\ComponentType.cpp" />
+    <ClCompile Include="Artemis-Cpp\ComponentTypeManager.cpp" />
+    <ClCompile Include="Artemis-Cpp\DelayedEntityProcessingSystem.cpp" />
+    <ClCompile Include="Artemis-Cpp\DelayedEntitySystem.cpp" />
+    <ClCompile Include="Artemis-Cpp\Entity.cpp" />
+    <ClCompile Include="Artemis-Cpp\EntityManager.cpp" />
+    <ClCompile Include="Artemis-Cpp\EntityProcessingSystem.cpp" />
+    <ClCompile Include="Artemis-Cpp\EntitySystem.cpp" />
+    <ClCompile Include="Artemis-Cpp\GroupManager.cpp" />
+    <ClCompile Include="Artemis-Cpp\SystemBitManager.cpp" />
+    <ClCompile Include="Artemis-Cpp\SystemManager.cpp" />
+    <ClCompile Include="Artemis-Cpp\TagManager.cpp" />
+    <ClCompile Include="Artemis-Cpp\World.cpp" />
+    <ClCompile Include="geoManager.cpp" />
     <ClCompile Include="GLCheck.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="shader.cpp" />
+    <ClCompile Include="systems\renderSystem.cpp" />
     <ClCompile Include="util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Artemis-Cpp\Artemis.h" />
+    <ClInclude Include="Artemis-Cpp\BitSize.h" />
+    <ClInclude Include="Artemis-Cpp\Component.h" />
+    <ClInclude Include="Artemis-Cpp\ComponentMapper.h" />
+    <ClInclude Include="Artemis-Cpp\ComponentType.h" />
+    <ClInclude Include="Artemis-Cpp\ComponentTypeManager.h" />
+    <ClInclude Include="Artemis-Cpp\DelayedEntityProcessingSystem.h" />
+    <ClInclude Include="Artemis-Cpp\DelayedEntitySystem.h" />
+    <ClInclude Include="Artemis-Cpp\Entity.h" />
+    <ClInclude Include="Artemis-Cpp\EntityManager.h" />
+    <ClInclude Include="Artemis-Cpp\EntityProcessingSystem.h" />
+    <ClInclude Include="Artemis-Cpp\EntitySystem.h" />
+    <ClInclude Include="Artemis-Cpp\GroupManager.h" />
+    <ClInclude Include="Artemis-Cpp\ImmutableBag.h" />
+    <ClInclude Include="Artemis-Cpp\SystemBitManager.h" />
+    <ClInclude Include="Artemis-Cpp\SystemManager.h" />
+    <ClInclude Include="Artemis-Cpp\TagManager.h" />
+    <ClInclude Include="Artemis-Cpp\TypeInfoComparator.h" />
+    <ClInclude Include="Artemis-Cpp\World.h" />
     <ClInclude Include="components\geoComponent.h" />
-    <ClInclude Include="components\renderableComponent.h" />
+    <ClInclude Include="components\phongComponent.h" />
     <ClInclude Include="config.h" />
+    <ClInclude Include="geo.h" />
+    <ClInclude Include="geoManager.h" />
     <ClInclude Include="GLCheck.hpp" />
     <ClInclude Include="main.h" />
     <ClInclude Include="shader.h" />
+    <ClInclude Include="systems\renderSystem.h" />
     <ClInclude Include="util.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Artemis-Cpp\README.md" />
+    <None Include="include\Artemis-Cpp\README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
