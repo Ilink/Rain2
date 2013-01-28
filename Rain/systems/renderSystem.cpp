@@ -21,8 +21,26 @@ void RenderSystem::initialize(){
     phongMapper.init(*world);
 }
 
+void RenderSystem::vaoSetup(GLuint vao, GLuint vbo, GLuint ibo){
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glVertexAttribPointer(attributePos, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat), NULL);
+    glEnableVertexAttribArray(0);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+
+    error = glGetError();
+    printGlError(error);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 void RenderSystem::processEntity(artemis::Entity &e){
-    // VAO Setup & shader binding
     GLuint shader = phongMapper.get(e)->shader.program;
     GLuint vao = geoMapper.get(e)->vao;
     GLuint vbo = geoMapper.get(e)->vbo;
@@ -31,18 +49,10 @@ void RenderSystem::processEntity(artemis::Entity &e){
     GLuint attributePos = glGetAttribLocation(shader, "pos");
     GLuint uniformMVP = glGetUniformLocation(shader, "uMVPmat");
 
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao); // current vao
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glVertexAttribPointer(attributePos, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat), NULL);
-    glEnableVertexAttribArray(0);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    //////////////////
-
-    error = glGetError();
-    printGlError(error);
+    if(!geoMapper.get(e)->isVaoReady){
+        vaoSetup(vao, vbo, ibo);
+        geoMapper.get(e)->isVaoReady = true;
+    }
 
     glClear(GL_COLOR_BUFFER_BIT);
 
