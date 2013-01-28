@@ -12,7 +12,9 @@
 #include "main.h"
 #include "geoManager.h"
 #include <string>
+#include "types.h"
 
+using namespace std;
 
 GLuint program;
 GLint attributePos;
@@ -32,6 +34,9 @@ GLuint indexes[] = {
     2, 1, 3
 };
 
+vector<GLfloat> vertsVec (verts, verts + sizeof(verts) / sizeof(verts[0]) );
+vector<GLuint> indexesVec (indexes, indexes + sizeof(indexes) / sizeof(indexes[0]) );
+
 GLuint vao = 0;
 GLuint vbo = 0;
 GLuint ibo = 0;
@@ -41,10 +46,8 @@ glm::mat4 ViewTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 
 glm::mat4 ViewRotateX = glm::rotate(ViewTranslate,0.0f, glm::vec3(-1.0f, 0.0f, 0.0f));
 glm::mat4 View = glm::rotate(ViewRotateX,0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 glm::mat4 Model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
-glm::mat4 MVP = Projection;
-// glm::mat4 MVP = glm::mat4(1.0f); // identity
-
-using namespace std;
+// glm::mat4 MVP = Projection;
+glm::mat4 MVP = glm::mat4(1.0f); // identity
 
 int initResources(){
     bool loaded = shader.load("shaders/vs.glsl", "shaders/fs.glsl");
@@ -101,11 +104,14 @@ void onDisplay(){
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
-    // glUniformMatrix4fv(uniformMVP, 1, FALSE, (const GLfloat*) glm::value_ptr(MVP)); 
-    glUniformMatrix4fv(uniformMVP, 1, FALSE, &MVP[0][0]);
+    glUniformMatrix4fv(uniformMVP, 1, FALSE, (const GLfloat*) glm::value_ptr(MVP)); 
+    // glUniformMatrix4fv(uniformMVP, 1, FALSE, &MVP[0][0]);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     // glDrawRangeElements(GL_TRIANGLES, 0, 3, 6, GL_UNSIGNED_INT, NULL);
+
+    error = glGetError();
+    printGlError(error);
 
     // cleanup
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -130,28 +136,30 @@ int main(int argc, char* argv[]) {
     sf::Window window(sf::VideoMode(800, 600), "OpenGL");
     window.setVerticalSyncEnabled(true);
 
-    artemis::World world;
-    artemis::SystemManager * sm = world.getSystemManager();
-    RenderSystem * renderSystem = (RenderSystem*)sm->setSystem(new RenderSystem());
-    artemis::EntityManager * em = world.getEntityManager();
+    // note this must be called before any opengl operations
+    GLenum glew_status = glewInit();
+    if (glew_status != GLEW_OK) {
+        fprintf(stderr, "Error: %s\n", glewGetErrorString(glew_status));
+        return 1;
+    }
 
-    sm->initializeAll();
+    // GeoManager geoManager;
+    // artemis::World world;
+    // artemis::SystemManager* sm = world.getSystemManager();
+    // RenderSystem* renderSystem = (RenderSystem*)sm->setSystem(new RenderSystem());
+    // artemis::EntityManager* em = world.getEntityManager();
 
-    // artemis::Entity & player = em->create();
+    // sm->initializeAll();
 
     // player.addComponent(new MovementComponent(2,4));
     // player.addComponent(new PositionComponent(0,0));
     // player.refresh();
     // PositionComponent * comp = (PositionComponent*)player.getComponent<PositionComponent>();
 
-
-    GeoManager geoManager;
-
-    GLenum glew_status = glewInit();
-    if (glew_status != GLEW_OK) {
-        fprintf(stderr, "Error: %s\n", glewGetErrorString(glew_status));
-        return 1;
-    }
+    // artemis::Entity &square = em->create();
+    // square.addComponent(geoManager.create(vertsVec, indexesVec));
+    // square.addComponent(new PhongComponent(shader, 0, 0));
+    // square.refresh();
 
     initResources();
     init();
@@ -165,6 +173,10 @@ int main(int argc, char* argv[]) {
             } else if (event.type == sf::Event::Resized){
                 glViewport(0, 0, event.size.width, event.size.height);
             }
+
+            // world.loopStart();
+            // world.setDelta(0.0016f);
+            // renderSystem->process();
 
             onDisplay();
             window.display();

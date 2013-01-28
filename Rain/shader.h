@@ -8,12 +8,14 @@
 #include <vector>
 #include <SFML/System.hpp>
 #include "util.h"
+#include "types.h"
 
 using namespace std;
 
 class Shader {
 private:
 	bool compile(string& vs, string& fs);
+	GLenum error;
 public:
 	Shader(const char* vsFilename, const char* fsFilename);
 	Shader();

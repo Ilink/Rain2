@@ -120,10 +120,12 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="systems\renderSystem.h" />
+    <ClInclude Include="types.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Artemis-Cpp\README.md" />
+    <None Include="ClassDiagram.cd" />
     <None Include="include\Artemis-Cpp\README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

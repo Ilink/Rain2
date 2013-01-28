@@ -164,6 +164,9 @@
     <ClInclude Include="systems\renderSystem.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="types.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\Artemis-Cpp\README.md">
@@ -172,5 +175,6 @@
     <None Include="Artemis-Cpp\README.md">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

@@ -7,6 +7,7 @@ shader stuff goes here
 
 #include "../shader.h"
 #include <GL/glew.h>
+#include "../shader.h"
 #include "../Artemis-Cpp/Artemis.h"
 #include <string>
 #include <vector>
@@ -24,6 +25,13 @@ public:
        this->brightness = brightness;
        this->specularity = specularity;
        this->shader.load(vsFilename, fsFilename);
+    };
+
+    // this lets you use preloaded/compiled shaders
+    PhongComponent(Shader shader, const double& brightness, const double& specularity){
+       this->brightness = brightness;
+       this->specularity = specularity;
+       this->shader = shader;
     };
     ~PhongComponent(){};
 };
