@@ -118,5 +118,15 @@ bool Shader::compile(string& _vs, string& _fs){
         cout << "linked shaders" << endl;
     }
 
+    glBindAttribLocation(program, 0, "pos");
+    // these will be used as defaults on shaders, but have not been created yet
+    glBindAttribLocation(program, 1, "uMVPmat");
+    // glBindAttribLocation(program, 2, "InTexCoord0");
+    // glBindAttribLocation(program, 3, "InNormal");
+
+    cout << "handling binding: ";
+    error = glGetError();
+    printGlError(error);
+
     return true;
 }

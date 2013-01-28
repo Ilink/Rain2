@@ -10,12 +10,17 @@ Rendering system.
 #include "../components/phongComponent.h"
 #include <GL/glew.h>
 #include "../util.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include "../types.h"
 
 class RenderSystem : public artemis::EntityProcessingSystem {
 private:
     artemis::ComponentMapper<GeoComponent> geoMapper;
     artemis::ComponentMapper<PhongComponent> phongMapper;
     GLenum error;
+    glm::mat4 MVP;
 public:
     RenderSystem();
     virtual void initialize();

@@ -22,11 +22,14 @@ GeoComponent* GeoManager::create(vector <GLfloat>& verts, vector<GLuint>& triInd
 	glBindBuffer(GL_ARRAY_BUFFER, this->VBOs.back());
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*9, &verts, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	cout << VBOs.back() << endl;
 
 	glGenBuffers(1, &this->IBOs.back());
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->IBOs.back());
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(GLfloat), &triIndex, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	cout << IBOs.back() << endl;
+
 
 	// unused until i actually start doing batched geometry stuff
 	// this->vboGeos.push(vboGeo);

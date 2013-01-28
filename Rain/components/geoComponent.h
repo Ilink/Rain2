@@ -20,6 +20,7 @@ public:
     GLuint vao;
     int start;
     int end;
+    bool isVaoReady;
     vector<GLfloat> verts; // storage for later modification
 
     // i could have the vbos and vaos as constructor parameters
@@ -31,6 +32,9 @@ public:
         this->verts = verts;
         this->start = start;
         this->end = end;
+        // this gets set by the rendering system, not by the constructor
+        // we only want to make a single vao, and then reference that when it's ready
+        this->isVaoReady = false;
     };
     ~GeoComponent(){
 
