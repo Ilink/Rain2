@@ -39,3 +39,7 @@ GeoComponent* GeoManager::create(vector <GLfloat>& verts, vector<GLuint>& triInd
     return new GeoComponent(verts, -1, -1, this->VBOs.back(), this->IBOs.back(), this->VAOs.back());
     // return new GeoComponent(verts, -1, -1, (GLuint) 0, (GLuint) 0);
 }
+
+void GeoManager::freeAll(){
+	vector<GLuint>::iterator iter;
+}
