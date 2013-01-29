@@ -100,6 +100,11 @@ bool Shader::compile(string& _vs, string& _fs){
     glCheck(glAttachShader(program, fragmentShader));
     glCheck(glDeleteShader(fragmentShader));
     
+    glBindAttribLocation(program, 0, "pos");
+    // these will be used as defaults on shaders, but have not been created yet
+    glBindAttribLocation(program, 1, "uMVPmat");
+    // glBindAttribLocation(program, 2, "InTexCoord0");
+    // glBindAttribLocation(program, 3, "InNormal");
 
     // Link the program
     glCheck(glLinkProgram(program));
@@ -117,12 +122,6 @@ bool Shader::compile(string& _vs, string& _fs){
     } else {
         cout << "linked shaders" << endl;
     }
-
-    glBindAttribLocation(program, 0, "pos");
-    // these will be used as defaults on shaders, but have not been created yet
-    glBindAttribLocation(program, 1, "uMVPmat");
-    // glBindAttribLocation(program, 2, "InTexCoord0");
-    // glBindAttribLocation(program, 3, "InNormal");
 
     cout << "handling binding: ";
     error = glGetError();

@@ -26,17 +26,19 @@ void RenderSystem::vaoSetup(GLuint vao, GLuint vbo, GLuint ibo){
     glBindVertexArray(vao);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glVertexAttribPointer(attributePos, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat), NULL);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat), NULL);
+    error = glGetError();
+    printGlError(error);
     glEnableVertexAttribArray(0);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-
     error = glGetError();
     printGlError(error);
 
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBindVertexArray(0);
+
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+    // glDisableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
