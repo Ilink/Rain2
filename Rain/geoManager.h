@@ -27,6 +27,7 @@ public:
     GeoManager();
     ~GeoManager();
     GeoComponent* create(vector <GLfloat>& verts, vector<GLuint>& triIndex);
+    void freeAll();
 };
 
 #endif
