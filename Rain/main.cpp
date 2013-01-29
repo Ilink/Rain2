@@ -23,15 +23,22 @@ Shader shader;
 GLenum error;
 
 GLfloat verts[] = {
-  0.5f, 0.5f, -10.0f,
-  0.5f, 0.25f, -10.0f,
-  0.5f, 0.35f, -10.0f,
-  0.0f, 0.60f, -10.0f
+  -0.5f, 0.5f, 0.0f,
+  -0.5f, 0.25f, 0.0f,
+  0.5f, 0.35f, 0.0f,
+  0.0f, 0.0f, 0.0f
 };
+
+// GLfloat verts[] = {
+//     0.0f, 0.0f,  -0.4f,
+//     1.0f, 0.0f,  -0.4f,
+//     1.0f,  1.0f,  -0.4f,
+//     0.0,  1.0f,  -0.4f
+// };
 
 GLuint indexes[] = {
     0, 1, 2,
-    2, 1, 3
+    0, 2, 3
 };
 
 vector<GLfloat> vertsVec (verts, verts + sizeof(verts) / sizeof(verts[0]) );
@@ -46,8 +53,8 @@ glm::mat4 ViewTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 
 glm::mat4 ViewRotateX = glm::rotate(ViewTranslate,0.0f, glm::vec3(-1.0f, 0.0f, 0.0f));
 glm::mat4 View = glm::rotate(ViewRotateX,0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 glm::mat4 Model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
-// glm::mat4 MVP = Projection;
-glm::mat4 MVP = glm::mat4(1.0f); // identity
+glm::mat4 MVP = Projection;
+// glm::mat4 MVP = glm::mat4(1.0f); // identity
 
 int initResources(){
     bool loaded = shader.load("shaders/vs.glsl", "shaders/fs.glsl");
@@ -81,6 +88,7 @@ void init(){
     glEnableVertexAttribArray(attributePos);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBindVertexArray(0);
     //////////////////
 
     error = glGetError();
@@ -89,20 +97,23 @@ void init(){
     // cleanup here
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+    
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glDisableVertexAttribArray(0);
+    error = glGetError();
+    printGlError(error);
 
-    glClearColor(0.8, 1.0, 0.85, 1.0);
+    glClearColor(0.8, 1.0, 0.85, 1.0); 
 }
 
 void onDisplay(){
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glUseProgram(shader.program);
     glBindVertexArray(vao);
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    // glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
     glUniformMatrix4fv(uniformMVP, 1, FALSE, (const GLfloat*) glm::value_ptr(MVP)); 
     // glUniformMatrix4fv(uniformMVP, 1, FALSE, &MVP[0][0]);
@@ -110,10 +121,11 @@ void onDisplay(){
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     // glDrawRangeElements(GL_TRIANGLES, 0, 3, 6, GL_UNSIGNED_INT, NULL);
 
-    error = glGetError();
-    printGlError(error);
+    // error = glGetError();
+    // printGlError(error);
 
     // cleanup
+    // glDisableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
@@ -126,11 +138,10 @@ void freeResources(){
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glUseProgram(0);
-    glDeleteProgram(program);
+    glDeleteProgram(shader.program);
     glDeleteBuffers(1, &vbo);
     glDeleteBuffers(1, &ibo);
 }
-
 
 int main(int argc, char* argv[]) {
     sf::Window window(sf::VideoMode(800, 600), "OpenGL");
@@ -143,28 +154,29 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // GeoManager geoManager;
-    // artemis::World world;
-    // artemis::SystemManager* sm = world.getSystemManager();
-    // RenderSystem* renderSystem = (RenderSystem*)sm->setSystem(new RenderSystem());
-    // artemis::EntityManager* em = world.getEntityManager();
+    GeoManager geoManager;
+    artemis::World world;
+    artemis::SystemManager* sm = world.getSystemManager();
+    RenderSystem* renderSystem = (RenderSystem*)sm->setSystem(new RenderSystem());
+    artemis::EntityManager* em = world.getEntityManager();
 
-    // sm->initializeAll();
+    sm->initializeAll();
 
     // player.addComponent(new MovementComponent(2,4));
     // player.addComponent(new PositionComponent(0,0));
     // player.refresh();
     // PositionComponent * comp = (PositionComponent*)player.getComponent<PositionComponent>();
 
-    // artemis::Entity &square = em->create();
-    // square.addComponent(geoManager.create(vertsVec, indexesVec));
-    // square.addComponent(new PhongComponent(shader, 0, 0));
-    // square.refresh();
+    artemis::Entity &square = em->create();
+    square.addComponent(geoManager.create(vertsVec, indexesVec));
+    square.addComponent(new PhongComponent(shader, 0, 0));
+    square.refresh();
 
-    initResources();
-    init();
+    // initResources();
+    // init();
 
     bool running = true;
+
     while (running){
         sf::Event event;
         while (window.pollEvent(event)){
@@ -173,14 +185,14 @@ int main(int argc, char* argv[]) {
             } else if (event.type == sf::Event::Resized){
                 glViewport(0, 0, event.size.width, event.size.height);
             }
-
-            // world.loopStart();
-            // world.setDelta(0.0016f);
-            // renderSystem->process();
-
-            onDisplay();
-            window.display();
         }
+
+        world.loopStart();
+        world.setDelta(0.0016f);
+        renderSystem->process();
+        
+        // onDisplay();
+        window.display();
     }
 
     freeResources();
