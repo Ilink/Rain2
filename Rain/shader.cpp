@@ -55,46 +55,14 @@ bool Shader::compile(string& _vs, string& _fs){
     glCheck(glShaderSource(vertexShader, 1, &vs, NULL));
     glCheck(glCompileShader(vertexShader));
 
-    // Check the compile log
-    // glCheck(glGetProgramiv(vertexShader, GL_OBJECT_COMPILE_STATUS_ARB, &success));
-    // printShaderInfoLog(vertexShader);
-    // if (success == GL_FALSE){
-    //     char log[1024];
-    //     glCheck(glGetShaderInfoLog(vertexShader, sizeof(log), 0, log));
-    //     cout << "Shader: Failed to compile vertex shader:" << std::endl
-    //             << log << std::endl;
-    //     glCheck(glDeleteShader(vertexShader));
-    //     glCheck(glDeleteProgram(program));
-    //     program = 0;
-    //     return false;
-    // } else {
-    //     cout << "Shader: compiled vert shader" << endl;
-    // }
-
     // Attach the shader to the program, and delete it (not needed anymore)
     glCheck(glAttachShader(program, vertexShader));
-    glCheck(glDeleteShader(vertexShader));
-    
+    glCheck(glDeleteShader(vertexShader));    
 
     // Create and compile the shader
     GLhandleARB fragmentShader = glCreateShader(GL_FRAGMENT_SHADER_ARB);
     glCheck(glShaderSource(fragmentShader, 1, &fs, NULL));
     glCheck(glCompileShader(fragmentShader));
-
-    // Check the compile log
-    // glCheck(glGetProgramiv(fragmentShader, GL_OBJECT_COMPILE_STATUS_ARB, &success));
-    // if (success == GL_FALSE){
-    //     char log[1024];
-    //     glCheck(glGetShaderInfoLog(fragmentShader, sizeof(log), 0, log));
-    //     cout << "Shader: Failed to compile fragment shader:" << std::endl
-    //             << log << std::endl;
-    //     glCheck(glDeleteShader(fragmentShader));
-    //     glCheck(glDeleteProgram(program));
-    //     program = 0;
-    //     return false;
-    // } else {
-    //     cout << "Shader: compiled frag shader" << endl;
-    // }
 
     // Attach the shader to the program, and delete it (not needed anymore)
     glCheck(glAttachShader(program, fragmentShader));
@@ -102,9 +70,8 @@ bool Shader::compile(string& _vs, string& _fs){
     
     glBindAttribLocation(program, 0, "pos");
     // these will be used as defaults on shaders, but have not been created yet
-    glBindAttribLocation(program, 1, "uMVPmat");
-    // glBindAttribLocation(program, 2, "InTexCoord0");
-    // glBindAttribLocation(program, 3, "InNormal");
+    // glBindAttribLocation(program, 1, "InTexCoord0");
+    // glBindAttribLocation(program, 2, "InNormal");
 
     // Link the program
     glCheck(glLinkProgram(program));
