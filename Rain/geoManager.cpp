@@ -30,6 +30,8 @@ GeoComponent* GeoManager::create(vector <GLfloat>& verts, vector<GLuint>& triInd
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	// cout << IBOs.back() << endl;
 
+	error = glGetError();
+    printGlError(error);
 
 	// unused until i actually start doing batched geometry stuff
 	// this->vboGeos.push(vboGeo);

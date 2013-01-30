@@ -6,6 +6,7 @@
 // #include "geo.h"
 #include "Artemis-Cpp/Artemis.h"
 #include "components/geoComponent.h"
+#include "util.h"
 
 using namespace std;
 
@@ -18,6 +19,7 @@ Don't need anything fancy yet.
 */
 
 class GeoManager {
+    GLenum error;
     // need a structure to index by ID?
 public:
     vector<GLuint> VBOs;
