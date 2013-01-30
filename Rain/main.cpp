@@ -56,11 +56,6 @@ glm::mat4 Model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
 glm::mat4 MVP = Projection;
 // glm::mat4 MVP = glm::mat4(1.0f); // identity
 
-int initResources(){
-    bool loaded = shader.load("shaders/vs.glsl", "shaders/fs.glsl");
-    return 1;
-}
-
 void init(){
     attributePos = glGetAttribLocation(shader.program, "pos");
     uniformMVP = glGetUniformLocation(shader.program, "uMVPmat");
@@ -152,6 +147,8 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    shader.load("shaders/vs.glsl", "shaders/fs.glsl");
+
     GeoManager geoManager;
     artemis::World world;
     artemis::SystemManager* sm = world.getSystemManager();
@@ -159,11 +156,6 @@ int main(int argc, char* argv[]) {
     artemis::EntityManager* em = world.getEntityManager();
 
     sm->initializeAll();
-
-    // player.addComponent(new MovementComponent(2,4));
-    // player.addComponent(new PositionComponent(0,0));
-    // player.refresh();
-    // PositionComponent * comp = (PositionComponent*)player.getComponent<PositionComponent>();
 
     artemis::Entity &square = em->create();
     square.addComponent(geoManager.create(vertsVec, indexesVec));
