@@ -61,8 +61,8 @@ void RenderSystem::processEntity(artemis::Entity &e){
     glUseProgram(shader);
     glBindVertexArray(vao);
 
-    // glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
     // glUniformMatrix4fv(uniformMVP, 1, FALSE, (const GLfloat*) glm::value_ptr(MVP)); 
     glUniformMatrix4fv(uniformMVP, 1, FALSE, &MVP[0][0]);
