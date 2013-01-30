@@ -1,5 +1,7 @@
 #include "renderSystem.h"
 
+// should have one system per shader
+
 RenderSystem::RenderSystem(){
     addComponentType<GeoComponent>();
     addComponentType<PhongComponent>();
