@@ -8,7 +8,7 @@
 #include <glm/glm.hpp>
 
 using namespace std;
-
+// i might need to make another one of these for the model-view part
 class TransComponent : public artemis::Component{
 public:
     glm::mat4 trans;
@@ -20,7 +20,7 @@ public:
     TransComponent(){
         this->trans = glm::mat4(1.0f); // identity
     };
-    
+
     ~TransComponent(){
 
     };
