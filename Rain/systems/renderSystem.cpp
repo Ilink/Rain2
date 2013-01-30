@@ -27,11 +27,8 @@ void RenderSystem::vaoSetup(GLuint vao, GLuint vbo, GLuint ibo){
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat), NULL);
-    error = glGetError();
-    printGlError(error);
+
     glEnableVertexAttribArray(0);
-    error = glGetError();
-    printGlError(error);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBindVertexArray(0);
@@ -39,7 +36,6 @@ void RenderSystem::vaoSetup(GLuint vao, GLuint vbo, GLuint ibo){
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glDisableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void RenderSystem::processEntity(artemis::Entity &e){
@@ -48,8 +44,12 @@ void RenderSystem::processEntity(artemis::Entity &e){
     GLuint vbo = geoMapper.get(e)->vbo;
     GLuint ibo = geoMapper.get(e)->ibo;
 
+    // this errors out
     GLuint attributePos = glGetAttribLocation(shader, "pos");
     GLuint uniformMVP = glGetUniformLocation(shader, "uMVPmat");
+
+    error = glGetError();
+    printGlError(error);
 
     if(!geoMapper.get(e)->isVaoReady){
         vaoSetup(vao, vbo, ibo);
