@@ -20,13 +20,12 @@ GeoComponent* GeoManager::create(vector <vertex>& verts, vector<GLuint>& triInde
 
     glGenBuffers(1, &this->VBOs.back());
     glBindBuffer(GL_ARRAY_BUFFER, this->VBOs.back());
-    //todo: change the 9 here to the actual number of vertexes
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertex)*4, &verts[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertex)*verts.size(), &verts[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glGenBuffers(1, &this->IBOs.back());
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->IBOs.back());
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(GLuint), &triIndex[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*triIndex.size(), &triIndex[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     error = glGetError();
