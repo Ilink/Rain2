@@ -10,10 +10,11 @@ GeoManager::~GeoManager(){
 
 }
 
-// note that we do not destroy verts - they might be modified later.
+/*
+Note that the VAO is not initialized here. It is just the first place i put it.
+It's actually initialized in the component. It shouldn't really be here at all.
+*/
 GeoComponent* GeoManager::create(vector <vertex>& verts, vector<GLuint>& triIndex){
-    // GLuint vbo, ibo, vao;
-
     this->VBOs.push_back((GLuint) this->VBOs.size()+1);
     this->IBOs.push_back((GLuint) this->IBOs.size()+1);
     this->VAOs.push_back((GLuint) this->VAOs.size()+1);
@@ -31,13 +32,21 @@ GeoComponent* GeoManager::create(vector <vertex>& verts, vector<GLuint>& triInde
     error = glGetError();
     printGlError(error);
 
-    // unused until i actually start doing batched geometry stuff
-    // this->vboGeos.push(vboGeo);
-    // this->VAOs.push(vao);
+    /*
+    something would have to store and chunk up the geometry into various VBOs. I dont know a good way of doing that.
+    group by:
+        => shader
+        => transformation matrix
 
-    // GeoComponent* geo = new GeoComponent(verts, -1, -1, this->VBOs.back(), this->IBOs.back());
+    you can still change uniforms/attributes, it just means drawing parts of the VBO at a time.
+    So it probably makes sense to group things that are similar, based upon both of those criteria.
+    For instance, a set of boxes could tkae the same shader. 
+
+    Another consideration is multiple shaders per mesh. I dont have a good way of dealing with that.
+    Right now, a single entity has a shader component and a mesh component. Can I have a list of mesh and shader components?
+    */
+
     return new GeoComponent(verts, -1, -1, this->VBOs.back(), this->IBOs.back(), this->VAOs.back());
-    // return new GeoComponent(verts, -1, -1, (GLuint) 0, (GLuint) 0);
 }
 
 void GeoManager::freeAll(){
