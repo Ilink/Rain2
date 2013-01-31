@@ -9,6 +9,14 @@ struct vertex {
     GLfloat u, v;         //Texcoord
 };
 
+struct Position {
+	double x, y, z;
+};
+
+struct Color {
+	GLfloat x, y, z;
+};
+
 #define POSATTR 0
 #define MVPUNI 1
 
