@@ -1,6 +1,16 @@
 #include "renderSystem.h"
 
-// should have one system per shader
+/*
+One system per shader
+Operates on:
+    => specific shader
+    => geometry
+    => optional texture
+
+I dont know how lighting works.
+It should have a subsystem that looks at every light entity and gathers data from them.
+I cant have the renderSystem itself look for light components because a renderable entity would never have one.
+*/
 
 RenderSystem::RenderSystem(){
     addComponentType<GeoComponent>();
