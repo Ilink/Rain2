@@ -10,6 +10,7 @@ geometry data, i dont know what else it will have
 #include "../include/Artemis-Cpp/Component.h"
 #include <Artemis-Cpp/Component.h>
 #include <vector>
+#include "../types.h"
 
 using namespace std;
 
@@ -21,11 +22,12 @@ public:
     int start;
     int end;
     bool isVaoReady;
-    vector<GLfloat> verts; // storage for later modification
+    // it doesn't really make sense to store this here, given that it isn't used and modification should happen at the level above...so it can regen VBOs etc
+    vector<vertex> verts; // storage for later modification
 
     // i could have the vbos and vaos as constructor parameters
     // that way the geometry manager would provide them
-    GeoComponent(vector <GLfloat>& verts, int start, int end, GLuint vbo, GLuint ibo, GLuint vao){
+    GeoComponent(vector <vertex>& verts, int start, int end, GLuint vbo, GLuint ibo, GLuint vao){
         this->vbo = vbo;
         this->ibo = ibo;
         this->vao = vao;

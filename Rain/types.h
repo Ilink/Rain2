@@ -6,7 +6,7 @@
 struct vertex {
     GLfloat x, y, z;        //Vertex
     GLfloat nx, ny, nz;     //Normal
-    GLfloat s0, t0;         //Texcoord
+    GLfloat u, v;         //Texcoord
 };
 
 #define POSATTR 0

@@ -13,6 +13,7 @@
 #include "geoManager.h"
 #include <string>
 #include "types.h"
+#include <vector>
 
 using namespace std;
 
@@ -36,10 +37,17 @@ GLfloat verts[] = {
 //     0.0,  1.0f,  -0.4f
 // };
 
+/*
+    1----3
+    | \  |
+    |  \ |
+    0----2
+*/
 GLuint indexes[] = {
     0, 1, 2,
-    0, 2, 3
+    2, 1, 3
 };
+vector<vertex> verts2;
 
 vector<GLfloat> vertsVec (verts, verts + sizeof(verts) / sizeof(verts[0]) );
 vector<GLuint> indexesVec (indexes, indexes + sizeof(indexes) / sizeof(indexes[0]) );
@@ -137,6 +145,46 @@ void freeResources(){
 }
 
 int main(int argc, char* argv[]) {
+    verts2.push_back(vertex());
+    verts2[0].x = -0.5f;
+    verts2[0].y = 0.5f;
+    verts2[0].z = 0.0f;
+    verts2[0].nx = 0.0f;
+    verts2[0].ny = 0.0f;
+    verts2[0].nz = 0.0f;
+    verts2[0].u = 0.0f;
+    verts2[0].v = 0.0f;
+
+    verts2.push_back(vertex());
+    verts2[1].x = -0.5f;
+    verts2[1].y = 0.25f;
+    verts2[1].z = 0.0f;
+    verts2[1].nx = 0.0f;
+    verts2[1].ny = 0.0f;
+    verts2[1].nz = 0.0f;
+    verts2[1].u = 0.0f;
+    verts2[1].v = 0.0f;
+
+    verts2.push_back(vertex());
+    verts2[2].x = 0.5f;
+    verts2[2].y = 0.35f;
+    verts2[2].z = 0.0f;
+    verts2[2].nx = 0.0f;
+    verts2[2].ny = 0.0f;
+    verts2[2].nz = 0.0f;
+    verts2[2].u = 0.0f;
+    verts2[2].v = 0.0f;
+
+    verts2.push_back(vertex());
+    verts2[3].x = 0.0f;
+    verts2[3].y = 0.0f;
+    verts2[3].z = 0.0f;
+    verts2[3].nx = 0.0f;
+    verts2[3].ny = 0.0f;
+    verts2[3].nz = 0.0f;
+    verts2[3].u = 0.0f;
+    verts2[3].v = 0.0f;
+
     sf::Window window(sf::VideoMode(800, 600), "OpenGL");
     window.setVerticalSyncEnabled(true);
 
@@ -158,7 +206,7 @@ int main(int argc, char* argv[]) {
     sm->initializeAll();
 
     artemis::Entity &square = em->create();
-    square.addComponent(geoManager.create(vertsVec, indexesVec));
+    square.addComponent(geoManager.create(verts2, indexesVec));
     square.addComponent(new PhongComponent(shader, 0, 0));
     square.refresh();
 

@@ -167,6 +167,9 @@
     <ClInclude Include="types.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="components\transComponent.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\Artemis-Cpp\README.md">
