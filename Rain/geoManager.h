@@ -7,6 +7,7 @@
 #include "Artemis-Cpp/Artemis.h"
 #include "components/geoComponent.h"
 #include "util.h"
+#include "types.h"
 
 using namespace std;
 
@@ -28,7 +29,7 @@ public:
     //vector<geo> geometry;
     GeoManager();
     ~GeoManager();
-    GeoComponent* create(vector <GLfloat>& verts, vector<GLuint>& triIndex);
+    GeoComponent* create(vector <vertex>& verts, vector<GLuint>& triIndex);
     void freeAll();
 };
 

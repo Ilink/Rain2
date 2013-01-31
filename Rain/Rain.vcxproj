@@ -113,6 +113,7 @@
     <ClInclude Include="Artemis-Cpp\World.h" />
     <ClInclude Include="components\geoComponent.h" />
     <ClInclude Include="components\phongComponent.h" />
+    <ClInclude Include="components\transComponent.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="geo.h" />
     <ClInclude Include="geoManager.h" />
