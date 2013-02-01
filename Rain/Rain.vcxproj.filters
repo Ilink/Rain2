@@ -75,6 +75,9 @@
     <ClCompile Include="systems\renderSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="normals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLCheck.hpp">
@@ -169,6 +172,12 @@
     </ClInclude>
     <ClInclude Include="components\transComponent.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="normals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\pointLightComponent.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
