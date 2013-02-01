@@ -87,6 +87,7 @@
     <ClCompile Include="geoManager.cpp" />
     <ClCompile Include="GLCheck.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="normals.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="systems\renderSystem.cpp" />
     <ClCompile Include="util.cpp" />
@@ -113,12 +114,14 @@
     <ClInclude Include="Artemis-Cpp\World.h" />
     <ClInclude Include="components\geoComponent.h" />
     <ClInclude Include="components\phongComponent.h" />
+    <ClInclude Include="components\pointLightComponent.h" />
     <ClInclude Include="components\transComponent.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="geo.h" />
     <ClInclude Include="geoManager.h" />
     <ClInclude Include="GLCheck.hpp" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="normals.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="systems\renderSystem.h" />
     <ClInclude Include="types.h" />
