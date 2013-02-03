@@ -13,3 +13,4 @@ void printGlError(GLenum error){
     // if(string != '')
     fprintf(stderr, "GL Error: %s\n", glewGetErrorString(error));
 }
+

@@ -14,6 +14,7 @@
 #include <string>
 #include "types.h"
 #include <vector>
+#include "normals.h"
 
 using namespace std;
 
@@ -177,6 +178,8 @@ int main(int argc, char* argv[]) {
     verts2[3].nz = 0.0f;
     verts2[3].u = 0.0f;
     verts2[3].v = 0.0f;
+
+    calcFaceNormals(verts2, indexesVec);
 
     sf::Window window(sf::VideoMode(800, 600), "OpenGL");
     window.setVerticalSyncEnabled(true);
