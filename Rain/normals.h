@@ -8,8 +8,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
+#include <stdio.h>
+#include <stdlib.h>
 
 using namespace std;
 void calcFaceNormals(vector <vertex>& verts, vector<GLuint>& triIndex);
+
 
 #endif
