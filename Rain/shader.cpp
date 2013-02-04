@@ -27,8 +27,7 @@ Shader::~Shader(){
 // printShaderInfoLog
 // From OpenGL Shading Language 3rd Edition, p215-216
 // Display (hopefully) useful error messages if shader fails to compile
-void printShaderInfoLog(GLint shader)
-{
+void printShaderInfoLog(GLint shader){
     int infoLogLen = 0;
     int charsWritten = 0;
     GLchar *infoLog;
