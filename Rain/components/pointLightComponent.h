@@ -10,17 +10,15 @@ using namespace std;
 
 class PointLightComponent : public artemis::Component {
 public:
-    Position pos;
     Color color;
     double brightness;
 
-    PointLight(Position pos, double brightness, Color color){
-        this->pos = pos;
+    PointLightComponent(double brightness, Color color){
         this->brightness = brightness;
         this->color = color;
     };
 
-    ~PointLight(){
+    ~PointLightComponent(){
 
     };
 };

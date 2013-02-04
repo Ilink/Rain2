@@ -197,6 +197,8 @@ int main(int argc, char* argv[]) {
     }
 
     shader.load("shaders/vs.glsl", "shaders/fs.glsl");
+    Shader phongShader;
+    phongShader.load("shaders/phongVs.glsl", "shaders/phongFs.glsl");
 
     GeoManager geoManager;
     artemis::World world;
