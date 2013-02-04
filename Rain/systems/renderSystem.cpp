@@ -17,12 +17,14 @@ RenderSystem::RenderSystem(){
     addComponentType<PhongComponent>();
     
     glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.f);
-    glm::mat4 ViewTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-    glm::mat4 ViewRotateX = glm::rotate(ViewTranslate,0.0f, glm::vec3(-1.0f, 0.0f, 0.0f));
+    glm::mat4 ViewTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+    glm::mat4 ViewRotateX = glm::rotate(ViewTranslate,90.0f, glm::vec3(-1.0f, 0.0f, 0.0f));
     glm::mat4 View = glm::rotate(ViewRotateX,0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
     glm::mat4 Model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
-    // MVP = Projection;
-    MVP = glm::mat4(1.0f); // identity
+    MVP = Model;
+    // MVP = glm::mat4(1.0f); // identity
+
+    rot = 0;
 
     // gl state
     glClearColor(0.8, 1.0, 0.85, 1.0);
@@ -39,9 +41,13 @@ void RenderSystem::vaoSetup(GLuint vao, GLuint vbo, GLuint ibo){
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-    // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat), NULL);
+    // Position
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), BUFFER_OFFSET(0));
     glEnableVertexAttribArray(0);
+
+    // Normals
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex),  BUFFER_OFFSET(sizeof(float)*3));
+    glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBindVertexArray(0);
@@ -49,6 +55,7 @@ void RenderSystem::vaoSetup(GLuint vao, GLuint vbo, GLuint ibo){
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
 }
 
 void RenderSystem::processEntity(artemis::Entity &e){
@@ -57,7 +64,13 @@ void RenderSystem::processEntity(artemis::Entity &e){
     GLuint vbo = geoMapper.get(e)->vbo;
     GLuint ibo = geoMapper.get(e)->ibo;
 
-    GLuint uMVPmat = glGetUniformLocationARB(shader, "uMVPmat");
+    glm::mat3 normalMatrix(MVP);
+    glm::transpose(normalMatrix);
+
+    // these need to go elsewhere, it's bad to get them every frame
+    GLuint uMVPmat = glGetUniformLocationARB(shader, "uPMatrix");
+    GLuint uMVMatrix = glGetUniformLocationARB(shader, "uMVMatrix");
+    GLuint uNormalMatrix = glGetUniformLocationARB(shader, "uNormalMatrix");
 
     if(!geoMapper.get(e)->isVaoReady){
         vaoSetup(vao, vbo, ibo);
@@ -72,8 +85,14 @@ void RenderSystem::processEntity(artemis::Entity &e){
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
+    rot += 1.1f;
+    MV = glm::rotate(MVP, rot, glm::vec3(0.5f, 1.0f, 0.0f));
+
+    glUniformMatrix3fv(uNormalMatrix, 1, false, (const GLfloat*) glm::value_ptr(normalMatrix));
+    glUniformMatrix4fv(uMVMatrix, 1, FALSE, (const GLfloat*) glm::value_ptr(MV));
     glUniformMatrix4fv(uMVPmat, 1, FALSE, (const GLfloat*) glm::value_ptr(MVP));
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
     //error = glGetError();
     //printGlError(error);
