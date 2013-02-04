@@ -135,3 +135,17 @@ void makeBox(double height, double width, double depth, vector <vertex>& verts, 
     // triIndex[30] = 20;  triIndex[31] = 21;  triIndex[32] = 22;
     // triIndex[33] = 22;  triIndex[34] = 21;  triIndex[35] = 23;
 }
+
+// i would like to have a variant of this which lets the user specify an axis of orientation
+void makePlane(double height, double width, vector <vertex>& verts, vector<GLuint>& triIndex){
+    verts.resize(4);
+    triIndex.resize(6);
+
+    verts[0].x = 0.0;           verts[0].y = 0.0;           verts[0].z = 0.0;
+    verts[1].x = width;         verts[1].y = 0.0;           verts[1].z = 0.0;
+    verts[2].x = width;         verts[2].y = height;        verts[2].z = 0.0;
+    verts[3].x = 0.0;           verts[3].y = height;        verts[3].z = 0.0;
+
+    triIndex[0] = 0;    triIndex[1] = 1;    triIndex[2] = 2;
+    triIndex[3] = 0;    triIndex[4] = 2;    triIndex[5] = 3;
+}
