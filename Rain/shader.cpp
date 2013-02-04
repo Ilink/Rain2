@@ -68,7 +68,8 @@ bool Shader::compile(string& _vs, string& _fs){
     glCheck(glDeleteShader(fragmentShader));
     
     glBindAttribLocation(program, 0, "pos");
-    // these will be used as defaults on shaders, but have not been created yet
+    glBindAttribLocation(program, 1, "normal");
+
     // glBindAttribLocation(program, 1, "InTexCoord0");
     // glBindAttribLocation(program, 2, "InNormal");
 

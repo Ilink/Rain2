@@ -21,6 +21,8 @@ private:
     artemis::ComponentMapper<PhongComponent> phongMapper;
     GLenum error;
     glm::mat4 MVP;
+    glm::mat4 MV;
+    float rot;
     void vaoSetup(GLuint vao, GLuint vbo, GLuint ibo);
 public:
     RenderSystem();
