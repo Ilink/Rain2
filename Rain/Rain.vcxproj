@@ -84,6 +84,7 @@
     <ClCompile Include="Artemis-Cpp\SystemManager.cpp" />
     <ClCompile Include="Artemis-Cpp\TagManager.cpp" />
     <ClCompile Include="Artemis-Cpp\World.cpp" />
+    <ClCompile Include="geoBuilder.cpp" />
     <ClCompile Include="geoManager.cpp" />
     <ClCompile Include="GLCheck.cpp" />
     <ClCompile Include="main.cpp" />
@@ -118,6 +119,7 @@
     <ClInclude Include="components\transComponent.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="geo.h" />
+    <ClInclude Include="geoBuilder.h" />
     <ClInclude Include="geoManager.h" />
     <ClInclude Include="GLCheck.hpp" />
     <ClInclude Include="main.h" />

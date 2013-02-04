@@ -78,6 +78,9 @@
     <ClCompile Include="normals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="geoBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLCheck.hpp">
@@ -177,6 +180,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="components\pointLightComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="geoBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

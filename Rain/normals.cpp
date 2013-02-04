@@ -55,7 +55,6 @@ void calcFaceNormals(vector <vertex>& verts, vector<GLuint>& triIndex){
 
     // find the normals for each vertex
     for(int i=0; i < triIndex.size(); i++){
-        // printf("index: %i\n", triIndex[i]);
         GLuint current = triIndex[i];
         vertex currentVert = verts[triIndex[i]];
         vector<int> adjacentNormalIndexes;
@@ -65,7 +64,6 @@ void calcFaceNormals(vector <vertex>& verts, vector<GLuint>& triIndex){
         for(int j = 0; j < triIndex.size(); j++){
             if(triIndex[j] == current) adjacentNormalIndexes.push_back(getFace(j, faceNormals));
         }
-        // printf("adjacent normal indexes size: %i\n", adjacentNormalIndexes.size());
 
         // average the normals from each face
         // this step could have weighting by angle
@@ -76,7 +74,6 @@ void calcFaceNormals(vector <vertex>& verts, vector<GLuint>& triIndex){
                currentVert.ny = currentNormal.y;
                currentVert.nz = currentNormal.z;
             } else {
-               // printf("averaging: %i\n", j);
                // printf("current normal: %f, %f, %f\n", currentNormal.x, currentNormal.y, currentNormal.z);
                currentVert.nx = currentNormal.x + currentVert.nx;
                currentVert.ny = currentNormal.y + currentVert.ny;

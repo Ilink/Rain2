@@ -15,6 +15,7 @@
 #include "types.h"
 #include <vector>
 #include "normals.h"
+#include "geoBuilder.h"
 
 using namespace std;
 
@@ -181,6 +182,10 @@ int main(int argc, char* argv[]) {
 
     calcFaceNormals(verts2, indexesVec);
 
+    vector<vertex> boxVerts;
+    vector<GLuint> boxVertIndex;
+    makeBox(1,1,-1, boxVerts, boxVertIndex);
+
     sf::Window window(sf::VideoMode(800, 600), "OpenGL");
     window.setVerticalSyncEnabled(true);
 
@@ -202,7 +207,9 @@ int main(int argc, char* argv[]) {
     sm->initializeAll();
 
     artemis::Entity &square = em->create();
-    square.addComponent(geoManager.create(verts2, indexesVec));
+    // square.addComponent(geoManager.create(verts2, indexesVec));
+    // square.addComponent(geoManager.create(verts2, indexesVec));
+    square.addComponent(geoManager.create(boxVerts, boxVertIndex));
     square.addComponent(new PhongComponent(shader, 0, 0));
     square.refresh();
 
