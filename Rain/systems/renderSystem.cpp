@@ -85,7 +85,7 @@ void RenderSystem::processEntity(artemis::Entity &e){
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
-    rot += 1.1f;
+    rot += 0.5f;
     MV = glm::rotate(MVP, rot, glm::vec3(0.5f, 1.0f, 0.0f));
 
     glUniformMatrix3fv(uNormalMatrix, 1, false, (const GLfloat*) glm::value_ptr(normalMatrix));

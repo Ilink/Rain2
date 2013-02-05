@@ -56,7 +56,7 @@ void calcFaceNormals(vector <vertex>& verts, vector<GLuint>& triIndex){
     // find the normals for each vertex
     for(int i=0; i < triIndex.size(); i++){
         GLuint current = triIndex[i];
-        vertex currentVert = verts[triIndex[i]];
+        vertex& currentVert = verts[triIndex[i]];
         vector<int> adjacentNormalIndexes;
         glm::vec3 vertNormal;
 
@@ -83,6 +83,10 @@ void calcFaceNormals(vector <vertex>& verts, vector<GLuint>& triIndex){
         currentVert.nx /= adjacentNormalIndexes.size();
         currentVert.ny /= adjacentNormalIndexes.size();
         currentVert.nz /= adjacentNormalIndexes.size();
-        printf("avg normal: %f, %f, %f\n", currentVert.nx, currentVert.ny, currentVert.nz);
+        // printf("avg normal: %f, %f, %f\n", currentVert.nx, currentVert.ny, currentVert.nz);
+    }
+
+    for(int i = 0; i < verts.size(); i++){
+        printf("avg normal %i: %f, %f, %f\n", i, verts[i].nx, verts[i].ny, verts[i].nz);
     }
 }
