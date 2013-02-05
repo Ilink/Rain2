@@ -14,6 +14,7 @@
 
 using namespace std;
 void makeBox(double height, double width, double depth, vector <vertex>& verts, vector<GLuint>& triIndex);
+void makePlane(double height, double width, double depth, vector <vertex>& verts, vector<GLuint>& triIndex);
 // geoComponent makeBox(double height, double width, double depth, vector <vertex>& verts, vector<GLuint>& triIndex);
 
 
