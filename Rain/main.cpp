@@ -6,6 +6,7 @@
 #include "shader.h"
 #include "Artemis-Cpp/Artemis.h"
 #include "systems/renderSystem.h"
+#include "systems/shadowSystem.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -78,8 +79,7 @@ void init(){
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
-    error = glGetError();
-    printGlError(error);
+    printGlError();
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glVertexAttribPointer(attributePos, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat), NULL);
@@ -89,15 +89,13 @@ void init(){
     glBindVertexArray(0);
     //////////////////
 
-    error = glGetError();
-    printGlError(error);
+    printGlError();
 
     // cleanup here
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glDisableVertexAttribArray(0);
-    error = glGetError();
-    printGlError(error);
+    printGlError();
 
     glClearColor(0.8, 1.0, 0.85, 1.0); 
 }
@@ -199,12 +197,14 @@ int main(int argc, char* argv[]) {
 
     shader.load("shaders/vs.glsl", "shaders/fs.glsl");
     Shader phongShader;
+    GLuint shadowMap = 0;
     phongShader.load("shaders/phongVs.glsl", "shaders/phongFs.glsl");
 
     GeoManager geoManager;
     artemis::World world;
     artemis::SystemManager* sm = world.getSystemManager();
     RenderSystem* renderSystem = (RenderSystem*)sm->setSystem(new RenderSystem());
+    ShadowSystem* shadowSystem = (ShadowSystem*)sm->setSystem(new ShadowSystem(shadowMap));
     artemis::EntityManager* em = world.getEntityManager();
 
     sm->initializeAll();

@@ -8,6 +8,6 @@
 #include <GL/glew.h>
 
 std::string getFileContents(const char *filename);
-void printGlError(GLenum error);
+void printGlError();
 
 #endif

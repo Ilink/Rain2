@@ -91,8 +91,7 @@ bool Shader::compile(string& _vs, string& _fs){
     }
 
     cout << "handling binding: ";
-    error = glGetError();
-    printGlError(error);
+    printGlError();
 
     return true;
 }

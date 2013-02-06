@@ -91,6 +91,7 @@
     <ClCompile Include="normals.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="systems\renderSystem.cpp" />
+    <ClCompile Include="systems\shadowSystem.cpp" />
     <ClCompile Include="util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +127,7 @@
     <ClInclude Include="normals.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="systems\renderSystem.h" />
+    <ClInclude Include="systems\shadowSystem.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>

@@ -29,8 +29,7 @@ GeoComponent* GeoManager::create(vector <vertex>& verts, vector<GLuint>& triInde
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*triIndex.size(), &triIndex[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    error = glGetError();
-    printGlError(error);
+    printGlError();
 
     /*
     something would have to store and chunk up the geometry into various VBOs. I dont know a good way of doing that.
