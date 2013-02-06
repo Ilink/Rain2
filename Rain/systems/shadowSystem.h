@@ -1,16 +1,25 @@
 #ifndef SHADOWSYSTEM_H
 #define SHADOWSYSTEM_H
 
+#include "../Artemis-Cpp/Artemis.h"
+#include "../components/geoComponent.h"
+#include "../components/phongComponent.h"
+#include <GL/glew.h>
+#include "../util.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include "../types.h"
+
 class ShadowSystem : public artemis::EntityProcessingSystem {
 private:
     artemis::ComponentMapper<GeoComponent> geoMapper;
-    artemis::ComponentMapper<PhongComponent> phongMapper;
     GLenum error;
-    glm::mat4 MVP;
-    glm::mat4 MV;
-    void vaoSetup(GLuint vao, GLuint vbo, GLuint ibo);
+    void vaoSetup(GLuint vao, GLuint vbo, GLuint ibo); // need this?
+    GLuint shadowMap;
+    GLuint fbo;
 public:
-    RenderSystem();
+    ShadowSystem(GLuint& _shadowMap);
     virtual void initialize();
     virtual void processEntity(artemis::Entity &e);
 };
