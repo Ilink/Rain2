@@ -1,4 +1,4 @@
-﻿Build started 2/5/2013 10:30:44 PM.
+﻿Build started 2/5/2013 11:18:38 PM.
      1>Project "L:\projects\Rain2\Rain\Rain.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IL:\projects\Rain\Rain\Rain\include /IL:\lib\SFML\include /ZI /nologo /W3 /WX- /Od /Oy- /D GLEW_STATIC /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt systems\shadowSystem.cpp
@@ -36,4 +36,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.54
+Time Elapsed 00:00:01.41
