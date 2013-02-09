@@ -11,8 +11,7 @@ GeoManager::~GeoManager(){
 }
 
 /*
-Note that the VAO is not initialized here. It is just the first place i put it.
-It's actually initialized in the component. It shouldn't really be here at all.
+Note that the VAO is only partially set up here. It needs to be initialized with more shader-specific stuff later.
 */
 GeoComponent* GeoManager::create(vector <vertex>& verts, vector<GLuint>& triIndex){
     this->VBOs.push_back((GLuint) this->VBOs.size()+1);
@@ -28,6 +27,8 @@ GeoComponent* GeoManager::create(vector <vertex>& verts, vector<GLuint>& triInde
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->IBOs.back());
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*triIndex.size(), &triIndex[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    glGenVertexArrays(1, &this->VAOs.back());
 
     printGlError();
 
@@ -45,7 +46,8 @@ GeoComponent* GeoManager::create(vector <vertex>& verts, vector<GLuint>& triInde
     Right now, a single entity has a shader component and a mesh component. Can I have a list of mesh and shader components?
     */
 
-    return new GeoComponent(verts, -1, -1, this->VBOs.back(), this->IBOs.back(), this->VAOs.back());
+    printf("vao from geomanager: %i, %i, %i\n", this->VAOs.back(), this->VBOs.back(), this->IBOs.back());
+    return new GeoComponent(verts, triIndex, -1, -1, this->VBOs.back(), this->IBOs.back(), this->VAOs.back());
 }
 
 void GeoManager::freeAll(){

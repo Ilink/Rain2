@@ -1,7 +1,12 @@
 #include "renderSystem.h"
 
 /*
-One system per shader
+One system per shader CATEGORY!
+a category is a set of inputs. A lot of shaders, that arent special purpose
+should follow the typical set laid out here. 
+
+I think other shaders will mostly feed into the composite system
+
 Operates on:
     => specific shader
     => geometry
@@ -36,7 +41,6 @@ void RenderSystem::initialize(){
 }
 
 void RenderSystem::vaoSetup(GLuint vao, GLuint vbo, GLuint ibo){
-    glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -74,10 +78,9 @@ void RenderSystem::processEntity(artemis::Entity &e){
 
     if(!geoMapper.get(e)->isVaoReady){
         vaoSetup(vao, vbo, ibo);
+        printf("vao: %i\n", vao);
         geoMapper.get(e)->isVaoReady = true;
     }
-
-    glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(shader);
     glBindVertexArray(vao);
@@ -92,7 +95,7 @@ void RenderSystem::processEntity(artemis::Entity &e){
     glUniformMatrix4fv(uMVMatrix, 1, FALSE, (const GLfloat*) glm::value_ptr(MV));
     glUniformMatrix4fv(uMVPmat, 1, FALSE, (const GLfloat*) glm::value_ptr(MVP));
 
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, geoMapper.get(e)->triIndex.size(), GL_UNSIGNED_INT, 0);
 
     //error = glGetError();
     //printGlError(error);
@@ -102,4 +105,6 @@ void RenderSystem::processEntity(artemis::Entity &e){
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     glUseProgram(0);
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
 }
