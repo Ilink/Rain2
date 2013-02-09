@@ -17,6 +17,7 @@
 #include <vector>
 #include "normals.h"
 #include "geoBuilder.h"
+#include "entityFactory.h"
 
 using namespace std;
 
@@ -185,6 +186,11 @@ int main(int argc, char* argv[]) {
     makeBox(1,1,-1, boxVerts, boxVertIndex);
     calcFaceNormals(boxVerts, boxVertIndex);
 
+    vector<vertex> planeVerts;
+    vector<GLuint> planeVertIndex;
+    makeBox(1,1,-1, planeVerts, planeVertIndex);
+    calcFaceNormals(planeVerts, planeVertIndex);
+
     sf::Window window(sf::VideoMode(800, 600), "OpenGL");
     window.setVerticalSyncEnabled(true);
 
@@ -201,20 +207,31 @@ int main(int argc, char* argv[]) {
     phongShader.load("shaders/phongVs.glsl", "shaders/phongFs.glsl");
 
     GeoManager geoManager;
+    // GeoFactory geoFactory;
     artemis::World world;
     artemis::SystemManager* sm = world.getSystemManager();
     RenderSystem* renderSystem = (RenderSystem*)sm->setSystem(new RenderSystem());
-    ShadowSystem* shadowSystem = (ShadowSystem*)sm->setSystem(new ShadowSystem(shadowMap));
+    // ShadowSystem* shadowSystem = (ShadowSystem*)sm->setSystem(new ShadowSystem(shadowMap));
     artemis::EntityManager* em = world.getEntityManager();
+    EntityFactory entityFactory(em, geoManager);
 
     sm->initializeAll();
 
+    artemis::Entity &plane = entityFactory.makePlaneEntity();
+    plane.addComponent(new PhongComponent(phongShader, 0, 0));
+
     artemis::Entity &square = em->create();
+    // artemis::Entity &plane = em->create();
     // square.addComponent(geoManager.create(verts2, indexesVec));
     // square.addComponent(geoManager.create(verts2, indexesVec));
     square.addComponent(geoManager.create(boxVerts, boxVertIndex));
+
     square.addComponent(new PhongComponent(phongShader, 0, 0));
+
+    
+    plane.refresh();
     square.refresh();
+    
 
     // initResources();
     // init();
@@ -222,6 +239,7 @@ int main(int argc, char* argv[]) {
     bool running = true;
 
     while (running){
+        glClear(GL_COLOR_BUFFER_BIT);
         sf::Event event;
         while (window.pollEvent(event)){
             if (event.type == sf::Event::Closed){
@@ -230,6 +248,7 @@ int main(int argc, char* argv[]) {
                 glViewport(0, 0, event.size.width, event.size.height);
             }
         }
+
 
         world.loopStart();
         world.setDelta(0.0016f);
