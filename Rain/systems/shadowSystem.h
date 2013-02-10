@@ -17,15 +17,16 @@ private:
     artemis::ComponentMapper<GeoComponent> geoMapper;
     GLenum error;
     void vaoSetup(GLuint vao, GLuint vbo, GLuint ibo); // need this?
-    GLuint shadowMap;
     GLuint fbo;
     GLuint vao;
     glm::mat4 MVP;
     glm::mat4 MV;
-    Shader shader;
+    Shader shadowShader;
+    Shader depthShader;
     float rot;
 public:
-    ShadowSystem(GLuint& _shadowMap);
+    GLuint shadowMap; // gathered later by the compositer
+    ShadowSystem();
     virtual void initialize();
     virtual void processEntity(artemis::Entity &e);
 };

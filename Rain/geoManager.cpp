@@ -46,7 +46,6 @@ GeoComponent* GeoManager::create(vector <vertex>& verts, vector<GLuint>& triInde
     Right now, a single entity has a shader component and a mesh component. Can I have a list of mesh and shader components?
     */
 
-    printf("vao from geomanager: %i, %i, %i\n", this->VAOs.back(), this->VBOs.back(), this->IBOs.back());
     return new GeoComponent(verts, triIndex, -1, -1, this->VBOs.back(), this->IBOs.back(), this->VAOs.back());
 }
 
