@@ -1,12 +1,18 @@
 #include "shadowSystem.h"
 
-ShadowSystem::ShadowSystem(GLuint& _shadowMap){
-    shader.load("shaders/shadowVs.glsl", "shaders/shadowFs.glsl");
+ShadowSystem::ShadowSystem(){
+    // Artemis Setup
+    addComponentType<GeoComponent>();
+
+    glm::mat4 Model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
+    MVP = Model;
+
+    // shadowShader.load("shaders/shadowVs.glsl", "shaders/shadowFs.glsl");
+    depthShader.load("shaders/depthVs.glsl", "shaders/depthFs.glsl");
 
     GLfloat border[]={1.0f,0.0f,0.0f,0.0f};
 
     // Texture
-    shadowMap = _shadowMap;
     glGenTextures(1, &shadowMap);
 
     glBindTexture(GL_TEXTURE_2D, shadowMap);
@@ -24,7 +30,7 @@ ShadowSystem::ShadowSystem(GLuint& _shadowMap){
     glBindTexture(GL_TEXTURE_2D, shadowMap);
 
     // FBO
-    fbo = 0;
+    // fbo = 0; // need this?
     glGenFramebuffers(1, &fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo); 
     glFramebufferTexture2D(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D,shadowMap,0);
@@ -48,54 +54,46 @@ void ShadowSystem::initialize(){
 }
 
 void ShadowSystem::processEntity(artemis::Entity &e){
+    // glViewport(0, 0, 800, 600);
+    GLuint vbo = geoMapper.get(e)->vbo;
+    GLuint ibo = geoMapper.get(e)->ibo;
 
-    //glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    // these need to go elsewhere, it's bad to get them every frame
+    //GLuint uMVPmatShadow = glGetUniformLocationARB(shadowShader.program, "uPMatrix");
+    //GLuint uMVMatrixShadow = glGetUniformLocationARB(shadowShader.program, "uMVMatrix");
+    GLuint uMVPmatDepth = glGetUniformLocationARB(depthShader.program, "uPMatrix");
+    GLuint uMVMatrixDepth = glGetUniformLocationARB(depthShader.program, "uMVMatrix");
+    //GLuint uShadowmapSampler = glGetUniformLocationARB(shadowShader.program, "uShadowmapSampler");
+    printGlError();
 
-    //// Position
-    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), BUFFER_OFFSET(0));
-    //glEnableVertexAttribArray(0);
+    glUseProgram(depthShader.program);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    //glBindVertexArray(0);
+    printGlError();
 
+    // Position
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), BUFFER_OFFSET(0));
+    glEnableVertexAttribArray(0);
 
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
+    rot += 0.5f;
+    MV = glm::rotate(MVP, rot, glm::vec3(0.5f, 1.0f, 0.0f));
 
-    // GLuint shader = phongMapper.get(e)->shader.program;
-    // // GLuint vao = geoMapper.get(e)->vao;
-    // GLuint vbo = geoMapper.get(e)->vbo;
-    // GLuint ibo = geoMapper.get(e)->ibo;
+    glUniformMatrix4fv(uMVMatrixDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(MV));
+    glUniformMatrix4fv(uMVPmatDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(MVP));
+    
+    printGlError();
+    // i think there's something not being transmitted to teh shader!
+    glDrawElements(GL_TRIANGLES, geoMapper.get(e)->triIndex.size(), GL_UNSIGNED_INT, 0);
+    printGlError(); // error here
 
-    // // these need to go elsewhere, it's bad to get them every frame
-    // GLuint uMVPmat = glGetUniformLocationARB(shader, "uPMatrix");
-    // GLuint uMVMatrix = glGetUniformLocationARB(shader, "uMVMatrix");
-
-    // // if(!geoMapper.get(e)->isVaoReady){
-    // //     vaoSetup(vao, vbo, ibo);
-    // //     geoMapper.get(e)->isVaoReady = true;
-    // // }
-
-    // glClear(GL_COLOR_BUFFER_BIT);
-
-    // glUseProgram(shader);
-    // glBindVertexArray(vao);
-
-    // glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-
-    // rot += 0.5f;
-    // MV = glm::rotate(MVP, rot, glm::vec3(0.5f, 1.0f, 0.0f));
-
-    // glUniformMatrix4fv(uMVMatrix, 1, FALSE, (const GLfloat*) glm::value_ptr(MV));
-    // glUniformMatrix4fv(uMVPmat, 1, FALSE, (const GLfloat*) glm::value_ptr(MVP));
-
-    // glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-
-    // printGlError();
-
-    // // cleanup
-    // glBindBuffer(GL_ARRAY_BUFFER, 0);
-    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    // glBindVertexArray(0);
-    // glUseProgram(0);
+    // cleanup
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    glUseProgram(0);
+    glDisableVertexAttribArray(0);
 }    

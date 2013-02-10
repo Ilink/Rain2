@@ -7,6 +7,7 @@
 #include "Artemis-Cpp/Artemis.h"
 #include "systems/renderSystem.h"
 #include "systems/shadowSystem.h"
+#include "systems/testSystem.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -203,36 +204,30 @@ int main(int argc, char* argv[]) {
 
     shader.load("shaders/vs.glsl", "shaders/fs.glsl");
     Shader phongShader;
-    GLuint shadowMap = 0;
     phongShader.load("shaders/phongVs.glsl", "shaders/phongFs.glsl");
 
     GeoManager geoManager;
-    // GeoFactory geoFactory;
     artemis::World world;
-    artemis::SystemManager* sm = world.getSystemManager();
-    RenderSystem* renderSystem = (RenderSystem*)sm->setSystem(new RenderSystem());
-    // ShadowSystem* shadowSystem = (ShadowSystem*)sm->setSystem(new ShadowSystem(shadowMap));
     artemis::EntityManager* em = world.getEntityManager();
+    artemis::SystemManager* sm = world.getSystemManager();
     EntityFactory entityFactory(em, geoManager);
-
+    // GeoFactory geoFactory;
+    
+    // RenderSystem* renderSystem = (RenderSystem*)sm->setSystem(new RenderSystem());
+    ShadowSystem* shadowSystem = (ShadowSystem*)sm->setSystem(new ShadowSystem());
+    
     sm->initializeAll();
 
     artemis::Entity &plane = entityFactory.makePlaneEntity();
     plane.addComponent(new PhongComponent(phongShader, 0, 0));
 
     artemis::Entity &square = em->create();
-    // artemis::Entity &plane = em->create();
-    // square.addComponent(geoManager.create(verts2, indexesVec));
-    // square.addComponent(geoManager.create(verts2, indexesVec));
     square.addComponent(geoManager.create(boxVerts, boxVertIndex));
-
     square.addComponent(new PhongComponent(phongShader, 0, 0));
 
-    
     plane.refresh();
     square.refresh();
     
-
     // initResources();
     // init();
 
@@ -240,6 +235,7 @@ int main(int argc, char* argv[]) {
 
     while (running){
         glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_DEPTH_BUFFER_BIT);
         sf::Event event;
         while (window.pollEvent(event)){
             if (event.type == sf::Event::Closed){
@@ -249,10 +245,10 @@ int main(int argc, char* argv[]) {
             }
         }
 
-
         world.loopStart();
         world.setDelta(0.0016f);
-        renderSystem->process();
+        shadowSystem->process();
+        // renderSystem->process();
         
         // onDisplay();
         window.display();

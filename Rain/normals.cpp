@@ -21,7 +21,7 @@ void calcFaceNormals(vector <vertex>& verts, vector<GLuint>& triIndex){
     glm::vec3 normal;
     vector<glm::vec3> faceNormals;
 
-    printf("tri index size: %i\n", triIndex.size());
+    // printf("tri index size: %i\n", triIndex.size());
 
     for(int i=0; i < triIndex.size(); i+=3){
         printf("%i\n", i);
@@ -40,8 +40,8 @@ void calcFaceNormals(vector <vertex>& verts, vector<GLuint>& triIndex){
         edgeA = vecB - vecA;
         edgeB = vecC - vecA;
 
-        printf("vecB: %f, %f, %f\n", vecA.x, vecA.y, vecA.z);
-        printf("edgeB: %f, %f, %f\n", edgeB.x, edgeB.y, edgeB.z);
+        // printf("vecB: %f, %f, %f\n", vecA.x, vecA.y, vecA.z);
+        // printf("edgeB: %f, %f, %f\n", edgeB.x, edgeB.y, edgeB.z);
         // printf("vecB: %i, %i, %i\n", verts[triIndex[i+1]].x, verts[triIndex[i+1]].z, verts[triIndex[i+1]].z);
 
         // This is the normal of the current face
@@ -49,9 +49,9 @@ void calcFaceNormals(vector <vertex>& verts, vector<GLuint>& triIndex){
         faceNormals.push_back(normal);
     }
 
-    for(int i = 0; i < faceNormals.size(); i++){
-        printf("face normal: %f, %f, %f\n", faceNormals[i].x, faceNormals[i].y, faceNormals[i].z);
-    }
+    // for(int i = 0; i < faceNormals.size(); i++){
+    //     printf("face normal: %f, %f, %f\n", faceNormals[i].x, faceNormals[i].y, faceNormals[i].z);
+    // }
 
     // find the normals for each vertex
     for(int i=0; i < triIndex.size(); i++){
@@ -86,7 +86,7 @@ void calcFaceNormals(vector <vertex>& verts, vector<GLuint>& triIndex){
         // printf("avg normal: %f, %f, %f\n", currentVert.nx, currentVert.ny, currentVert.nz);
     }
 
-    for(int i = 0; i < verts.size(); i++){
-        printf("avg normal %i: %f, %f, %f\n", i, verts[i].nx, verts[i].ny, verts[i].nz);
-    }
+    // for(int i = 0; i < verts.size(); i++){
+    //     printf("avg normal %i: %f, %f, %f\n", i, verts[i].nx, verts[i].ny, verts[i].nz);
+    // }
 }

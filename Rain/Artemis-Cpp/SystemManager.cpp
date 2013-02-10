@@ -39,12 +39,14 @@ namespace artemis {
       //If it doesn't point to an existing system
       //Check if the new system is already known
       if(bitFlag){
+        printf("system already exists!\n");
         //Delete newly made system.
         delete stm;
         //Point to existing system in bag.
         stm = bagged.get(index);
       }
       else{
+        printf("returning new system!\n");
         stm->setWorld(world);
         systems[&typeid(*stm)]  = stm;
         bagged.add(stm);
