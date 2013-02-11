@@ -105,10 +105,15 @@ void makePlane(double height, double width, vector <vertex>& verts, vector<GLuin
     verts.resize(4);
     triIndex.resize(6);
 
-    verts[0].x = 0.0;           verts[0].y = 0.0;           verts[0].z = 0.0;
-    verts[1].x = width;         verts[1].y = 0.0;           verts[1].z = 0.0;
-    verts[2].x = width;         verts[2].y = height;        verts[2].z = 0.0;
-    verts[3].x = 0.0;           verts[3].y = height;        verts[3].z = 0.0;
+    double left = -width/2.0;
+    double right = width/2.0;
+    double top = height/2.0;
+    double bottom = -height/2.0;
+
+    verts[0].x = left;          verts[0].y = bottom;           verts[0].z = 0.0;
+    verts[1].x = right;         verts[1].y = bottom;           verts[1].z = 0.0;
+    verts[2].x = right;         verts[2].y = top;              verts[2].z = 0.0;
+    verts[3].x = left;          verts[3].y = top;              verts[3].z = 0.0;
 
     triIndex[0] = 0;    triIndex[1] = 1;    triIndex[2] = 2;
     triIndex[3] = 0;    triIndex[4] = 2;    triIndex[5] = 3;

@@ -69,10 +69,8 @@ bool Shader::compile(string& _vs, string& _fs){
     
     glBindAttribLocation(program, 0, "pos");
     glBindAttribLocation(program, 1, "normal");
-
-    // glBindAttribLocation(program, 1, "InTexCoord0");
-    // glBindAttribLocation(program, 2, "InNormal");
-
+    glBindAttribLocation(program, 2, "texCoord");
+    
     // Link the program
     glCheck(glLinkProgram(program));
 
