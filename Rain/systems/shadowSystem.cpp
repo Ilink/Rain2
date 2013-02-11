@@ -7,37 +7,55 @@ ShadowSystem::ShadowSystem(){
     rot = 0;
     fbo = 0; // need this?
     shadowMap = 0;
+    colorTex = 0;
 
     glm::mat4 Model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
     MVP = Model;
 
     // shadowShader.load("shaders/shadowVs.glsl", "shaders/shadowFs.glsl");
     depthShader.load("shaders/depthVs.glsl", "shaders/depthFs.glsl");
+    glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
     GLfloat border[]={1.0f,0.0f,0.0f,0.0f};
 
-    // Texture
+    int w = 600;
+    int h = 800;
+
+    // create a RGBA color texture
+    glGenTextures(1, &colorTex);
+    glBindTexture(GL_TEXTURE_2D, colorTex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 
+                        w, h, 
+                        0, GL_RGBA, GL_UNSIGNED_BYTE,
+                        NULL); 
+     
+    // create a depth texture
     glGenTextures(1, &shadowMap);
-    // glActiveTexture(GL_TEXTURE0); 
+    glBindTexture(GL_TEXTURE_2D, shadowMap);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 
+                        w, h, 
+                        0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE,
+                        NULL);
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, shadowMap);
     
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); 
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER); 
-    glTexParameterfv(GL_TEXTURE_2D,GL_TEXTURE_BORDER_COLOR,border); 
+    // glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); 
+    // glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
+    // glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
+    // glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER); 
+    // glTexParameterfv(GL_TEXTURE_2D,GL_TEXTURE_BORDER_COLOR,border); 
     // glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_COMPARE_MODE,GL_COMPARE_REF_TO_TEXTURE); 
     // glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_COMPARE_FUNC,GL_LESS);
-
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 256, 256, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
 
     // FBO
     glGenFramebuffers(1, &fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-    // glDrawBuffer(GL_NONE);
-    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D,shadowMap,0);
 
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+                           GL_TEXTURE_2D, shadowMap, 0);
+    GLenum drawBuffers[] = {GL_NONE};
+    glDrawBuffers(1, drawBuffers);
     printGlError();
 
     GLenum FBOstatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
