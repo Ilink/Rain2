@@ -19,6 +19,7 @@
 #include "normals.h"
 #include "geoBuilder.h"
 #include "entityFactory.h"
+#include "compositeRenderer.h"
 
 using namespace std;
 
@@ -213,8 +214,11 @@ int main(int argc, char* argv[]) {
     EntityFactory entityFactory(em, geoManager);
     // GeoFactory geoFactory;
     
-    // RenderSystem* renderSystem = (RenderSystem*)sm->setSystem(new RenderSystem());
+    RenderSystem* renderSystem = (RenderSystem*)sm->setSystem(new RenderSystem());
     ShadowSystem* shadowSystem = (ShadowSystem*)sm->setSystem(new ShadowSystem());
+    vector<GLuint> passes;
+    passes.push_back(shadowSystem->shadowMap);
+    CompositeRenderer compositeRenderer(passes);
     
     sm->initializeAll();
 
@@ -234,8 +238,7 @@ int main(int argc, char* argv[]) {
     bool running = true;
 
     while (running){
-        glClear(GL_COLOR_BUFFER_BIT);
-        glClear(GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         sf::Event event;
         while (window.pollEvent(event)){
             if (event.type == sf::Event::Closed){
@@ -248,7 +251,8 @@ int main(int argc, char* argv[]) {
         world.loopStart();
         world.setDelta(0.0016f);
         shadowSystem->process();
-        // renderSystem->process();
+        renderSystem->process();
+        compositeRenderer.render();
         
         // onDisplay();
         window.display();
