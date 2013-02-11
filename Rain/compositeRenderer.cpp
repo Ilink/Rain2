@@ -5,6 +5,12 @@ CompositeRenderer::CompositeRenderer(vector<GLuint>& passes){
     vector<GLuint> planeVertIndex;
     makePlane(1,1, planeVerts, planeVertIndex);
 
+    // set texture coordinates
+    planeVerts[0].u = 0.0; planeVerts[0].v = 0.0;
+    planeVerts[0].u = 1.0; planeVerts[0].v = 0.0;
+    planeVerts[0].u = 1.0; planeVerts[0].v = 1.0;
+    planeVerts[0].u = 0.0; planeVerts[0].v = 1.0;
+
     glGenVertexArrays(1, &vao);
 
     glGenBuffers(1, &vbo);
@@ -45,10 +51,7 @@ void CompositeRenderer::render(){
         glBindTexture(GL_TEXTURE_2D, passes[i]);
 
         // pos
-        // error here
-        printGlError();
-        glVertexAttribPointer(glGetAttribLocation(texShader.program, "pos"), 3, GL_FLOAT, GL_FALSE, sizeof(vertex), BUFFER_OFFSET(0));
-        printGlError();
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), BUFFER_OFFSET(0));
         glEnableVertexAttribArray(0);
 
         // tex coordinate

@@ -252,6 +252,7 @@ int main(int argc, char* argv[]) {
         world.setDelta(0.0016f);
         shadowSystem->process();
         renderSystem->process();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         compositeRenderer.render();
         
         // onDisplay();
