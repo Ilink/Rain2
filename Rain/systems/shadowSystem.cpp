@@ -35,7 +35,7 @@ ShadowSystem::ShadowSystem(){
     // FBO
     glGenFramebuffers(1, &fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-    glDrawBuffer(GL_NONE);
+    // glDrawBuffer(GL_NONE);
     glFramebufferTexture2D(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D,shadowMap,0);
 
     printGlError();
