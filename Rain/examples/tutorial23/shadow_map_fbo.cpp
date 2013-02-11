@@ -55,7 +55,8 @@ bool ShadowMapFBO::Init(unsigned int WindowWidth, unsigned int WindowHeight)
     glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_shadowMap, 0);
 
     // Disable writes to the color buffer
-    glDrawBuffer(GL_NONE);
+    GLuint attachments[1] = { GL_COLOR_ATTACHMENT0 };
+    glDrawBuffers(1,  attachments);
 
     GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
