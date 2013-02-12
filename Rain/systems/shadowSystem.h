@@ -25,11 +25,13 @@ private:
     Shader depthShader;
     float rot;
 public:
-    GLuint shadowMap; // gathered later by the compositer
+    GLuint depthMap; // gathered later by the compositer
     GLuint colorTex;
     ShadowSystem();
     virtual void initialize();
     virtual void processEntity(artemis::Entity &e);
+    virtual void begin();
+    virtual void end();
 };
 
 #endif

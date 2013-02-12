@@ -20,6 +20,7 @@ private:
     GLuint vbo;
     GLuint ibo;
     GLuint vao;
+    GLuint texCoords;
     vector<GLuint> passes; // each pass is a texture
     Shader texShader;
 public:

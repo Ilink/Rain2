@@ -10,8 +10,7 @@ std::string getFileContents(const char *filename){
 
 void printGlError(){
     GLenum error = glGetError();
-    // string errorString = glewGetErrorString(error);
-    // if(string != '')
-    fprintf(stderr, "GL Error: %s\n", glewGetErrorString(error));
+    if(error)
+        fprintf(stderr, "GL Error: %s\n", glewGetErrorString(error));
 }
 
