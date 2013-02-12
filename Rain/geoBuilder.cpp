@@ -117,9 +117,9 @@ void makePlane(double height, double width, vector <vertex>& verts, vector<GLuin
 
     // set texture coordinates
     verts[0].u = 0.0; verts[0].v = 0.0;
-    verts[0].u = 1.0; verts[0].v = 0.0;
-    verts[0].u = 1.0; verts[0].v = 1.0;
-    verts[0].u = 0.0; verts[0].v = 1.0;
+    verts[1].u = 1.0; verts[1].v = 0.0;
+    verts[2].u = 1.0; verts[2].v = 1.0;
+    verts[3].u = 0.0; verts[3].v = 1.0;
 
     triIndex[0] = 0;    triIndex[1] = 1;    triIndex[2] = 2;
     triIndex[3] = 0;    triIndex[4] = 2;    triIndex[5] = 3;
