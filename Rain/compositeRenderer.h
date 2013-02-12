@@ -13,6 +13,7 @@
 #include <string>
 #include "shader.h"
 #include "geoBuilder.h"
+#include <SFML/Graphics/Image.hpp>
 
 class CompositeRenderer
 {
@@ -21,6 +22,8 @@ private:
     GLuint ibo;
     GLuint vao;
     GLuint texCoords;
+    GLuint tex;
+    sf::Image image;
     vector<GLuint> passes; // each pass is a texture
     Shader texShader;
 public:

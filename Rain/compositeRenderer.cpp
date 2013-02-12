@@ -5,6 +5,27 @@ CompositeRenderer::CompositeRenderer(vector<GLuint>& passes){
     vector<GLuint> planeVertIndex;
     makePlane(2,2, planeVerts, planeVertIndex);
 
+    // temp texture
+    if(!image.loadFromFile("textures/tex2.jpg")){
+        printf("loaded texture from disk\n");
+        
+        glGenTextures(1, &tex);
+        glBindTexture(GL_TEXTURE_2D, tex);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 
+                        100,
+                        100, 
+                        0, GL_RGBA, GL_UNSIGNED_BYTE,
+                        image.getPixelsPtr()); 
+
+        printGlError();
+
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, tex);
+    
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); 
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
+    }
+
     glGenVertexArrays(1, &vao);
 
     glGenBuffers(1, &vbo);
@@ -39,15 +60,19 @@ void CompositeRenderer::render(){
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
         // error here
-        glActiveTexture(GL_TEXTURE1); // might be 1?
+        //glActiveTexture(GL_TEXTURE0); // might be 1?
         glBindTexture(GL_TEXTURE_2D, passes[i]);
+
+        // glUniformMatrix3fv(uNormalMatrix, 1, false, (const GLfloat*) glm::value_ptr(normalMatrix));
+        GLint uSampler = glGetUniformLocation(texShader.program, "sampler");
+        glUniform1i(uSampler, 0);
 
         // pos
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), BUFFER_OFFSET(0));
         glEnableVertexAttribArray(0);
 
         // tex coordinate
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertex),  BUFFER_OFFSET(sizeof(float)*6));
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertex),  BUFFER_OFFSET(sizeof(float)*8));
         glEnableVertexAttribArray(2);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
