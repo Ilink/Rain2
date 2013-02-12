@@ -217,7 +217,7 @@ int main(int argc, char* argv[]) {
     RenderSystem* renderSystem = (RenderSystem*)sm->setSystem(new RenderSystem());
     ShadowSystem* shadowSystem = (ShadowSystem*)sm->setSystem(new ShadowSystem());
     vector<GLuint> passes;
-    passes.push_back(shadowSystem->shadowMap);
+    passes.push_back(shadowSystem->depthMap);
     CompositeRenderer compositeRenderer(passes);
     
     sm->initializeAll();
@@ -252,7 +252,7 @@ int main(int argc, char* argv[]) {
         world.setDelta(0.0016f);
         shadowSystem->process();
         renderSystem->process();
-        // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         compositeRenderer.render();
         
         // onDisplay();

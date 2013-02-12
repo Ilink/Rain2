@@ -3,20 +3,14 @@
 CompositeRenderer::CompositeRenderer(vector<GLuint>& passes){
     vector<vertex> planeVerts;
     vector<GLuint> planeVertIndex;
-    makePlane(1,1, planeVerts, planeVertIndex);
-
-    // set texture coordinates
-    planeVerts[0].u = 0.0; planeVerts[0].v = 0.0;
-    planeVerts[0].u = 1.0; planeVerts[0].v = 0.0;
-    planeVerts[0].u = 1.0; planeVerts[0].v = 1.0;
-    planeVerts[0].u = 0.0; planeVerts[0].v = 1.0;
+    makePlane(2,2, planeVerts, planeVertIndex);
 
     glGenVertexArrays(1, &vao);
 
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertex)*planeVerts.size(), &planeVerts[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);  
 
     glGenBuffers(1, &ibo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
@@ -33,7 +27,6 @@ void CompositeRenderer::setPasses(vector<GLuint>& passes){
 }
 
 CompositeRenderer::~CompositeRenderer(){
-
 }
 
 void CompositeRenderer::render(){
@@ -46,8 +39,7 @@ void CompositeRenderer::render(){
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
         // error here
-        glActiveTexture(GL_TEXTURE0); // might be 1?
-        printGlError();
+        glActiveTexture(GL_TEXTURE1); // might be 1?
         glBindTexture(GL_TEXTURE_2D, passes[i]);
 
         // pos
@@ -58,7 +50,6 @@ void CompositeRenderer::render(){
         glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertex),  BUFFER_OFFSET(sizeof(float)*6));
         glEnableVertexAttribArray(2);
 
-        printGlError();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     }
 
