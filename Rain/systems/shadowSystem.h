@@ -20,6 +20,7 @@ private:
     GLuint fbo;
     GLuint vao;
     glm::mat4 MVP;
+    glm::mat4 shadowMatrix;
     glm::mat4 MV;
     Shader shadowShader;
     float rot;
@@ -27,7 +28,7 @@ private:
 public:
     GLuint shadowMap; // gathered later by the compositer
     GLuint colorTex; // need this?
-    ShadowSystem(GLuint& depthMap);
+    ShadowSystem(GLuint& depthMap, glm::mat4 shadowMatrix);
     virtual void initialize();
     virtual void processEntity(artemis::Entity &e);
     virtual void begin();

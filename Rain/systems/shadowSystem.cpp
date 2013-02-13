@@ -1,6 +1,6 @@
 #include "shadowSystem.h"
 
-ShadowSystem::ShadowSystem(GLuint& depthMap){
+ShadowSystem::ShadowSystem(GLuint& depthMap, glm::mat4 shadowMatrix){
     this->depthMap = depthMap;
     // Artemis Setup
     addComponentType<GeoComponent>();
