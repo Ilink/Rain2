@@ -12,7 +12,7 @@ DepthSystem::DepthSystem(){
     glm::mat4 Model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
     // MVP = Model;
     // lets pretend this is where the light is...
-    MVP = glm::translate(
+    shadowMVP = glm::translate(
         Model,
         glm::vec3(-1.0f, 0.0f, 0.0f)
     );
@@ -102,7 +102,7 @@ void DepthSystem::processEntity(artemis::Entity &e){
     GLuint ibo = geoMapper.get(e)->ibo;
 
     rot += 0.5f;
-    MV = glm::rotate(MVP, rot, glm::vec3(0.5f, 1.0f, 0.0f));
+    MV = glm::rotate(shadowMVP, rot, glm::vec3(0.5f, 1.0f, 0.0f));
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -119,7 +119,7 @@ void DepthSystem::processEntity(artemis::Entity &e){
     printGlError();
 
     glUniformMatrix4fv(uMVMatrixDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(MV));
-    glUniformMatrix4fv(uMVPmatDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(MVP));
+    glUniformMatrix4fv(uMVPmatDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(shadowMVP));
     
     printGlError();
     // error - FBO not setup correctly
