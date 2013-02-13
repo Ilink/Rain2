@@ -87,10 +87,10 @@
     <ClCompile Include="systems\renderSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="systems\testSystem.cpp">
+    <ClCompile Include="compositeRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="compositeRenderer.cpp">
+    <ClCompile Include="systems\depthSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -203,10 +203,10 @@
     <ClInclude Include="systems\renderSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="systems\testSystem.h">
+    <ClInclude Include="compositeRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="compositeRenderer.h">
+    <ClInclude Include="systems\depthSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

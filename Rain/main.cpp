@@ -7,7 +7,7 @@
 #include "Artemis-Cpp/Artemis.h"
 #include "systems/renderSystem.h"
 #include "systems/shadowSystem.h"
-#include "systems/testSystem.h"
+#include "systems/depthSystem.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -215,9 +215,10 @@ int main(int argc, char* argv[]) {
     // GeoFactory geoFactory;
     
     RenderSystem* renderSystem = (RenderSystem*)sm->setSystem(new RenderSystem());
-    ShadowSystem* shadowSystem = (ShadowSystem*)sm->setSystem(new ShadowSystem());
+    DepthSystem* depthSystem = (DepthSystem*)sm->setSystem(new DepthSystem());
+    ShadowSystem* shadowSystem = (ShadowSystem*)sm->setSystem(new ShadowSystem(depthSystem->depthMap));
     vector<GLuint> passes;
-    passes.push_back(shadowSystem->depthMap);
+    passes.push_back(depthSystem->depthMap);
     CompositeRenderer compositeRenderer(passes);
     
     sm->initializeAll();
@@ -250,10 +251,12 @@ int main(int argc, char* argv[]) {
 
         world.loopStart();
         world.setDelta(0.0016f);
+        depthSystem->process();
         shadowSystem->process();
         renderSystem->process();
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        compositeRenderer.render();
+
+        // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // compositeRenderer.render();
         
         // onDisplay();
         window.display();

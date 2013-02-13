@@ -70,14 +70,11 @@ void CompositeRenderer::render(){
         // pos
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), BUFFER_OFFSET(0));
-        
 
         // tex coordinate
-        // something is wrong with the texture coordinates themselves
         glEnableVertexAttribArray(2);
         glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertex),  ((GLubyte *)NULL + (24)));
         
-
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     }
 

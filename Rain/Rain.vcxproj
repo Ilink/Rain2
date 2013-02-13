@@ -92,9 +92,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="normals.cpp" />
     <ClCompile Include="shader.cpp" />
+    <ClCompile Include="systems\depthSystem.cpp" />
     <ClCompile Include="systems\renderSystem.cpp" />
     <ClCompile Include="systems\shadowSystem.cpp" />
-    <ClCompile Include="systems\testSystem.cpp" />
     <ClCompile Include="util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -131,9 +131,9 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="normals.h" />
     <ClInclude Include="shader.h" />
+    <ClInclude Include="systems\depthSystem.h" />
     <ClInclude Include="systems\renderSystem.h" />
     <ClInclude Include="systems\shadowSystem.h" />
-    <ClInclude Include="systems\testSystem.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>

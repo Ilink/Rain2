@@ -22,12 +22,12 @@ private:
     glm::mat4 MVP;
     glm::mat4 MV;
     Shader shadowShader;
-    Shader depthShader;
     float rot;
+    GLuint depthMap;
 public:
-    GLuint depthMap; // gathered later by the compositer
-    GLuint colorTex;
-    ShadowSystem();
+    GLuint shadowMap; // gathered later by the compositer
+    GLuint colorTex; // need this?
+    ShadowSystem(GLuint& depthMap);
     virtual void initialize();
     virtual void processEntity(artemis::Entity &e);
     virtual void begin();
