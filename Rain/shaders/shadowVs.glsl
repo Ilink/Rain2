@@ -1,7 +1,11 @@
 uniform mat4 uMVMatrix;
 uniform mat4 uPMatrix;
+uniform mat4 uShadowMatrix;
 attribute vec3 pos;
+varying vec4 vShadowCoord;
 
 void main(void) {
+    vShadowCoord = uPMatrix * uMVMatrix * vec4(pos,1.0);
+    // vShadowCoord = uShadowMatrix * vec4(pos,1.0);
     gl_Position = uPMatrix * uMVMatrix * vec4(pos, 1.0);
 }
