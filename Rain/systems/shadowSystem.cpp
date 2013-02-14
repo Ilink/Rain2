@@ -21,6 +21,8 @@ ShadowSystem::ShadowSystem(GLuint& depthMap, glm::mat4 shadowMatrix){
     );
 
     lightPersp = shadowBias * shadowMatrix;
+    // lightPersp = shadowBias * perspective * lookAt(shadowViewMatrix)
+    // perspective is the same as shadowPerspective in this case
 
     shadowShader.load("shaders/shadowVs.glsl", "shaders/shadowFs.glsl");
     glEnable(GL_TEXTURE_2D);

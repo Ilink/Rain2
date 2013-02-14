@@ -9,13 +9,9 @@ DepthSystem::DepthSystem(){
     depthMap = 0;
     colorTex = 0;
 
-    glm::mat4 Model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
-    // MVP = Model;
+    perspective = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.f);
     // lets pretend this is where the light is...
-    shadowMVP = glm::translate(
-        Model,
-        glm::vec3(-1.0f, 0.0f, 0.0f)
-    );
+    view = glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 0.0f, -10.0f));
 
     depthShader.load("shaders/depthVs.glsl", "shaders/depthFs.glsl");
     glEnable(GL_TEXTURE_2D);
@@ -83,7 +79,7 @@ void DepthSystem::begin(){
     glBindTexture(GL_TEXTURE_2D, depthMap);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
     glDrawBuffer(GL_NONE);
-    // glClear(GL_DEPTH_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -102,14 +98,15 @@ void DepthSystem::processEntity(artemis::Entity &e){
     GLuint ibo = geoMapper.get(e)->ibo;
 
     rot += 0.5f;
-    MV = glm::rotate(shadowMVP, rot, glm::vec3(0.5f, 1.0f, 0.0f));
+    glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), rot, glm::vec3(0.5f, 1.0f, 0.0f));
+    MV = view * rotate;
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
     // these need to go elsewhere, it's bad to get them every frame
-    GLuint uMVPmatDepth = glGetUniformLocationARB(depthShader.program, "uPMatrix");
-    GLuint uMVMatrixDepth = glGetUniformLocationARB(depthShader.program, "uMVMatrix");
+    GLuint uPMatrix = glGetUniformLocationARB(depthShader.program, "uPMatrix");
+    GLuint uMVMatrix = glGetUniformLocationARB(depthShader.program, "uMVMatrix");
     printGlError();
 
     // Position
@@ -118,8 +115,8 @@ void DepthSystem::processEntity(artemis::Entity &e){
 
     printGlError();
 
-    glUniformMatrix4fv(uMVMatrixDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(MV));
-    glUniformMatrix4fv(uMVPmatDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(shadowMVP));
+    glUniformMatrix4fv(uMVMatrix, 1, FALSE, (const GLfloat*) glm::value_ptr(MV));
+    glUniformMatrix4fv(uPMatrix, 1, FALSE, (const GLfloat*) glm::value_ptr(perspective));
     
     printGlError();
     // error - FBO not setup correctly

@@ -17,7 +17,9 @@ varying vec3 vLightDirection;
 
 void main(void) {
     vPosition = uMVMatrix * vec4(pos, 1.0);
-    gl_Position = uPMatrix * vPosition;
+    // gl_Position = uPMatrix * vPosition;
+    gl_Position = uPMatrix * uMVMatrix * vec4(pos, 1.0);
+    
     
     //todo: use the uniforms instead of these hardcoded values
     vec3 ambientLight = vec3(0.85, 0.5, 0.5);

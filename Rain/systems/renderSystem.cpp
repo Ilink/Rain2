@@ -21,14 +21,8 @@ RenderSystem::RenderSystem(){
     addComponentType<GeoComponent>();
     addComponentType<PhongComponent>();
     
-    glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.f);
-    glm::mat4 ViewTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -1.0f));
-    glm::mat4 ViewRotateX = glm::rotate(ViewTranslate,90.0f, glm::vec3(-1.0f, 0.0f, 0.0f));
-    glm::mat4 View = glm::rotate(ViewRotateX,0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::mat4 Model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
-    MVP = Model;
-    // MVP = glm::mat4(1.0f); // identity
-
+    perspective = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.f);
+    view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
     rot = 0;
 
     // gl state
@@ -70,11 +64,11 @@ void RenderSystem::processEntity(artemis::Entity &e){
     GLuint vbo = geoMapper.get(e)->vbo;
     GLuint ibo = geoMapper.get(e)->ibo;
 
-    glm::mat3 normalMatrix(MVP);
+    glm::mat3 normalMatrix(perspective);
     glm::transpose(normalMatrix);
 
     // these need to go elsewhere, it's bad to get them every frame
-    GLuint uMVPmat = glGetUniformLocationARB(shader, "uPMatrix");
+    GLuint uPMatrix = glGetUniformLocationARB(shader, "uPMatrix");
     GLuint uMVMatrix = glGetUniformLocationARB(shader, "uMVMatrix");
     GLuint uNormalMatrix = glGetUniformLocationARB(shader, "uNormalMatrix");
 
@@ -91,11 +85,12 @@ void RenderSystem::processEntity(artemis::Entity &e){
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
     rot += 0.5f;
-    MV = glm::rotate(MVP, rot, glm::vec3(0.5f, 1.0f, 0.0f));
+    glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), rot, glm::vec3(0.5f, 1.0f, 0.0f));
+    MV = view * rotate;
 
     glUniformMatrix3fv(uNormalMatrix, 1, false, (const GLfloat*) glm::value_ptr(normalMatrix));
     glUniformMatrix4fv(uMVMatrix, 1, FALSE, (const GLfloat*) glm::value_ptr(MV));
-    glUniformMatrix4fv(uMVPmat, 1, FALSE, (const GLfloat*) glm::value_ptr(MVP));
+    glUniformMatrix4fv(uPMatrix, 1, FALSE, (const GLfloat*) glm::value_ptr(perspective));
 
     glDrawElements(GL_TRIANGLES, geoMapper.get(e)->triIndex.size(), GL_UNSIGNED_INT, 0);
 

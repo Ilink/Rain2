@@ -16,8 +16,9 @@ private:
     artemis::ComponentMapper<GeoComponent> geoMapper;
     artemis::ComponentMapper<PhongComponent> phongMapper;
     GLenum error;
-    glm::mat4 MVP;
+    glm::mat4 perspective;
     glm::mat4 MV;
+    glm::mat4 view;
     float rot;
     void vaoSetup(GLuint vao, GLuint vbo, GLuint ibo);
 public:
