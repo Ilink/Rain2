@@ -20,7 +20,7 @@ ShadowSystem::ShadowSystem(GLuint& depthMap, glm::mat4 shadowMatrix){
         glm::vec4(0.5f,0.5f,0.5f,1.0f)
     );
 
-    lightPersp = shadowBias * lightFrustum->getProjectionMatrix() * lightFrustum->getViewMatrix();
+    lightPersp = shadowBias * shadowMatrix;
 
     shadowShader.load("shaders/shadowVs.glsl", "shaders/shadowFs.glsl");
     glEnable(GL_TEXTURE_2D);
@@ -90,10 +90,10 @@ void ShadowSystem::initialize(){
 }
 
 void ShadowSystem::begin(){
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    // glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     glUseProgram(shadowShader.program);
     glBindTexture(GL_TEXTURE_2D, depthMap);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, shadowMap, 0);
+    //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, shadowMap, 0);
     // glClear(GL_DEPTH_BUFFER_BIT);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     printGlError();
@@ -138,6 +138,7 @@ void ShadowSystem::processEntity(artemis::Entity &e){
 
     glUniformMatrix4fv(uMVMatrixDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(MV));
     glUniformMatrix4fv(uMVPmatDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(MVP));
+    glUniformMatrix4fv(uShadowMatrix, 1, FALSE, (const GLfloat*) glm::value_ptr(lightPersp));
 
     glBindTexture(GL_TEXTURE_2D, depthMap);
     GLint uShadowmapSampler = glGetUniformLocation(shadowShader.program, "uShadowmapSampler");
