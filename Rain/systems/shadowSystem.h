@@ -24,6 +24,8 @@ private:
     Shader shadowShader;
     float rot;
     GLuint depthMap;
+    glm::mat4 shadowBias;
+    glm::mat4 lightPersp;
 public:
     GLuint shadowMap; // gathered later by the compositer
     GLuint colorTex; // need this?
