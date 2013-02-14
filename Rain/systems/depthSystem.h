@@ -19,11 +19,11 @@ private:
     void vaoSetup(GLuint vao, GLuint vbo, GLuint ibo); // need this?
     GLuint fbo;
     GLuint vao;
-    glm::mat4 MVP;
     glm::mat4 MV;
     Shader depthShader;
     float rot;
 public:
+    glm::mat4 shadowMVP;
     GLuint depthMap;
     GLuint colorTex;
     DepthSystem();
