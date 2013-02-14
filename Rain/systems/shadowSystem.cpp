@@ -13,6 +13,15 @@ ShadowSystem::ShadowSystem(GLuint& depthMap){
     glm::mat4 Model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
     MVP = Model;
 
+    shadowBias = glm::mat4(
+        glm::vec4(0.5f,0.0f,0.0f,0.0f),
+        glm::vec4(0.0f,0.5f,0.0f,0.0f),
+        glm::vec4(0.0f,0.0f,0.5f,0.0f),
+        glm::vec4(0.5f,0.5f,0.5f,1.0f)
+    );
+
+    lightPersp = shadowBias * lightFrustum->getProjectionMatrix() * lightFrustum->getViewMatrix();
+
     shadowShader.load("shaders/shadowVs.glsl", "shaders/shadowFs.glsl");
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
