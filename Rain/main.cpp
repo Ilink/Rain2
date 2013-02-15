@@ -218,8 +218,8 @@ int main(int argc, char* argv[]) {
     DepthSystem* depthSystem = (DepthSystem*)sm->setSystem(new DepthSystem());
     ShadowSystem* shadowSystem = (ShadowSystem*)sm->setSystem(new ShadowSystem(depthSystem->depthMap, depthSystem->shadowMVP));
     vector<GLuint> passes;
-    // passes.push_back(depthSystem->depthMap);
-    passes.push_back(shadowSystem->shadowMap);
+    passes.push_back(depthSystem->depthMap);
+    //passes.push_back(shadowSystem->shadowMap);
     CompositeRenderer compositeRenderer(passes);
     
     sm->initializeAll();
@@ -241,6 +241,7 @@ int main(int argc, char* argv[]) {
 
     while (running){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // glDepthRange(0, 5);
         sf::Event event;
         while (window.pollEvent(event)){
             if (event.type == sf::Event::Closed){

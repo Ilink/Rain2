@@ -22,8 +22,6 @@ ShadowSystem::ShadowSystem(GLuint& depthMap, glm::mat4 shadowMatrix){
     );
 
     lightPerspective = shadowBias * perspective * shadowView;
-    // lightPersp = shadowBias * perspective * lookAt(shadowViewMatrix)
-    // perspective is the same as shadowPerspective in this case
 
     shadowShader.load("shaders/shadowVs.glsl", "shaders/shadowFs.glsl");
     glEnable(GL_TEXTURE_2D);
@@ -33,14 +31,6 @@ ShadowSystem::ShadowSystem(GLuint& depthMap, glm::mat4 shadowMatrix){
 
     int w = 800;
     int h = 600;
-
-    // // create a RGBA color texture
-    // glGenTextures(1, &colorTex);
-    // glBindTexture(GL_TEXTURE_2D, colorTex);
-    // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 
-    //                     w, h, 
-    //                     0, GL_RGBA, GL_UNSIGNED_BYTE,
-    //                     NULL); 
 
     // shadowmap setup
     glGenTextures(1, &shadowMap);
@@ -65,7 +55,6 @@ ShadowSystem::ShadowSystem(GLuint& depthMap, glm::mat4 shadowMatrix){
     // FBO
     glGenFramebuffers(1, &fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-    //glClear(GL_DEPTH_BUFFER_BIT);
 
     printGlError();
 
@@ -93,17 +82,17 @@ void ShadowSystem::initialize(){
 }
 
 void ShadowSystem::begin(){
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    // glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     glUseProgram(shadowShader.program);
-    glBindTexture(GL_TEXTURE_2D, depthMap);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, shadowMap, 0);
+    // glBindTexture(GL_TEXTURE_2D, depthMap);
+    // glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, shadowMap, 0);
     // glClear(GL_DEPTH_BUFFER_BIT);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     printGlError();
 }
 
 void ShadowSystem::end(){
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    // glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
