@@ -19,9 +19,11 @@ private:
     void vaoSetup(GLuint vao, GLuint vbo, GLuint ibo); // need this?
     GLuint fbo;
     GLuint vao;
-    glm::mat4 MVP;
-    glm::mat4 shadowMatrix;
+    glm::mat4 shadowView;
+    glm::mat4 view;
     glm::mat4 MV;
+    glm::mat4 perspective;
+    glm::mat4 lightPerspective;
     Shader shadowShader;
     float rot;
     GLuint depthMap;
