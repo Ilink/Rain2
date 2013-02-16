@@ -25,8 +25,6 @@ ShadowSystem::ShadowSystem(GLuint& depthMap, glm::mat4 shadowMatrix){
         glm::vec4(0.5f,0.5f,0.5f,1.0f)
     );
 
-    lightPersp = shadowBias * shadowMatrix;
-
     shadowShader.load("shaders/shadowVs.glsl", "shaders/shadowFs.glsl");
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
@@ -126,6 +124,7 @@ void ShadowSystem::processEntity(artemis::Entity &e){
     rot = 0.5f;
     view = glm::rotate(view, rot, glm::vec3(0.5f, 1.0f, 0.0f));
     MV = view * model;
+    lightPersp = perspective * (shadowBias * shadowMatrix * model);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
