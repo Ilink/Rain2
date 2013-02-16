@@ -20,8 +20,12 @@ private:
     GLuint fbo;
     GLuint vao;
     glm::mat4 MV;
+    glm::mat4 view;
+    glm::mat4 perspective;
+    glm::mat4 model;
     Shader depthShader;
     float rot;
+    float depth;
 public:
     glm::mat4 shadowMVP;
     GLuint depthMap;

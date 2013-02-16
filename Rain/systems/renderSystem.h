@@ -18,6 +18,9 @@ private:
     GLenum error;
     glm::mat4 MVP;
     glm::mat4 MV;
+    glm::mat4 perspective;
+    glm::mat4 view;
+    glm::mat4 model;
     float rot;
     void vaoSetup(GLuint vao, GLuint vbo, GLuint ibo);
 public:

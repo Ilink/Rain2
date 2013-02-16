@@ -22,6 +22,9 @@ private:
     glm::mat4 MVP;
     glm::mat4 shadowMatrix;
     glm::mat4 MV;
+    glm::mat4 model;
+    glm::mat4 view;
+    glm::mat4 perspective;
     Shader shadowShader;
     float rot;
     GLuint depthMap;

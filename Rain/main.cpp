@@ -217,8 +217,10 @@ int main(int argc, char* argv[]) {
     RenderSystem* renderSystem = (RenderSystem*)sm->setSystem(new RenderSystem());
     DepthSystem* depthSystem = (DepthSystem*)sm->setSystem(new DepthSystem());
     ShadowSystem* shadowSystem = (ShadowSystem*)sm->setSystem(new ShadowSystem(depthSystem->depthMap, depthSystem->shadowMVP));
+    
     vector<GLuint> passes;
     passes.push_back(depthSystem->depthMap);
+    // passes.push_back(shadowSystem->shadowMap);
     CompositeRenderer compositeRenderer(passes);
     
     sm->initializeAll();

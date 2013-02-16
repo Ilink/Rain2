@@ -10,8 +10,13 @@ ShadowSystem::ShadowSystem(GLuint& depthMap, glm::mat4 shadowMatrix){
     colorTex = 0;
     shadowMap = 0;
 
-    glm::mat4 Model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
-    MVP = Model;
+    // glm::mat4 Model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
+    // MVP = Model;
+
+    perspective = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.f);
+    view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
+    model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
+    shadowMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 0.0f, -10.0f));
 
     shadowBias = glm::mat4(
         glm::vec4(0.5f,0.0f,0.0f,0.0f),
@@ -95,12 +100,14 @@ void ShadowSystem::begin(){
     glBindTexture(GL_TEXTURE_2D, depthMap);
     //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, shadowMap, 0);
     // glClear(GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
+    // glEnable(GL_CULL_FACE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     printGlError();
 }
 
 void ShadowSystem::end(){
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    // glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
@@ -113,8 +120,12 @@ void ShadowSystem::processEntity(artemis::Entity &e){
     GLuint vbo = geoMapper.get(e)->vbo;
     GLuint ibo = geoMapper.get(e)->ibo;
 
-    rot += 0.5f;
-    MV = glm::rotate(MVP, rot, glm::vec3(0.5f, 1.0f, 0.0f));
+    // rot += 0.5f;
+    // MV = glm::rotate(MVP, rot, glm::vec3(0.5f, 1.0f, 0.0f));
+
+    rot = 0.5f;
+    view = glm::rotate(view, rot, glm::vec3(0.5f, 1.0f, 0.0f));
+    MV = view * model;
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -137,7 +148,7 @@ void ShadowSystem::processEntity(artemis::Entity &e){
     printGlError();
 
     glUniformMatrix4fv(uMVMatrixDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(MV));
-    glUniformMatrix4fv(uMVPmatDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(MVP));
+    glUniformMatrix4fv(uMVPmatDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(perspective));
     glUniformMatrix4fv(uShadowMatrix, 1, FALSE, (const GLfloat*) glm::value_ptr(lightPersp));
 
     glBindTexture(GL_TEXTURE_2D, depthMap);

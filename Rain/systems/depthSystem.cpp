@@ -8,12 +8,17 @@ DepthSystem::DepthSystem(){
     fbo = 0; // need this?
     depthMap = 0;
     colorTex = 0;
+    depth = 0;
 
-    glm::mat4 Model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
+    perspective = glm::perspective(45.0f, 4.0f / 3.0f, 5.0f, 20.f);
+    view = glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 0.0f, -10.0f));
+    // view = glm::mat4(1.0);
+
+    model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
     // MVP = Model;
     // lets pretend this is where the light is...
     shadowMVP = glm::translate(
-        Model,
+        model,
         glm::vec3(-1.0f, 0.0f, 0.0f)
     );
 
@@ -101,8 +106,16 @@ void DepthSystem::processEntity(artemis::Entity &e){
     GLuint vbo = geoMapper.get(e)->vbo;
     GLuint ibo = geoMapper.get(e)->ibo;
 
-    rot += 0.5f;
-    MV = glm::rotate(shadowMVP, rot, glm::vec3(0.5f, 1.0f, 0.0f));
+    // rot += 0.5f;
+    // MV = glm::rotate(shadowMVP, rot, glm::vec3(0.5f, 1.0f, 0.0f));
+
+    // glDepthRange(0.5, 10);
+    // printf("depth: %f\n", depth);
+    depth += 0.1;
+
+    rot = 0.5f;
+    view = glm::rotate(view, rot, glm::vec3(0.5f, 1.0f, 0.0f));
+    MV = view * model;
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -119,7 +132,8 @@ void DepthSystem::processEntity(artemis::Entity &e){
     printGlError();
 
     glUniformMatrix4fv(uMVMatrixDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(MV));
-    glUniformMatrix4fv(uMVPmatDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(shadowMVP));
+    glUniformMatrix4fv(uMVPmatDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(perspective));
+    // glUniformMatrix4fv(uMVPmatDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(shadowMVP));
     
     printGlError();
     // error - FBO not setup correctly
