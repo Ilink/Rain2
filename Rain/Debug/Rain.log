@@ -1,9 +1,11 @@
-﻿Build started 2/15/2013 11:08:44 PM.
+﻿Build started 2/16/2013 11:27:06 AM.
      1>Project "L:\projects\Rain2\Rain\Rain.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IL:\projects\Rain\Rain\Rain\include /IL:\lib\SFML\include /ZI /nologo /W3 /WX- /Od /Oy- /D GLEW_STATIC /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt systems\shadowSystem.cpp
-         shadowSystem.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IL:\projects\Rain\Rain\Rain\include /IL:\lib\SFML\include /ZI /nologo /W3 /WX- /Od /Oy- /D GLEW_STATIC /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
+         main.cpp
      1>l:\projects\rain2\rain\artemis-cpp\typeinfocomparator.h(17): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
+     1>l:\projects\rain2\rain\main.cpp(104): warning C4305: 'argument' : truncation from 'double' to 'GLclampf'
+     1>l:\projects\rain2\rain\main.cpp(104): warning C4305: 'argument' : truncation from 'double' to 'GLclampf'
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"L:\projects\Rain2\Debug\Rain.exe" /NOLOGO /LIBPATH:L:\lib\SFML\lib\Debug glew.lib "sfml-graphics-d.lib" "sfml-window-d.lib" "sfml-system-d.lib" "sfml-main-d.lib" opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\Rain.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"L:\projects\Rain2\Debug\Rain.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"L:\projects\Rain2\Debug\Rain.lib" /MACHINE:X86 Debug\Component.obj
          Debug\ComponentType.obj
@@ -30,13 +32,13 @@
          Debug\depthSystem.obj
          Debug\renderSystem.obj
          Debug\shadowSystem.obj
+         Debug\texturePlane.obj
          Debug\util.obj
          LINK : L:\projects\Rain2\Debug\Rain.exe not found or not built by the last incremental link; performing full link
      1>normals.obj : warning LNK4099: PDB 'vc100.pdb' was not found with 'normals.obj' or at 'L:\projects\Rain2\Debug\vc100.pdb'; linking object as if no debug info
      1>geoManager.obj : warning LNK4099: PDB 'vc100.pdb' was not found with 'geoManager.obj' or at 'L:\projects\Rain2\Debug\vc100.pdb'; linking object as if no debug info
      1>geoBuilder.obj : warning LNK4099: PDB 'vc100.pdb' was not found with 'geoBuilder.obj' or at 'L:\projects\Rain2\Debug\vc100.pdb'; linking object as if no debug info
      1>entityFactory.obj : warning LNK4099: PDB 'vc100.pdb' was not found with 'entityFactory.obj' or at 'L:\projects\Rain2\Debug\vc100.pdb'; linking object as if no debug info
-     1>compositeRenderer.obj : warning LNK4099: PDB 'vc100.pdb' was not found with 'compositeRenderer.obj' or at 'L:\projects\Rain2\Debug\vc100.pdb'; linking object as if no debug info
      1>World.obj : warning LNK4099: PDB 'vc100.pdb' was not found with 'World.obj' or at 'L:\projects\Rain2\Debug\vc100.pdb'; linking object as if no debug info
      1>TagManager.obj : warning LNK4099: PDB 'vc100.pdb' was not found with 'TagManager.obj' or at 'L:\projects\Rain2\Debug\vc100.pdb'; linking object as if no debug info
      1>SystemManager.obj : warning LNK4099: PDB 'vc100.pdb' was not found with 'SystemManager.obj' or at 'L:\projects\Rain2\Debug\vc100.pdb'; linking object as if no debug info
@@ -58,4 +60,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.47
+Time Elapsed 00:00:01.84

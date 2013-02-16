@@ -95,6 +95,7 @@
     <ClCompile Include="systems\depthSystem.cpp" />
     <ClCompile Include="systems\renderSystem.cpp" />
     <ClCompile Include="systems\shadowSystem.cpp" />
+    <ClCompile Include="texturePlane.cpp" />
     <ClCompile Include="util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -134,6 +135,7 @@
     <ClInclude Include="systems\depthSystem.h" />
     <ClInclude Include="systems\renderSystem.h" />
     <ClInclude Include="systems\shadowSystem.h" />
+    <ClInclude Include="texturePlane.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>

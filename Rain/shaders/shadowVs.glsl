@@ -5,7 +5,7 @@ attribute vec3 pos;
 varying vec4 vShadowCoord;
 
 void main(void) {
-    vShadowCoord = uShadowMatrix * uMVMatrix * vec4(pos,1.0);
+    vShadowCoord = uShadowMatrix * vec4(pos,1.0);
     // vShadowCoord = uShadowMatrix * vec4(pos,1.0); 
     gl_Position = uPMatrix * uMVMatrix * vec4(pos, 1.0);
 }

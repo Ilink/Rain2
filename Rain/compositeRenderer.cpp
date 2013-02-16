@@ -53,7 +53,7 @@ CompositeRenderer::~CompositeRenderer(){
 void CompositeRenderer::render(){
     glUseProgram(texShader.program);
     glBindVertexArray(vao);
-    GLuint sampler = glGetUniformLocationARB(texShader.program, "sampler");
+    GLuint uSampler = glGetUniformLocationARB(texShader.program, "sampler");
 
     for(int i = 0; i < passes.size(); i++){
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
@@ -64,7 +64,6 @@ void CompositeRenderer::render(){
         glBindTexture(GL_TEXTURE_2D, passes[i]);
 
         // glUniformMatrix3fv(uNormalMatrix, 1, false, (const GLfloat*) glm::value_ptr(normalMatrix));
-        GLint uSampler = glGetUniformLocation(texShader.program, "sampler");
         glUniform1i(uSampler, 0);
 
         // pos

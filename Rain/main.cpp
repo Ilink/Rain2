@@ -20,6 +20,7 @@
 #include "geoBuilder.h"
 #include "entityFactory.h"
 #include "compositeRenderer.h"
+#include "texturePlane.h"
 
 using namespace std;
 
@@ -195,6 +196,7 @@ int main(int argc, char* argv[]) {
 
     sf::Window window(sf::VideoMode(800, 600), "OpenGL");
     window.setVerticalSyncEnabled(true);
+    window.setKeyRepeatEnabled(false);
 
     // note this must be called before any opengl operations
     GLenum glew_status = glewInit();
@@ -222,6 +224,8 @@ int main(int argc, char* argv[]) {
     passes.push_back(depthSystem->depthMap);
     // passes.push_back(shadowSystem->shadowMap);
     CompositeRenderer compositeRenderer(passes);
+
+    TexturePlane texturePlane(depthSystem->depthMap, 0.5, -0.7, 0.7);
     
     sm->initializeAll();
 
@@ -248,14 +252,24 @@ int main(int argc, char* argv[]) {
                 running = false;
             } else if (event.type == sf::Event::Resized){
                 glViewport(0, 0, event.size.width, event.size.height);
+            } else if (event.key.code == sf::Keyboard::Space && event.type == sf::Event::KeyPressed){
+                
             }
         }
+
+        // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+        //     printf("spacebar presed\n");
+        // }
+
+
 
         world.loopStart();
         world.setDelta(0.0016f);
         depthSystem->process();
         shadowSystem->process();
         // renderSystem->process();
+
+        texturePlane.render();
 
         // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         // compositeRenderer.render();
