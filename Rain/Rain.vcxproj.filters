@@ -96,6 +96,9 @@
     <ClCompile Include="texturePlane.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="settings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLCheck.hpp">
@@ -214,6 +217,15 @@
     </ClInclude>
     <ClInclude Include="texturePlane.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="spotlight.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\transformationComponent.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

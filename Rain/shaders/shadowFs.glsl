@@ -1,15 +1,18 @@
 varying vec4 vPosition;
 uniform sampler2D uShadowmapSampler;
-// uniform sampler2DShadow uShadowmapSampler;
 varying vec4 vShadowCoord;
 
 void main() {
-    vec4 shadow = texture2D(uShadowmapSampler, vShadowCoord.st);
-    gl_FragColor = vec4(shadow.z, shadow.z, shadow.z, 1.0);
+    vec4 shadowCoordinateWdivide = vShadowCoord / vShadowCoord.w ;
 
-    if(shadow.z > vPosition.z){
-        gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-    } else {
-        gl_FragColor = vec4(0.5, 0.4, 0.4, 1.0);
-    }
+    // Used to lower moire pattern and self-shadowing
+    shadowCoordinateWdivide.z += 0.0005;
+
+    float distanceFromLight = texture2D(uShadowmapSampler,shadowCoordinateWdivide.st).z;
+
+    float shadow = 1.0;
+    if (vShadowCoord.w > 0.0)
+        shadow = distanceFromLight < shadowCoordinateWdivide.z ? 0.5 : 1.0 ;
+
+    gl_FragColor =  shadow * vec4(0.5, 0.4, 0.4, 1.0);
 }

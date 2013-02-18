@@ -21,6 +21,11 @@
 #include "entityFactory.h"
 #include "compositeRenderer.h"
 #include "texturePlane.h"
+#include "components/spotLightComponent.h"
+#include "components/idComponent.h"
+#include "components/transformationComponent.h"
+#include "spotlight.h"
+#include "settings.h"
 
 using namespace std;
 
@@ -209,6 +214,10 @@ int main(int argc, char* argv[]) {
     Shader phongShader;
     phongShader.load("shaders/phongVs.glsl", "shaders/phongFs.glsl");
 
+    Spotlight light(1.0, glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+    // Spotlight light(1.0, glm::vec3(10.0f, 0.0f, -5.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+    // light.rotate(90.0, glm::vec3(1.0, ))
+
     GeoManager geoManager;
     artemis::World world;
     artemis::EntityManager* em = world.getEntityManager();
@@ -217,8 +226,8 @@ int main(int argc, char* argv[]) {
     // GeoFactory geoFactory;
     
     RenderSystem* renderSystem = (RenderSystem*)sm->setSystem(new RenderSystem());
-    DepthSystem* depthSystem = (DepthSystem*)sm->setSystem(new DepthSystem());
-    ShadowSystem* shadowSystem = (ShadowSystem*)sm->setSystem(new ShadowSystem(depthSystem->depthMap, depthSystem->shadowMVP));
+    DepthSystem* depthSystem = (DepthSystem*)sm->setSystem(new DepthSystem(light));
+    ShadowSystem* shadowSystem = (ShadowSystem*)sm->setSystem(new ShadowSystem(depthSystem->depthMap, light));
     
     vector<GLuint> passes;
     passes.push_back(depthSystem->depthMap);
@@ -231,10 +240,19 @@ int main(int argc, char* argv[]) {
 
     artemis::Entity &plane = entityFactory.makePlaneEntity();
     plane.addComponent(new PhongComponent(phongShader, 0, 0));
+    plane.addComponent(new IDComponent(0));
+    plane.addComponent(new TransformationComponent(
+        glm::vec3(0.0f, 0.0f, 0.0f),
+        -50.0f, glm::vec3(1.0f, 0.0f, 0.0f)
+    ));
 
     artemis::Entity &square = em->create();
     square.addComponent(geoManager.create(boxVerts, boxVertIndex));
     square.addComponent(new PhongComponent(phongShader, 0, 0));
+    square.addComponent(new IDComponent(1));
+    square.addComponent(new TransformationComponent(
+        glm::vec3(0.0f, 2.0f, 0.0f)
+    ));
 
     plane.refresh();
     square.refresh();
@@ -253,15 +271,10 @@ int main(int argc, char* argv[]) {
             } else if (event.type == sf::Event::Resized){
                 glViewport(0, 0, event.size.width, event.size.height);
             } else if (event.key.code == sf::Keyboard::Space && event.type == sf::Event::KeyPressed){
-                
+                if(isPaused) isPaused = false;
+                else isPaused = true;
             }
         }
-
-        // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
-        //     printf("spacebar presed\n");
-        // }
-
-
 
         world.loopStart();
         world.setDelta(0.0016f);

@@ -1,6 +1,6 @@
 #include "depthSystem.h"
 
-DepthSystem::DepthSystem(){
+DepthSystem::DepthSystem(Spotlight& light){
     // Artemis Setup
     addComponentType<GeoComponent>();
 
@@ -10,17 +10,16 @@ DepthSystem::DepthSystem(){
     colorTex = 0;
     depth = 0;
 
+    this->light = light;
+
     perspective = glm::perspective(45.0f, 4.0f / 3.0f, 5.0f, 20.f);
-    view = glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 0.0f, -10.0f));
-    // view = glm::mat4(1.0);
+    shadowView = glm::rotate(view, 30.0f, glm::vec3(0.0f, 0.5f, 0.0f));
+    shadowView = glm::translate(shadowView, glm::vec3(0.0f, 0.0f, -10.0f));
+    view = glm::mat4(1.0f);
+    // view = glm::rotate(view, rot, glm::vec3(0.5f, 1.0f, 0.0f));
 
     model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
-    // MVP = Model;
-    // lets pretend this is where the light is...
-    shadowMVP = glm::translate(
-        model,
-        glm::vec3(-1.0f, 0.0f, 0.0f)
-    );
+    model = glm::mat4(1.0f);
 
     depthShader.load("shaders/depthVs.glsl", "shaders/depthFs.glsl");
     glEnable(GL_TEXTURE_2D);
@@ -79,7 +78,7 @@ DepthSystem::DepthSystem(){
 
 void DepthSystem::initialize(){
     geoMapper.init(*world);
-
+    transformationMapper.init(*world);
 }
 
 void DepthSystem::begin(){
@@ -89,6 +88,7 @@ void DepthSystem::begin(){
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
     glDrawBuffer(GL_NONE);
     // glClear(GL_DEPTH_BUFFER_BIT);
+    glCullFace(GL_FRONT);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -98,6 +98,7 @@ void DepthSystem::end(){
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     glUseProgram(0);
+    glCullFace(GL_BACK);
     glDisableVertexAttribArray(0);
 }
 
@@ -105,6 +106,7 @@ void DepthSystem::processEntity(artemis::Entity &e){
     // glViewport(0, 0, 800, 600);
     GLuint vbo = geoMapper.get(e)->vbo;
     GLuint ibo = geoMapper.get(e)->ibo;
+    model = transformationMapper.get(e)->modelMatrix;
 
     // rot += 0.5f;
     // MV = glm::rotate(shadowMVP, rot, glm::vec3(0.5f, 1.0f, 0.0f));
@@ -113,9 +115,15 @@ void DepthSystem::processEntity(artemis::Entity &e){
     // printf("depth: %f\n", depth);
     depth += 0.1;
 
-    rot = 0.5f;
-    view = glm::rotate(view, rot, glm::vec3(0.5f, 1.0f, 0.0f));
-    MV = view * model;
+    if(!isPaused) {
+        rot = 0.5f;
+    } else {
+        rot = 0;
+    }
+
+    // view = glm::rotate(view, rot, glm::vec3(0.5f, 1.0f, 0.0f));
+    light.update();
+    MV = light.viewMatrix * view * model;
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
