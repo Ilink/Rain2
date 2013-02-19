@@ -14,18 +14,12 @@ ShadowSystem::ShadowSystem(GLuint& depthMap, Spotlight& light){
     // glm::mat4 Model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
     // MVP = Model;
 
-    perspective = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.f);
-    view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
-    model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
-    model = glm::mat4(1.0f);
-
     shadowBias = glm::mat4(
         glm::vec4(0.5f,0.0f,0.0f,0.0f),
         glm::vec4(0.0f,0.5f,0.0f,0.0f),
         glm::vec4(0.0f,0.0f,0.5f,0.0f),
         glm::vec4(0.5f,0.5f,0.5f,1.0f)
     );
-    shadowMatrix = shadowBias * perspective * light.viewMatrix * model;
 
     shadowShader.load("shaders/shadowVs.glsl", "shaders/shadowFs.glsl");
     glEnable(GL_TEXTURE_2D);
@@ -117,11 +111,16 @@ void ShadowSystem::end(){
 }
 
 void ShadowSystem::processEntity(artemis::Entity &e){
-    // glViewport(0, 0, 800, 600);
     GLuint vbo = geoMapper.get(e)->vbo;
     GLuint ibo = geoMapper.get(e)->ibo;
-    model = transformationMapper.get(e)->modelMatrix;
-    shadowMatrix = shadowBias * perspective * light.viewMatrix * model;
+
+    perspective = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.f);
+    view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
+    model = transformationMapper.get(e)->getModelMatrix();
+    glm::mat4 inv = glm::inverse(light.viewMatrix);
+    // shadowMatrix = shadowBias * perspective * inv * view * model;
+    // shadowMatrix = shadowBias * perspective * light.viewMatrix * model;
+    shadowMatrix = shadowBias * perspective * glm::inverse(light.viewMatrix) * view * model;
 
     // rot += 0.5f;
     // MV = glm::rotate(MVP, rot, glm::vec3(0.5f, 1.0f, 0.0f));
@@ -139,10 +138,6 @@ void ShadowSystem::processEntity(artemis::Entity &e){
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
 
-    // these need to go elsewhere, it's bad to get them every frame
-    //GLuint uMVPmatShadow = glGetUniformLocationARB(shadowShader.program, "uPMatrix");
-    //GLuint uMVMatrixShadow = glGetUniformLocationARB(shadowShader.program, "uMVMatrix");
-    //GLuint udepthMapSampler = glGetUniformLocationARB(shadowShader.program, "udepthMapSampler");
     printGlError();
     GLuint uMVPmatDepth = glGetUniformLocationARB(shadowShader.program, "uPMatrix");
     GLuint uMVMatrixDepth = glGetUniformLocationARB(shadowShader.program, "uMVMatrix");

@@ -12,15 +12,6 @@ DepthSystem::DepthSystem(Spotlight& light){
 
     this->light = light;
 
-    perspective = glm::perspective(45.0f, 4.0f / 3.0f, 5.0f, 20.f);
-    shadowView = glm::rotate(view, 30.0f, glm::vec3(0.0f, 0.5f, 0.0f));
-    shadowView = glm::translate(shadowView, glm::vec3(0.0f, 0.0f, -10.0f));
-    view = glm::mat4(1.0f);
-    // view = glm::rotate(view, rot, glm::vec3(0.5f, 1.0f, 0.0f));
-
-    model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
-    model = glm::mat4(1.0f);
-
     depthShader.load("shaders/depthVs.glsl", "shaders/depthFs.glsl");
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
@@ -87,7 +78,7 @@ void DepthSystem::begin(){
     glBindTexture(GL_TEXTURE_2D, depthMap);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
     glDrawBuffer(GL_NONE);
-    // glClear(GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
@@ -98,15 +89,14 @@ void DepthSystem::end(){
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     glUseProgram(0);
-    glCullFace(GL_BACK);
     glDisableVertexAttribArray(0);
+    glDisable(GL_CULL_FACE);
 }
 
 void DepthSystem::processEntity(artemis::Entity &e){
     // glViewport(0, 0, 800, 600);
     GLuint vbo = geoMapper.get(e)->vbo;
     GLuint ibo = geoMapper.get(e)->ibo;
-    model = transformationMapper.get(e)->modelMatrix;
 
     // rot += 0.5f;
     // MV = glm::rotate(shadowMVP, rot, glm::vec3(0.5f, 1.0f, 0.0f));
@@ -114,16 +104,17 @@ void DepthSystem::processEntity(artemis::Entity &e){
     // glDepthRange(0.5, 10);
     // printf("depth: %f\n", depth);
     depth += 0.1;
-
     if(!isPaused) {
         rot = 0.5f;
     } else {
         rot = 0;
     }
-
     // view = glm::rotate(view, rot, glm::vec3(0.5f, 1.0f, 0.0f));
+
     light.update();
-    MV = light.viewMatrix * view * model;
+    model = transformationMapper.get(e)->getModelMatrix();
+    perspective = glm::perspective(45.0f, 4.0f / 3.0f, 5.0f, 20.f);
+    MV = light.viewMatrix * model;
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -141,7 +132,6 @@ void DepthSystem::processEntity(artemis::Entity &e){
 
     glUniformMatrix4fv(uMVMatrixDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(MV));
     glUniformMatrix4fv(uMVPmatDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(perspective));
-    // glUniformMatrix4fv(uMVPmatDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(shadowMVP));
     
     printGlError();
     // error - FBO not setup correctly

@@ -10,26 +10,43 @@ public:
     float x;
     float y;
     float z;
-    glm::mat4 modelMatrix;
+    glm::vec3 *pos;
+    glm::mat4 *modelMatrix;
+    glm::vec3 *axis;
+    float *angle;
 
-    TransformationComponent(glm::vec3& pos){
+    TransformationComponent(glm::vec3* pos){
         // this->x = pos[0];
         // this->y = pos[1];
         // this->z = pos[3];
-        this->modelMatrix = glm::translate(glm::mat4(1.0f), pos);
+
+        float angle = 0.0f;
+        this->angle = &angle;
+        this->axis = &glm::vec3(0.0f,0.0f,0.0f);
+        this->pos = pos;
+        this->modelMatrix = &glm::translate(glm::mat4(1.0f), *this->pos);
     };
 
-    TransformationComponent(glm::vec3& pos, float angle, glm::vec3& axis){
+    TransformationComponent(glm::vec3* pos, float* angle, glm::vec3* axis){
         // this->x = x;
         // this->y = y;
         // this->z = z;
-        this->modelMatrix = glm::translate(glm::mat4(1.0f), pos);
-        this->modelMatrix = glm::rotate(this->modelMatrix, angle, axis);
+
+        this->angle = angle;
+        this->axis = axis;
+        this->pos = pos;
+        this->modelMatrix = &glm::translate(glm::mat4(1.0f), *this->pos);
+        this->modelMatrix = &glm::rotate(*this->modelMatrix, *angle, *axis);
     };
 
-    /*glm::mat4 getModelMatrix(){
-        return glm::mat4(glm::mat4(1.0f), x, y, z);
-    }*/
+    glm::mat4 getModelMatrix(){
+        glm::mat4 trans = glm::translate(glm::mat4(1.0f), *pos);
+        if(*angle != 0.0){
+            return glm::rotate(trans, *angle, *axis);
+        } else {
+            return trans;
+        }
+    }
 
     ~TransformationComponent(){
 

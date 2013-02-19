@@ -238,12 +238,15 @@ int main(int argc, char* argv[]) {
     
     sm->initializeAll();
 
+    glm::vec3 squarePos(0.0f, 2.0f, 0.0f);
+    float planeRot = 300.0f;
+
     artemis::Entity &plane = entityFactory.makePlaneEntity();
     plane.addComponent(new PhongComponent(phongShader, 0, 0));
     plane.addComponent(new IDComponent(0));
     plane.addComponent(new TransformationComponent(
-        glm::vec3(0.0f, 0.0f, 0.0f),
-        -50.0f, glm::vec3(1.0f, 0.0f, 0.0f)
+        &glm::vec3(0.0f, 0.0f, 0.0f),
+        &planeRot, &glm::vec3(1.0f, 0.0f, 0.0f)
     ));
 
     artemis::Entity &square = em->create();
@@ -251,7 +254,7 @@ int main(int argc, char* argv[]) {
     square.addComponent(new PhongComponent(phongShader, 0, 0));
     square.addComponent(new IDComponent(1));
     square.addComponent(new TransformationComponent(
-        glm::vec3(0.0f, 2.0f, 0.0f)
+        &squarePos
     ));
 
     plane.refresh();
@@ -261,8 +264,13 @@ int main(int argc, char* argv[]) {
     // init();
 
     bool running = true;
+    double angle = 0;
+    double x = 0;
 
     while (running){
+        // planeRot += 0.5;
+        x+=0.1;
+        squarePos[1] = 2+2.0*sin(x);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         sf::Event event;
         while (window.pollEvent(event)){
