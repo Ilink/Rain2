@@ -78,8 +78,11 @@ void DepthSystem::begin(){
     glBindTexture(GL_TEXTURE_2D, depthMap);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
     glDrawBuffer(GL_NONE);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_FRONT);
+    if(toggleCull){
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_FRONT);
+    }
+    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 

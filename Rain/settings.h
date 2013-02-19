@@ -2,5 +2,6 @@
 #define SETTINGS_H
 
 extern bool isPaused;
+extern bool toggleCull;
 
 #endif

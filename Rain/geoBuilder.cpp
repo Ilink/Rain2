@@ -40,22 +40,22 @@ void makeBox(double height, double width, double depth, vector <vertex>& verts, 
     verts[11].x = right;         verts[11].y = top;            verts[11].z = close;
 
     // Bottom
-    verts[12].x = left;          verts[12].y = bottom;          verts[12].z = close;
+    verts[12].x = left;          verts[12].y = bottom;         verts[12].z = close;
     verts[13].x = right;        verts[13].y = bottom;          verts[13].z = close;
-    verts[14].x = right;        verts[14].y = bottom;           verts[14].z = far;
-    verts[15].x = left;          verts[15].y = bottom;          verts[15].z = far;
+    verts[14].x = right;        verts[14].y = bottom;          verts[14].z = far;
+    verts[15].x = left;          verts[15].y = bottom;         verts[15].z = far;
 
     // Right
     verts[16].x = right;        verts[16].y = bottom;          verts[16].z = far;
-    verts[17].x = right;        verts[17].y = top;       verts[17].z = far;
-    verts[18].x = right;        verts[18].y = top;       verts[18].z = close;
+    verts[17].x = right;        verts[17].y = top;             verts[17].z = far;
+    verts[18].x = right;        verts[18].y = top;             verts[18].z = close;
     verts[19].x = right;        verts[19].y = bottom;          verts[19].z = close;
 
     // Left
     verts[20].x = left;          verts[20].y = bottom;          verts[20].z = close;
     verts[21].x = left;          verts[21].y = bottom;          verts[21].z = far;
-    verts[22].x = left;          verts[22].y = top;       verts[22].z = far;
-    verts[23].x = left;          verts[23].y = top;       verts[23].z = close;
+    verts[22].x = left;          verts[22].y = top;             verts[22].z = far;
+    verts[23].x = left;          verts[23].y = top;             verts[23].z = close;
 
 
     /*

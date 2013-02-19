@@ -239,7 +239,7 @@ int main(int argc, char* argv[]) {
     
     sm->initializeAll();
 
-    glm::vec3 squarePos(0.0f, 2.0f, 1.0f);
+    glm::vec3 squarePos(0.0f, 2.0f, 0.0f);
     float planeRot = 300.0f;
 
     artemis::Entity &plane = entityFactory.makePlaneEntity();
@@ -272,8 +272,11 @@ int main(int argc, char* argv[]) {
 
     while (running){
         // planeRot += 0.5;
-        x+=0.1;
-        squarePos[1] = 2+2.0*sin(x);
+
+        if(!isPaused){
+            x+=0.1;
+            squarePos[1] = 3+2.0*sin(x);
+        } 
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         sf::Event event;
@@ -285,6 +288,12 @@ int main(int argc, char* argv[]) {
             } else if (event.key.code == sf::Keyboard::Space && event.type == sf::Event::KeyPressed){
                 if(isPaused) isPaused = false;
                 else isPaused = true;
+            } else if (event.key.code == sf::Keyboard::S && event.type == sf::Event::KeyPressed){
+                if(toggleCull) {
+                    toggleCull = false;
+                } else {
+                    toggleCull = true;
+                }
             }
         }
 
