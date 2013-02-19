@@ -1,6 +1,7 @@
- varying vec4 vPosition;
+varying vec4 vPosition;
 uniform sampler2D uShadowmapSampler;
 varying vec4 vShadowCoord;
+uniform vec4 uColor;
 
 void main() {
     vec3 shadowCoordinateWdivide = vShadowCoord.xyz / vShadowCoord.w ;
@@ -12,7 +13,8 @@ void main() {
 
     float shadow = 1.0;
     if (vShadowCoord.w > 0.0)
-        shadow = distanceFromLight > shadowCoordinateWdivide.z ? 0.5 : 1.0 ;
+        shadow = distanceFromLight < shadowCoordinateWdivide.z ? 0.5 : 1.0 ;
 
-    gl_FragColor =  shadow * vec4(0.5, 0.4, 0.4, 1.0);
+    // gl_FragColor =  shadow * vec4(0.5, 0.4, 0.4, 1.0);
+    gl_FragColor =  shadow * uColor;
 }

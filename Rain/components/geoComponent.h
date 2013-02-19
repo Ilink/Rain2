@@ -11,8 +11,12 @@ geometry data, i dont know what else it will have
 #include <Artemis-Cpp/Component.h>
 #include <vector>
 #include "../types.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 using namespace std;
+using namespace glm;
 
 class GeoComponent : public artemis::Component{
 public:

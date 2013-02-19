@@ -1,4 +1,0 @@
-#ifndef ROTATIONCOMPONENT_H
-#define ROTATIONCOMPONENT_H
-
-#endif
