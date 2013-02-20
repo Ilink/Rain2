@@ -1,4 +1,4 @@
 #include "settings.h"
 
 bool isPaused = false;
-bool toggleCull = false;
+bool toggleCull = true;

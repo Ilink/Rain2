@@ -215,7 +215,7 @@ int main(int argc, char* argv[]) {
     Shader phongShader;
     phongShader.load("shaders/phongVs.glsl", "shaders/phongFs.glsl");
 
-    Spotlight light(1.0, glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+    Spotlight light(1.0, glm::vec3(7.0f, 6.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
     // Spotlight light(1.0, glm::vec3(10.0f, 0.0f, -5.0f), glm::vec3(0.0f, 0.0f, -1.0f));
     // light.rotate(90.0, glm::vec3(1.0, ))
 
@@ -239,8 +239,9 @@ int main(int argc, char* argv[]) {
     
     sm->initializeAll();
 
-    glm::vec3 squarePos(0.0f, 2.0f, 0.0f);
+    glm::vec3 squarePos(0.0f, 0.5f, 0.0f);
     float planeRot = 300.0f;
+    float squareRot = 0.0f;
 
     artemis::Entity &plane = entityFactory.makePlaneEntity();
     plane.addComponent(new PhongComponent(phongShader, 0, 0, glm::vec3(0.1, 0.2, 0.3)));
@@ -257,7 +258,8 @@ int main(int argc, char* argv[]) {
     square.addComponent(new DebugComponent(&glm::vec4(0.4, 0.3, 0.2, 1.0)));
     square.addComponent(new IDComponent(1));
     square.addComponent(new TransformationComponent(
-        &squarePos
+        &squarePos,
+        &squareRot, &glm::vec3(1.0f, 0.0f, 0.0f)
     ));
 
     plane.refresh();
@@ -275,7 +277,8 @@ int main(int argc, char* argv[]) {
 
         if(!isPaused){
             x+=0.1;
-            squarePos[1] = 3+2.0*sin(x);
+            // squarePos[1] = 3+1.5*sin(x);
+            // squareRot += 1;
         } 
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
