@@ -15,7 +15,7 @@ void main() {
     float shadow = 1.0;
     // if the point is closer to the light, then it is in shadow. 
     if (vShadowCoord.w > 0.0) {
-        if(distanceFromLight + 0.4 < shadowCoord.z){
+        if(distanceFromLight + 0.001 < shadowCoord.z){
             shadow = 0.5;
         } else {
             shadow = 1.0;

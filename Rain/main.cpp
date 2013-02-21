@@ -215,7 +215,10 @@ int main(int argc, char* argv[]) {
     Shader phongShader;
     phongShader.load("shaders/phongVs.glsl", "shaders/phongFs.glsl");
 
-    Spotlight light(1.0, glm::vec3(7.0f, 6.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+    // glm::vec3 lightPos = glm::vec3(-7.0f, 6.0f, 0.0f);
+    glm::vec3 lightPos = glm::vec3(0.0f, 10.0f, 0.0f);
+    glm::vec3 lightLookAtPoint = glm::vec3(0.0f, 0.5f, 0.0f);
+    Spotlight light(1.0, &lightPos, &lightLookAtPoint);
     // Spotlight light(1.0, glm::vec3(10.0f, 0.0f, -5.0f), glm::vec3(0.0f, 0.0f, -1.0f));
     // light.rotate(90.0, glm::vec3(1.0, ))
 
@@ -277,7 +280,7 @@ int main(int argc, char* argv[]) {
 
         if(!isPaused){
             x+=0.1;
-            // squarePos[1] = 3+1.5*sin(x);
+            squarePos[1] = 2.0+1.5*sin(x);
             // squareRot += 1;
         } 
 
