@@ -122,7 +122,7 @@ void ShadowSystem::processEntity(artemis::Entity &e){
     // shadowMatrix = shadowBias * perspective * inv * view * model;
     // shadowMatrix = shadowBias * perspective * light.viewMatrix * model;
     // shadowMatrix = shadowBias * perspective * view * model;
-    shadowMatrix = shadowBias * perspective * (light.viewMatrix) * model;
+    shadowMatrix = shadowBias * light.perspectiveMatrix * (light.viewMatrix) * model;
 
     // rot += 0.5f;
     // MV = glm::rotate(MVP, rot, glm::vec3(0.5f, 1.0f, 0.0f));

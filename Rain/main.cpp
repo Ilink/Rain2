@@ -30,166 +30,9 @@
 
 using namespace std;
 
-GLuint program;
-GLint attributePos;
-GLint uniformMVP;
-Shader shader;
-GLenum error;
-
-GLfloat verts[] = {
-  -0.5f, 0.5f, 0.0f,
-  -0.5f, 0.25f, 0.0f,
-  0.5f, 0.35f, 0.0f,
-  0.0f, 0.0f, 0.0f
-};
-
-/*
-    1----3
-    | \  |
-    |  \ |
-    0----2
-*/
-GLuint indexes[] = {
-    0, 1, 2,
-    2, 1, 3
-};
-vector<vertex> verts2;
-
-vector<GLfloat> vertsVec (verts, verts + sizeof(verts) / sizeof(verts[0]) );
-vector<GLuint> indexesVec (indexes, indexes + sizeof(indexes) / sizeof(indexes[0]) );
-
-GLuint vao = 0;
-GLuint vbo = 0;
-GLuint ibo = 0;
-
-glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.f);
-glm::mat4 ViewTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-glm::mat4 ViewRotateX = glm::rotate(ViewTranslate,0.0f, glm::vec3(-1.0f, 0.0f, 0.0f));
-glm::mat4 View = glm::rotate(ViewRotateX,0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-glm::mat4 Model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
-glm::mat4 MVP = Projection;
-// glm::mat4 MVP = glm::mat4(1.0f); // identity
-
-void init(){
-    attributePos = glGetAttribLocation(shader.program, "pos");
-    uniformMVP = glGetUniformLocation(shader.program, "uMVPmat");
-
-    // VBO Setup
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*9, &verts, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    glGenBuffers(1, &ibo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(GLfloat), &indexes, GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-    // VAO Setup
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-    printGlError();
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glVertexAttribPointer(attributePos, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat), NULL);
-    glEnableVertexAttribArray(attributePos);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBindVertexArray(0);
-    //////////////////
-
-    printGlError();
-
-    // cleanup here
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glDisableVertexAttribArray(0);
-    printGlError();
-
-    glClearColor(0.8, 1.0, 0.85, 1.0); 
-}
-
-void onDisplay(){
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glUseProgram(shader.program);
-    glBindVertexArray(vao);
-
-    // glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-
-    glUniformMatrix4fv(uniformMVP, 1, FALSE, (const GLfloat*) glm::value_ptr(MVP)); 
-    // glUniformMatrix4fv(uniformMVP, 1, FALSE, &MVP[0][0]);
-
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    // glDrawRangeElements(GL_TRIANGLES, 0, 3, 6, GL_UNSIGNED_INT, NULL);
-
-    // error = glGetError();
-    // printGlError(error);
-
-    // cleanup
-    // glDisableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-    glUseProgram(0);
-}
-
-void freeResources(){
-    glBindVertexArray(0);
-    glDisableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glUseProgram(0);
-    glDeleteProgram(shader.program);
-    glDeleteBuffers(1, &vbo);
-    glDeleteBuffers(1, &ibo);
-}
-
 int main(int argc, char* argv[]) {
-    verts2.push_back(vertex());
-    verts2[0].x = -0.5f;
-    verts2[0].y = 0.5f;
-    verts2[0].z = 0.0f;
-    verts2[0].nx = 0.0f;
-    verts2[0].ny = 0.0f;
-    verts2[0].nz = 0.0f;
-    verts2[0].u = 0.0f;
-    verts2[0].v = 0.0f;
 
-    verts2.push_back(vertex());
-    verts2[1].x = -0.5f;
-    verts2[1].y = 0.25f;
-    verts2[1].z = 0.0f;
-    verts2[1].nx = 0.0f;
-    verts2[1].ny = 0.0f;
-    verts2[1].nz = 0.0f;
-    verts2[1].u = 0.0f;
-    verts2[1].v = 0.0f;
-
-    verts2.push_back(vertex());
-    verts2[2].x = 0.5f;
-    verts2[2].y = 0.35f;
-    verts2[2].z = 0.0f;
-    verts2[2].nx = 0.0f;
-    verts2[2].ny = 0.0f;
-    verts2[2].nz = 0.0f;
-    verts2[2].u = 0.0f;
-    verts2[2].v = 0.0f;
-
-    verts2.push_back(vertex());
-    verts2[3].x = 0.0f;
-    verts2[3].y = 0.0f;
-    verts2[3].z = 0.0f;
-    verts2[3].nx = 0.0f;
-    verts2[3].ny = 0.0f;
-    verts2[3].nz = 0.0f;
-    verts2[3].u = 0.0f;
-    verts2[3].v = 0.0f;
-
-    calcFaceNormals(verts2, indexesVec);
-
+    Shader shader;
     vector<vertex> boxVerts;
     vector<GLuint> boxVertIndex;
     makeBox(1,1,-1, boxVerts, boxVertIndex);
@@ -262,14 +105,11 @@ int main(int argc, char* argv[]) {
     square.addComponent(new IDComponent(1));
     square.addComponent(new TransformationComponent(
         &squarePos,
-        &squareRot, &glm::vec3(1.0f, 0.0f, 0.0f)
+        &squareRot, &glm::vec3(0.0f, 1.0f, 0.0f)
     ));
 
     plane.refresh();
     square.refresh();
-    
-    // initResources();
-    // init();
 
     bool running = true;
     double angle = 0;
@@ -281,7 +121,7 @@ int main(int argc, char* argv[]) {
         if(!isPaused){
             x+=0.1;
             squarePos[1] = 2.0+1.5*sin(x);
-            // squareRot += 1;
+            squareRot += 1;
         } 
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -311,13 +151,8 @@ int main(int argc, char* argv[]) {
 
         texturePlane.render();
 
-        // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        // compositeRenderer.render();
-        
-        // onDisplay();
         window.display();
     }
 
-    freeResources();
     return 0;
 }
