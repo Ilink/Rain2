@@ -2,6 +2,7 @@
 #include <stdlib.h>
 // #include <SFML/OpenGL.hpp>
 #include <SFML/Window.hpp>
+#include <tinyobj/tiny_obj_loader.h>
 #include <GL/glew.h>
 #include "shader.h"
 #include "Artemis-Cpp/Artemis.h"
@@ -30,7 +31,57 @@
 
 using namespace std;
 
+void testObjLoader(){
+    std::string inputfile = "sponza.obj";
+    std::vector<tinyobj::shape_t> shapes;
+
+    std::string err = tinyobj::LoadObj(shapes, inputfile.c_str());
+
+    if (!err.empty()) {
+      std::cerr << err << std::endl;
+    }
+
+    std::cout << "# of shapes : " << shapes.size() << std::endl;
+
+    for (size_t i = 0; i < shapes.size(); i++) {
+      printf("shape[%ld].name = %s\n", i, shapes[i].name.c_str());
+      printf("shape[%ld].indices: %ld\n", i, shapes[i].mesh.indices.size());
+      assert((shapes[i].mesh.indices.size() % 3) == 0);
+      for (size_t f = 0; f < shapes[i].mesh.indices.size(); f++) {
+        printf("  idx[%ld] = %d\n", f, shapes[i].mesh.indices[f]);
+      }
+
+      printf("shape[%ld].vertices: %ld\n", i, shapes[i].mesh.positions.size());
+      assert((shapes[i].mesh.positions.size() % 3) == 0);
+      for (size_t v = 0; v < shapes[i].mesh.positions.size() / 3; v++) {
+        printf("  v[%ld] = (%f, %f, %f)\n", v,
+          shapes[i].mesh.positions[3*v+0],
+          shapes[i].mesh.positions[3*v+1],
+          shapes[i].mesh.positions[3*v+2]);
+      }
+
+      printf("shape[%ld].material.name = %s\n", i, shapes[i].material.name.c_str());
+      printf("  material.Ka = (%f, %f ,%f)\n", shapes[i].material.ambient[0], shapes[i].material.ambient[1], shapes[i].material.ambient[2]);
+      printf("  material.Kd = (%f, %f ,%f)\n", shapes[i].material.diffuse[0], shapes[i].material.diffuse[1], shapes[i].material.diffuse[2]);
+      printf("  material.Ks = (%f, %f ,%f)\n", shapes[i].material.specular[0], shapes[i].material.specular[1], shapes[i].material.specular[2]);
+      printf("  material.Tr = (%f, %f ,%f)\n", shapes[i].material.transmittance[0], shapes[i].material.transmittance[1], shapes[i].material.transmittance[2]);
+      printf("  material.Ke = (%f, %f ,%f)\n", shapes[i].material.emission[0], shapes[i].material.emission[1], shapes[i].material.emission[2]);
+      printf("  material.Ns = %f\n", shapes[i].material.shininess);
+      printf("  material.map_Ka = %s\n", shapes[i].material.ambient_texname.c_str());
+      printf("  material.map_Kd = %s\n", shapes[i].material.diffuse_texname.c_str());
+      printf("  material.map_Ks = %s\n", shapes[i].material.specular_texname.c_str());
+      printf("  material.map_Ns = %s\n", shapes[i].material.normal_texname.c_str());
+      std::map<std::string, std::string>::iterator it(shapes[i].material.unknown_parameter.begin());
+      std::map<std::string, std::string>::iterator itEnd(shapes[i].material.unknown_parameter.end());
+      for (; it != itEnd; it++) {
+        printf("  material.%s = %s\n", it->first.c_str(), it->second.c_str());
+      }
+      printf("\n");
+    }
+}
+
 int main(int argc, char* argv[]) {
+    // testObjLoader();
 
     Shader shader;
     vector<vertex> boxVerts;
@@ -81,7 +132,7 @@ int main(int argc, char* argv[]) {
     // passes.push_back(shadowSystem->shadowMap);
     CompositeRenderer compositeRenderer(passes);
 
-    TexturePlane texturePlane(depthSystem->depthMap, 0.5, -0.7, 0.7);
+    TexturePlane depthDebugPanel(depthSystem->depthMap, 0.5, -0.7, 0.7);
     
     sm->initializeAll();
 
@@ -89,9 +140,11 @@ int main(int argc, char* argv[]) {
     float planeRot = 300.0f;
     float squareRot = 0.0f;
 
+    double brightness = 0.0;
+    double specularity = 0.0;
+
     artemis::Entity &plane = entityFactory.makePlaneEntity();
-    plane.addComponent(new PhongComponent(phongShader, 0, 0, glm::vec3(0.1, 0.2, 0.3)));
-    plane.addComponent(new IDComponent(0));
+    plane.addComponent(new PhongComponent(&phongShader, &brightness, &specularity, &glm::vec3(0.1, 0.2, 0.3)));
     plane.addComponent(new DebugComponent(&glm::vec4(0.0, 0.3, 0.2, 1.0)));
     plane.addComponent(new TransformationComponent(
         &glm::vec3(0.0f, 0.0f, 0.0f),
@@ -100,9 +153,8 @@ int main(int argc, char* argv[]) {
 
     artemis::Entity &square = em->create();
     square.addComponent(geoManager.create(boxVerts, boxVertIndex));
-    square.addComponent(new PhongComponent(phongShader, 0, 0, glm::vec3(0.4,0.5, 0.5)));
+    square.addComponent(new PhongComponent(&phongShader, &brightness, &specularity, &glm::vec3(0.4,0.5, 0.5)));
     square.addComponent(new DebugComponent(&glm::vec4(0.4, 0.3, 0.2, 1.0)));
-    square.addComponent(new IDComponent(1));
     square.addComponent(new TransformationComponent(
         &squarePos,
         &squareRot, &glm::vec3(0.0f, 1.0f, 0.0f)
@@ -149,7 +201,7 @@ int main(int argc, char* argv[]) {
         shadowSystem->process();
         // renderSystem->process();
 
-        texturePlane.render();
+        depthDebugPanel.render();
 
         window.display();
     }

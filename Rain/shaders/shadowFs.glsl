@@ -19,6 +19,7 @@ void main() {
             shadow = 0.5;
         } else {
             shadow = 1.0;
+            // discard;
         }
     }
 

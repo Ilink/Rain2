@@ -99,6 +99,9 @@
     <ClCompile Include="settings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="include\tinyobj\tiny_obj_loader.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLCheck.hpp">
@@ -226,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="components\transformationComponent.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tinyobj\tiny_obj_loader.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

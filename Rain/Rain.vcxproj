@@ -89,6 +89,7 @@
     <ClCompile Include="geoBuilder.cpp" />
     <ClCompile Include="geoManager.cpp" />
     <ClCompile Include="GLCheck.cpp" />
+    <ClCompile Include="include\tinyobj\tiny_obj_loader.cc" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="normals.cpp" />
     <ClCompile Include="settings.cpp" />
@@ -131,6 +132,7 @@
     <ClInclude Include="geoBuilder.h" />
     <ClInclude Include="geoManager.h" />
     <ClInclude Include="GLCheck.hpp" />
+    <ClInclude Include="include\tinyobj\tiny_obj_loader.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="normals.h" />

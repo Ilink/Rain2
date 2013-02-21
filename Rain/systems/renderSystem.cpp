@@ -64,7 +64,7 @@ void RenderSystem::vaoSetup(GLuint vao, GLuint vbo, GLuint ibo){
 
 void RenderSystem::processEntity(artemis::Entity &e){
     // printf("renderable entity\n");
-    GLuint shader = phongMapper.get(e)->shader.program; //todo: this only needs to be bound once!
+    GLuint shader = phongMapper.get(e)->shader->program; //todo: this only needs to be bound once!
                                                         //could be: startup => process => teardown
     GLuint vao = geoMapper.get(e)->vao;
     GLuint vbo = geoMapper.get(e)->vbo;

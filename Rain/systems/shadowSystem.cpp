@@ -3,16 +3,12 @@
 ShadowSystem::ShadowSystem(GLuint& depthMap, Spotlight& light){
     this->depthMap = depthMap;
     this->light = light;
-    // Artemis Setup
     addComponentType<GeoComponent>();
 
     rot = 0;
     fbo = 0; // need this?
     colorTex = 0;
     shadowMap = 0;
-
-    // glm::mat4 Model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
-    // MVP = Model;
 
     shadowBias = glm::mat4(
         glm::vec4(0.5f,0.0f,0.0f,0.0f),
@@ -124,15 +120,11 @@ void ShadowSystem::processEntity(artemis::Entity &e){
     // shadowMatrix = shadowBias * perspective * view * model;
     shadowMatrix = shadowBias * light.perspectiveMatrix * (light.viewMatrix) * model;
 
-    // rot += 0.5f;
-    // MV = glm::rotate(MVP, rot, glm::vec3(0.5f, 1.0f, 0.0f));
-
     if(!isPaused) {
         rot = 0.5f;
     } else {
         rot = 0;
     }
-
     
     MV = view * model;
 
@@ -167,7 +159,4 @@ void ShadowSystem::processEntity(artemis::Entity &e){
     printGlError();
     glDrawElements(GL_TRIANGLES, geoMapper.get(e)->triIndex.size(), GL_UNSIGNED_INT, 0);
     printGlError();
-
-    
-    
 }

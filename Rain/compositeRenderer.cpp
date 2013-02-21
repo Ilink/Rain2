@@ -59,7 +59,6 @@ void CompositeRenderer::render(){
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-        // error here
         //glActiveTexture(GL_TEXTURE0); // might be 1?
         glBindTexture(GL_TEXTURE_2D, passes[i]);
 
