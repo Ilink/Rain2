@@ -16,6 +16,18 @@ struct mesh {
     vector<GLuint> indexes;
 };
 
+struct pos {
+    GLfloat x, y, z;
+};
+
+struct tex {
+    GLfloat u, v;
+};
+
+struct normal {
+    GLfloat nx, ny, nz;
+};
+
 extern void parseObj(string filename, vector<mesh>& meshes);
 
 #endif

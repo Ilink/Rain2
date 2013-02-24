@@ -17,12 +17,20 @@ void parseObj(string filename, vector<mesh>& meshes){
     mesh newMesh;
     meshes.push_back(newMesh);
 
+    // temporary structures
+    vector<pos> positions;
+    vector<tex> texs;
+    vector<normal> normals;
+
     string line;
     int i = 0;
     int j = 0;
+    int k = 0;
 
     bool faceCheck = true;
     bool parseFaceTripple = false;
+
+
 
     /*
     My parsing strategy is fairly simple.
@@ -36,37 +44,42 @@ void parseObj(string filename, vector<mesh>& meshes){
 
     while (getline(in, line)) {
         if(line.substr(0,2) == "v "){
-            vertex vert;
-            vert.nx = 0.0; vert.ny = 0.0; vert.nz = 0.0;
-            vert.u = 0.0; vert.v = 0.0;
+            pos _pos;
+
             istringstream strm(line.substr(2)); // we want to skip the 'v ' part of the line
-            if (!(strm >> vert.x >> vert.y >> vert.z)) { 
+            if (!(strm >> _pos.x >> _pos.y >> _pos.z)) { 
                 cerr << "error parsing verts" << "\n";
                 return;
             }
-            meshes[0].verts.push_back(vert);
+            positions.push_back(_pos);
         } else if (line.substr(0,3) == "vn "){
-            if(meshes[0].verts.size() > i){
-                istringstream strm(line.substr(3));
-                if (!(strm >> meshes[0].verts[i].nx >> meshes[0].verts[i].ny >> meshes[0].verts[i].nz)) { 
-                    cerr << "error parsing normals" << "\n";
-                    return;
-                }
-            }
+            normal _normal;
 
-            // if i > verts.size(), push new vert onto vector
-            i++;
+            istringstream strm(line.substr(3));
+            if (!(strm >> _normal.nx >> _normal.ny >> _normal.nz)) { 
+                cerr << "error parsing normals" << "\n";
+                return;
+            }
+            normals.push_back(_normal);
         } else if (line.substr(0,3) == "vt "){
-            if(meshes[0].verts.size() > j){
-                istringstream strm(line.substr(3));
-                if(!(strm >> meshes[0].verts[j].u >> meshes[0].verts[j].v)){
-                    cerr << "error parsing texture coordinates" << "\n";
-                    return;
-                }
-            }
+            tex _tex;
 
-            j++;
-        } else if (line.substr(0,2) == "f "){
+            istringstream strm(line.substr(3));
+            if (!(strm >> _tex.u >> _tex.v)) { 
+                cerr << "error parsing normals" << "\n";
+                return;
+            }
+            texs.push_back(_tex);
+        }
+    }
+
+    in.clear();
+    in.seekg(0, ios::beg);
+
+    while (getline(in, line)) {
+        if (line.substr(0,2) == "f "){
+            vertex vert;
+
             if(faceCheck){
                 unsigned int slash = line.find("/");
                 if(slash != string::npos){
@@ -76,25 +89,39 @@ void parseObj(string filename, vector<mesh>& meshes){
             }
 
             if(parseFaceTripple){
-                int num;
+                int index;
                 string curNum;
-                int start = 0;
-                int end = 0;
+                int start = 2;
+                int end = 2;
                 int length = line.length();
                 int numTokens = 0;
-                for(int i=0; i < length; i++){
+                for(int i=2; i < length; i++){
+                    // printf("line @ i: %c\n", line[i]);
                     if(line[i] == '/' || line[i] == ' '){
                         end = i;
                         curNum = line.substr(start, end-start);
-                        num = strtol(curNum.c_str(), NULL, 10);
+                        index = strtol(curNum.c_str(), NULL, 10) - 1; // OBJ uses 1-based indexes, while opengl uses 0 based
                         start = i+1;
-                        if(numTokens%3 == 0){
-                            //printf("num: %i\n", num);
-                            meshes[0].indexes.push_back(num);
+                        // printf("index: %i tokens: %i\n", index, numTokens);
+                        if(numTokens==0){
+                            vert.x = positions[index].x;
+                            vert.y = positions[index].y;
+                            vert.z = positions[index].z;
+                            meshes[0].indexes.push_back(index);
+                            numTokens++;
+                        } else if (numTokens==1){
+                            vert.u = texs[index].u;
+                            vert.v = texs[index].v;
+                            numTokens++;
+                        } else if (numTokens==2){
+                            vert.nx = normals[index].nx;
+                            vert.ny = normals[index].ny;
+                            vert.nz = normals[index].nz;
+                            numTokens = 0;
+                            meshes[0].verts.push_back(vert);
                         }
-                        numTokens++;
                     }
-                };
+                }
             } else {
                 istringstream strm(line.substr(2));
                 GLuint a, b, c;
@@ -102,15 +129,13 @@ void parseObj(string filename, vector<mesh>& meshes){
                     cerr << "error parsing faces" << "\n";
                     return;
                 }
+                a--; b--; c--;
                 // OBJ uses 1-based indexes, while opengl uses 0 based
-                meshes[0].indexes.push_back(a-1);
-                meshes[0].indexes.push_back(b-1);
-                meshes[0].indexes.push_back(c-1);
+                meshes[0].indexes.push_back(a);
+                meshes[0].indexes.push_back(b);
+                meshes[0].indexes.push_back(c);
             }
-            
         }
-
-        
     }
 
 }
