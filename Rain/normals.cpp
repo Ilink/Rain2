@@ -24,7 +24,7 @@ void calcFaceNormals(vector <vertex>& verts, vector<GLuint>& triIndex){
     // printf("tri index size: %i\n", triIndex.size());
 
     for(int i=0; i < triIndex.size(); i+=3){
-        printf("%i\n", i);
+        // printf("%i\n", i);
         vecA.x = verts[triIndex[i]].x;
         vecA.y = verts[triIndex[i]].y;
         vecA.z = verts[triIndex[i]].z;

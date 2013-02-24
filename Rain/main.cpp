@@ -28,60 +28,78 @@
 #include "components/debugComponent.h"
 #include "spotlight.h"
 #include "settings.h"
+#include "objParser/objParser.h"
 
 using namespace std;
 
-void testObjLoader(){
-    std::string inputfile = "sponza.obj";
-    std::vector<tinyobj::shape_t> shapes;
-
-    std::string err = tinyobj::LoadObj(shapes, inputfile.c_str());
-
-    if (!err.empty()) {
-      std::cerr << err << std::endl;
+void printParsedObj(vector<vertex>& verts, vector<GLuint>& indexes){    
+    FILE *file = fopen ("log/obj.txt","w");
+    
+    fprintf(file, "num verts: %i\n", verts.size());
+    for(int i = 0; i < verts.size(); i++){
+        fprintf(file, "x: %f\ty: %f\tz: %f\n", verts[i].x, verts[i].y, verts[i].z);
+        fprintf(file, "nx: %f\tny: %f\tnz: %f\n", verts[i].nx, verts[i].ny, verts[i].nz);
+        fprintf(file, "u: %f\tu: %f\n\n", verts[i].u, verts[i].v);
     }
 
-    std::cout << "# of shapes : " << shapes.size() << std::endl;
+    fprintf(file, "\n\n\n");
 
-    for (size_t i = 0; i < shapes.size(); i++) {
-      printf("shape[%ld].name = %s\n", i, shapes[i].name.c_str());
-      printf("shape[%ld].indices: %ld\n", i, shapes[i].mesh.indices.size());
-      assert((shapes[i].mesh.indices.size() % 3) == 0);
-      for (size_t f = 0; f < shapes[i].mesh.indices.size(); f++) {
-        printf("  idx[%ld] = %d\n", f, shapes[i].mesh.indices[f]);
-      }
-
-      printf("shape[%ld].vertices: %ld\n", i, shapes[i].mesh.positions.size());
-      assert((shapes[i].mesh.positions.size() % 3) == 0);
-      for (size_t v = 0; v < shapes[i].mesh.positions.size() / 3; v++) {
-        printf("  v[%ld] = (%f, %f, %f)\n", v,
-          shapes[i].mesh.positions[3*v+0],
-          shapes[i].mesh.positions[3*v+1],
-          shapes[i].mesh.positions[3*v+2]);
-      }
-
-      printf("shape[%ld].material.name = %s\n", i, shapes[i].material.name.c_str());
-      printf("  material.Ka = (%f, %f ,%f)\n", shapes[i].material.ambient[0], shapes[i].material.ambient[1], shapes[i].material.ambient[2]);
-      printf("  material.Kd = (%f, %f ,%f)\n", shapes[i].material.diffuse[0], shapes[i].material.diffuse[1], shapes[i].material.diffuse[2]);
-      printf("  material.Ks = (%f, %f ,%f)\n", shapes[i].material.specular[0], shapes[i].material.specular[1], shapes[i].material.specular[2]);
-      printf("  material.Tr = (%f, %f ,%f)\n", shapes[i].material.transmittance[0], shapes[i].material.transmittance[1], shapes[i].material.transmittance[2]);
-      printf("  material.Ke = (%f, %f ,%f)\n", shapes[i].material.emission[0], shapes[i].material.emission[1], shapes[i].material.emission[2]);
-      printf("  material.Ns = %f\n", shapes[i].material.shininess);
-      printf("  material.map_Ka = %s\n", shapes[i].material.ambient_texname.c_str());
-      printf("  material.map_Kd = %s\n", shapes[i].material.diffuse_texname.c_str());
-      printf("  material.map_Ks = %s\n", shapes[i].material.specular_texname.c_str());
-      printf("  material.map_Ns = %s\n", shapes[i].material.normal_texname.c_str());
-      std::map<std::string, std::string>::iterator it(shapes[i].material.unknown_parameter.begin());
-      std::map<std::string, std::string>::iterator itEnd(shapes[i].material.unknown_parameter.end());
-      for (; it != itEnd; it++) {
-        printf("  material.%s = %s\n", it->first.c_str(), it->second.c_str());
-      }
-      printf("\n");
+    for(int i = 0; i < indexes.size()-3; i+=3){
+        fprintf(file, "%i %i %i\n", indexes[i], indexes[i+1], indexes[i+2]);
     }
+
+    fclose (file);
 }
 
 int main(int argc, char* argv[]) {
-    // testObjLoader();
+
+    string str = "1111/789/125433 2222/789/123345 3333/789/123456";
+
+    int num;
+    string curNum;
+    int start = 0;
+    int end = 0;
+    int length = str.length();
+    int numTokens = 0;
+    for(int i=0; i < length; i++){
+        if(str[i] == '/' || str[i] == ' '){
+            end = i;
+            curNum = str.substr(start, end-start);
+            num = strtol(curNum.c_str(), NULL, 10);
+            start = i+1;
+            if(numTokens%3 == 0){
+                printf("num: %i\n", num);
+            }
+            numTokens++;
+        }
+    };
+
+    //char * pch;
+    //char * inner;
+    //int a;
+    //pch = strtok ((char *) str.c_str()," ");
+    //while (pch != NULL){
+    //    // a = strtol(pch, NULL, 10);
+    //    //inner = strtok(pch, "/");
+    //    printf ("outer %s\n",pch);
+    //    /*while (inner != NULL){
+    //        printf("inner: %s\n", inner);
+    //        inner = strtok(NULL, "/");
+    //    }*/
+    //    // printf ("%i\n",a);
+    //    
+    //    pch = strtok (NULL, " ");
+    //}
+
+
+
+    vector<mesh> meshes;
+    // parseObj("meshes/cornellBox/cornell_box.obj", meshes);
+    // parseObj("meshes/teapot.obj", meshes);
+    parseObj("meshes/crytek-sponza/sponza.obj", meshes);
+    if(meshes.size()){
+        printParsedObj(meshes[0].verts, meshes[0].indexes);
+    }
 
     Shader shader;
     vector<vertex> boxVerts;
@@ -136,32 +154,53 @@ int main(int argc, char* argv[]) {
     
     sm->initializeAll();
 
-    glm::vec3 squarePos(0.0f, 0.5f, 0.0f);
+    glm::vec3 squarePos = glm::vec3(0.0f, 0.5f, 0.0f);
+    glm::vec3 scenePos = glm::vec3(0.0f, 0.0f, 0.0f);
     float planeRot = 300.0f;
     float squareRot = 0.0f;
+    glm::vec3 lightDir = glm::vec3(0.4,0.5, 0.5);
 
     double brightness = 0.0;
     double specularity = 0.0;
 
-    artemis::Entity &plane = entityFactory.makePlaneEntity();
-    plane.addComponent(new PhongComponent(&phongShader, &brightness, &specularity, &glm::vec3(0.1, 0.2, 0.3)));
-    plane.addComponent(new DebugComponent(&glm::vec4(0.0, 0.3, 0.2, 1.0)));
-    plane.addComponent(new TransformationComponent(
-        &glm::vec3(0.0f, 0.0f, 0.0f),
-        &planeRot, &glm::vec3(1.0f, 0.0f, 0.0f)
-    ));
+    // TransformationComponent *trans1 = new TransformationComponent(
+    //     &glm::vec3(0.0f, 0.0f, 0.0f),
+    //     &planeRot, &glm::vec3(1.0f, 0.0f, 0.0f)
+    // );
 
-    artemis::Entity &square = em->create();
-    square.addComponent(geoManager.create(boxVerts, boxVertIndex));
-    square.addComponent(new PhongComponent(&phongShader, &brightness, &specularity, &glm::vec3(0.4,0.5, 0.5)));
-    square.addComponent(new DebugComponent(&glm::vec4(0.4, 0.3, 0.2, 1.0)));
-    square.addComponent(new TransformationComponent(
-        &squarePos,
-        &squareRot, &glm::vec3(0.0f, 1.0f, 0.0f)
-    ));
+    // artemis::Entity &plane = entityFactory.makePlaneEntity();
+    // plane.addComponent(new PhongComponent(&phongShader, &brightness, &specularity, &lightDir));
+    // plane.addComponent(trans1);
+    // plane.refresh();
 
-    plane.refresh();
-    square.refresh();
+    // TransformationComponent* trans = new TransformationComponent(
+    //     &squarePos,
+    //     &squareRot, &glm::vec3(0.0f, 1.0f, 0.0f)
+    // );
+
+    // artemis::Entity &square = em->create();
+    // square.addComponent(geoManager.create(boxVerts, boxVertIndex));
+    // square.addComponent(new PhongComponent(&phongShader, &brightness, &specularity, &lightDir));
+    // square.addComponent(trans);
+    // square.refresh();
+
+    double __angle = 0.0;
+    double *_angle = &__angle;
+    glm::vec3 scale = glm::vec3(0.001f);
+    TransformationComponent *sceneTrans = new TransformationComponent(
+        &scenePos,
+        &scale,
+        &squareRot,
+        &glm::vec3(1.0f,0.5f, 0.5f)
+    );
+    artemis::Entity &scene = em->create();
+    scene.addComponent(geoManager.create(meshes[0].verts, meshes[0].indexes));
+    // scene.addComponent(geoManager.create(boxVerts, boxVertIndex));
+    scene.addComponent(new PhongComponent(&phongShader, &brightness, &specularity, &lightDir));
+    scene.addComponent(new DebugComponent(&glm::vec4(0.4, 0.3, 0.2, 1.0)));
+    scene.addComponent(sceneTrans);
+    scene.refresh();
+    
 
     bool running = true;
     double angle = 0;
@@ -174,7 +213,7 @@ int main(int argc, char* argv[]) {
             x+=0.1;
             squarePos[1] = 2.0+1.5*sin(x);
             squareRot += 1;
-        } 
+        }
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         sf::Event event;
@@ -186,20 +225,24 @@ int main(int argc, char* argv[]) {
             } else if (event.key.code == sf::Keyboard::Space && event.type == sf::Event::KeyPressed){
                 if(isPaused) isPaused = false;
                 else isPaused = true;
-            } else if (event.key.code == sf::Keyboard::S && event.type == sf::Event::KeyPressed){
+            } else if (event.key.code == sf::Keyboard::E && event.type == sf::Event::KeyPressed){
                 if(toggleCull) {
                     toggleCull = false;
                 } else {
                     toggleCull = true;
                 }
+            } else if (event.key.code == sf::Keyboard::S && event.type == sf::Event::KeyPressed){
+                scale[0] -= 0.05;
+                scale[1] -= 0.05;
+                scale[2] -= 0.05;
             }
         }
 
         world.loopStart();
         world.setDelta(0.0016f);
-        depthSystem->process();
-        shadowSystem->process();
-        // renderSystem->process();
+        // depthSystem->process();
+        // shadowSystem->process();
+        renderSystem->process();
 
         depthDebugPanel.render();
 

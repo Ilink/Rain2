@@ -4,6 +4,7 @@
 #include "../Artemis-Cpp/Artemis.h"
 #include "../components/geoComponent.h"
 #include "../components/phongComponent.h"
+#include "../components/transformationComponent.h"
 #include <GL/glew.h>
 #include "../util.h"
 #include <glm/glm.hpp>
@@ -15,6 +16,7 @@ class RenderSystem : public artemis::EntityProcessingSystem {
 private:
     artemis::ComponentMapper<GeoComponent> geoMapper;
     artemis::ComponentMapper<PhongComponent> phongMapper;
+    artemis::ComponentMapper<TransformationComponent> transMapper;
     GLenum error;
     glm::mat4 MVP;
     glm::mat4 MV;

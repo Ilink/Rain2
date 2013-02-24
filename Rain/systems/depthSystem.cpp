@@ -106,16 +106,16 @@ void DepthSystem::processEntity(artemis::Entity &e){
 
     // glDepthRange(0.5, 10);
     // printf("depth: %f\n", depth);
-    depth += 0.1;
-    if(!isPaused) {
-        rot = 0.5f;
-    } else {
-        rot = 0;
-    }
     // view = glm::rotate(view, rot, glm::vec3(0.5f, 1.0f, 0.0f));
 
     light.update();
-    model = transformationMapper.get(e)->getModelMatrix();
+    TransformationComponent *trans = transformationMapper.get(e);
+    model = trans->getModelMatrix();
+    // model = glm::translate(glm::mat4(1.0f), *trans->pos);
+    // model = glm::rotate(model, *trans->angle, *trans->axis);
+    // model = glm::scale(model, *trans->scale);
+    // model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+
     perspective = glm::perspective(45.0f, 4.0f / 3.0f, 5.0f, 20.f);
     MV = light.viewMatrix * model;
 

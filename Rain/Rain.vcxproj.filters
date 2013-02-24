@@ -102,6 +102,9 @@
     <ClCompile Include="include\tinyobj\tiny_obj_loader.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="objParser\objParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLCheck.hpp">
@@ -191,9 +194,6 @@
     <ClInclude Include="types.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="components\transComponent.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="normals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -227,11 +227,14 @@
     <ClInclude Include="settings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="components\transformationComponent.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\tinyobj\tiny_obj_loader.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="objParser\objParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\transformationComponent.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
