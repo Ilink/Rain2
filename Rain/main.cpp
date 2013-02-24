@@ -44,8 +44,13 @@ void printParsedObj(vector<vertex>& verts, vector<GLuint>& indexes){
 
     fprintf(file, "\n\n\n");
 
-    for(int i = 0; i < indexes.size()-3; i+=3){
-        fprintf(file, "%i %i %i\n", indexes[i], indexes[i+1], indexes[i+2]);
+    for(int i = 0; i < indexes.size(); i++){
+        // fprintf(file, "%i %i %i\n", indexes[i], indexes[i+1], indexes[i+2]);
+        if(i%3==0 && i > 0){
+            fprintf(file, "\n");
+        }
+        fprintf(file, "%i", i);
+        
     }
 
     fclose (file);
@@ -68,35 +73,17 @@ int main(int argc, char* argv[]) {
             num = strtol(curNum.c_str(), NULL, 10);
             start = i+1;
             if(numTokens%3 == 0){
-                printf("num: %i\n", num);
+                // printf("num: %i\n", num);
             }
             numTokens++;
         }
     };
 
-    //char * pch;
-    //char * inner;
-    //int a;
-    //pch = strtok ((char *) str.c_str()," ");
-    //while (pch != NULL){
-    //    // a = strtol(pch, NULL, 10);
-    //    //inner = strtok(pch, "/");
-    //    printf ("outer %s\n",pch);
-    //    /*while (inner != NULL){
-    //        printf("inner: %s\n", inner);
-    //        inner = strtok(NULL, "/");
-    //    }*/
-    //    // printf ("%i\n",a);
-    //    
-    //    pch = strtok (NULL, " ");
-    //}
-
-
-
     vector<mesh> meshes;
     // parseObj("meshes/cornellBox/cornell_box.obj", meshes);
     // parseObj("meshes/teapot.obj", meshes);
-    parseObj("meshes/crytek-sponza/sponza.obj", meshes);
+    // parseObj("meshes/crytek-sponza/sponza.obj", meshes);
+    parseObj("meshes/test.obj", meshes);
     if(meshes.size()){
         printParsedObj(meshes[0].verts, meshes[0].indexes);
     }
