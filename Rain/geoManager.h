@@ -7,6 +7,7 @@
 #include "Artemis-Cpp/Artemis.h"
 #include "components/geoComponent.h"
 #include "util.h"
+#include <tinyobj/tiny_obj_loader.h>
 #include "types.h"
 
 using namespace std;
@@ -30,6 +31,7 @@ public:
     GeoManager();
     ~GeoManager();
     GeoComponent* create(vector <vertex>& verts, vector<GLuint>& triIndex);
+    GeoComponent* create(std::vector<tinyobj::shape_t>* shapes);
     void freeAll();
 };
 

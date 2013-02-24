@@ -260,7 +260,6 @@ std::string LoadMtl (
   std::map<std::string, material_t>& material_map,
   const char* filename)
 {
-  //todo: prepend base path to the filename
   material_map.clear();
   std::stringstream err;
 
@@ -421,25 +420,29 @@ std::string LoadMtl (
   }
   // flush last material.
   material_map.insert(std::pair<std::string, material_t>(material.name, material));
-
   return err.str();
 }
 
-char* getPath(const char* filename){
-  char* path = "";
-  size_t length = strlen(filename);
-  for(int i = length-1; i > 0; i--){
-    if(filename[i] == '/'){
-      char subbuff[length-i];
-      memcpy( subbuff, &buff[10], 4 );
-      subbuff[4] = '\0';
-      return subbuff;
-    }
+// gets base path then appends material path to the base path
+char* getMtlPath(const char* path, char* mat){
+  
+  const char* p;
+  int size = 0;
+
+  p = strrchr(path, '/');
+  if(p){
+    int start = p-path+1;
+    size += start + 2 + strlen(mat); // the two is for the slash and the final end-of-string \0 character
+    char* mtlPath = (char*) malloc(size);
+    printf("start: %i\n", start);
+    strncpy(mtlPath, path, start);
+    strcat(mtlPath, mat);
+    return mtlPath;
+  } else { // no base path, so we just return the string
+    // allocate so we can always perform "free" later
+    char* mtlPath = (char*) malloc(strlen(mat));
+    return strcpy(mtlPath, mat);
   }
-  /*
-  go back until you find a '/' or a '\'
-  */
-  return path;
 }
 
 std::string
@@ -569,13 +572,19 @@ LoadObj(
       char namebuf[4096];
       token += 7;
       sscanf(token, "%s", namebuf);
-      char* fullPath = getPath(filename);
+      printf("name: %s\n", namebuf);
+      printf("filename: %s\n", filename);
 
-      std::string err_mtl = LoadMtl(material_map, namebuf);
+      char* matPath = getMtlPath(filename, namebuf);
+      printf("matpath: %s\n", matPath);
+
+      std::string err_mtl = LoadMtl(material_map, matPath);
+      
       if (!err_mtl.empty()) {
         faceGroup.clear();  // for safety
         return err_mtl;
       }
+      
       continue;
     }
 

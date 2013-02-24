@@ -41,7 +41,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>L:\projects\Rain2\Rain\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
-    <SourcePath>L:\projects\Rain2\Rain\systems;$(SourcePath)</SourcePath>
+    <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -92,6 +92,7 @@
     <ClCompile Include="include\tinyobj\tiny_obj_loader.cc" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="normals.cpp" />
+    <ClCompile Include="objParser\objParser.cpp" />
     <ClCompile Include="settings.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="systems\depthSystem.cpp" />
@@ -123,7 +124,6 @@
     <ClInclude Include="components\geoComponent.h" />
     <ClInclude Include="components\phongComponent.h" />
     <ClInclude Include="components\pointLightComponent.h" />
-    <ClInclude Include="components\transComponent.h" />
     <ClInclude Include="components\transformationComponent.h" />
     <ClInclude Include="compositeRenderer.h" />
     <ClInclude Include="config.h" />
@@ -133,6 +133,7 @@
     <ClInclude Include="geoManager.h" />
     <ClInclude Include="GLCheck.hpp" />
     <ClInclude Include="include\tinyobj\tiny_obj_loader.h" />
+    <ClInclude Include="objParser\objParser.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="normals.h" />

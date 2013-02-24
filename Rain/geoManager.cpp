@@ -49,6 +49,28 @@ GeoComponent* GeoManager::create(vector <vertex>& verts, vector<GLuint>& triInde
     return new GeoComponent(verts, triIndex, -1, -1, this->VBOs.back(), this->IBOs.back(), this->VAOs.back());
 }
 
+GeoComponent* GeoManager::create(std::vector<tinyobj::shape_t>* shapes){
+    this->VBOs.push_back((GLuint) this->VBOs.size()+1);
+    this->IBOs.push_back((GLuint) this->IBOs.size()+1);
+    this->VAOs.push_back((GLuint) this->VAOs.size()+1);
+
+    glGenBuffers(1, &this->VBOs.back());
+    // glBindBuffer(GL_ARRAY_BUFFER, this->VBOs.back());
+    // glBufferData(GL_ARRAY_BUFFER, sizeof(vertex)*verts.size(), &verts[0], GL_STATIC_DRAW);
+    // glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glGenBuffers(1, &this->IBOs.back());
+    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->IBOs.back());
+    // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*triIndex.size(), &triIndex[0], GL_STATIC_DRAW);
+    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    glGenVertexArrays(1, &this->VAOs.back());
+
+    printGlError();
+
+    return new GeoComponent(shapes, -1, -1, this->VBOs.back(), this->IBOs.back(), this->VAOs.back());
+}
+
 void GeoManager::freeAll(){
     vector<GLuint>::iterator iter;
 }

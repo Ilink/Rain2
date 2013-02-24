@@ -113,7 +113,15 @@ void ShadowSystem::processEntity(artemis::Entity &e){
 
     perspective = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.f);
     view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
-    model = transformationMapper.get(e)->getModelMatrix();
+
+    TransformationComponent *trans = transformationMapper.get(e);
+    model = trans->getModelMatrix();
+    
+    // model = glm::translate(glm::mat4(1.0f), *trans->pos);
+    // model = glm::rotate(model, *trans->angle, *trans->axis);
+    // model = glm::scale(model, *trans->scale);
+    // model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+
     glm::mat4 inv = glm::inverse(light.viewMatrix);
     // shadowMatrix = shadowBias * perspective * inv * view * model;
     // shadowMatrix = shadowBias * perspective * light.viewMatrix * model;

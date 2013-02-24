@@ -1,6 +1,8 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#include <GL/glew.h>
+
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 struct vertex {

@@ -23,7 +23,6 @@ RenderSystem::RenderSystem(){
     
     perspective = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.f);
     view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
-    model = glm::scale(glm::mat4(1.0f),glm::vec3(0.5f));
 
     glm::mat4 ViewTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -1.0f));
     glm::mat4 ViewRotateX = glm::rotate(ViewTranslate,90.0f, glm::vec3(-1.0f, 0.0f, 0.0f));
@@ -38,6 +37,7 @@ RenderSystem::RenderSystem(){
 void RenderSystem::initialize(){
     geoMapper.init(*world);
     phongMapper.init(*world);
+    transMapper.init(*world);
 }
 
 void RenderSystem::vaoSetup(GLuint vao, GLuint vbo, GLuint ibo){
@@ -87,12 +87,12 @@ void RenderSystem::processEntity(artemis::Entity &e){
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
-    rot = 0.5f;
-    view = glm::rotate(view, rot, glm::vec3(0.5f, 1.0f, 0.0f));
+    model = transMapper.get(e)->getModelMatrix();
 
     MV = view * model;
     glm::mat3 normalMatrix(MV);
     glm::transpose(normalMatrix);
+    glFrontFace(GL_CW);
 
     glUniformMatrix3fv(uNormalMatrix, 1, false, (const GLfloat*) glm::value_ptr(normalMatrix));
     glUniformMatrix4fv(uMVMatrix, 1, FALSE, (const GLfloat*) glm::value_ptr(MV));
