@@ -29,6 +29,7 @@
 #include "spotlight.h"
 #include "settings.h"
 #include "objParser/objParser.h"
+#include "camera.h"
 
 using namespace std;
 
@@ -57,6 +58,7 @@ void printParsedObj(vector<vertex>& verts, vector<GLuint>& indexes){
 }
 
 int main(int argc, char* argv[]) {
+    Camera camera;
 
     string str = "1111/789/125433 2222/789/123345 3333/789/123456";
 
@@ -83,9 +85,9 @@ int main(int argc, char* argv[]) {
     // parseObj("meshes/cornellBox/cornell_box.obj", meshes);
     // parseObj("meshes/teapot.obj", meshes);
     // parseObj("meshes/crytek-sponza/sponza.obj", meshes);
-    parseObj("meshes/test.obj", meshes);
+    // parseObj("meshes/test.obj", meshes);
     if(meshes.size()){
-        printParsedObj(meshes[0].verts, meshes[0].indexes);
+        //printParsedObj(meshes[0].verts, meshes[0].indexes);
     }
 
     Shader shader;
@@ -128,7 +130,7 @@ int main(int argc, char* argv[]) {
     EntityFactory entityFactory(em, geoManager);
     // GeoFactory geoFactory;
     
-    RenderSystem* renderSystem = (RenderSystem*)sm->setSystem(new RenderSystem());
+    RenderSystem* renderSystem = (RenderSystem*)sm->setSystem(new RenderSystem(&camera.viewMatrix));
     DepthSystem* depthSystem = (DepthSystem*)sm->setSystem(new DepthSystem(light));
     ShadowSystem* shadowSystem = (ShadowSystem*)sm->setSystem(new ShadowSystem(depthSystem->depthMap, light));
     
@@ -173,7 +175,8 @@ int main(int argc, char* argv[]) {
 
     double __angle = 0.0;
     double *_angle = &__angle;
-    glm::vec3 scale = glm::vec3(0.001f);
+    // glm::vec3 scale = glm::vec3(0.001f);
+    glm::vec3 scale = glm::vec3(1.0f);
     TransformationComponent *sceneTrans = new TransformationComponent(
         &scenePos,
         &scale,
@@ -181,8 +184,8 @@ int main(int argc, char* argv[]) {
         &glm::vec3(1.0f,0.5f, 0.5f)
     );
     artemis::Entity &scene = em->create();
-    scene.addComponent(geoManager.create(meshes[0].verts, meshes[0].indexes));
-    // scene.addComponent(geoManager.create(boxVerts, boxVertIndex));
+    // scene.addComponent(geoManager.create(meshes[0].verts, meshes[0].indexes));
+    scene.addComponent(geoManager.create(boxVerts, boxVertIndex));
     scene.addComponent(new PhongComponent(&phongShader, &brightness, &specularity, &lightDir));
     scene.addComponent(new DebugComponent(&glm::vec4(0.4, 0.3, 0.2, 1.0)));
     scene.addComponent(sceneTrans);
@@ -199,7 +202,7 @@ int main(int argc, char* argv[]) {
         if(!isPaused){
             x+=0.1;
             squarePos[1] = 2.0+1.5*sin(x);
-            squareRot += 1;
+            // squareRot += 1;
         }
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -219,9 +222,15 @@ int main(int argc, char* argv[]) {
                     toggleCull = true;
                 }
             } else if (event.key.code == sf::Keyboard::S && event.type == sf::Event::KeyPressed){
-                scale[0] -= 0.05;
-                scale[1] -= 0.05;
-                scale[2] -= 0.05;
+                camera.translate(-0.1);
+            } else if (event.key.code == sf::Keyboard::W && event.type == sf::Event::KeyPressed){
+                camera.translate(0.1);
+            } else if (event.key.code == sf::Keyboard::A && event.type == sf::Event::KeyPressed){
+                camera.strafe(-1.0f);
+            } else if (event.key.code == sf::Keyboard::D && event.type == sf::Event::KeyPressed){
+                camera.strafe(1.0f);
+            } else if (event.key.code == sf::Keyboard::E && event.type == sf::Event::KeyPressed){
+                camera.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 1.0f);
             }
         }
 

@@ -17,16 +17,13 @@ It should have a subsystem that looks at every light entity and gathers data fro
 I cant have the renderSystem itself look for light components because a renderable entity would never have one.
 */
 
-RenderSystem::RenderSystem(){
+RenderSystem::RenderSystem(glm::mat4 *viewMatrix){
     addComponentType<GeoComponent>();
     addComponentType<PhongComponent>();
     
-    perspective = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.f);
-    view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
-
-    glm::mat4 ViewTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -1.0f));
-    glm::mat4 ViewRotateX = glm::rotate(ViewTranslate,90.0f, glm::vec3(-1.0f, 0.0f, 0.0f));
-    glm::mat4 View = glm::rotate(ViewRotateX,0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+    perspective = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 200.f);
+    // view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
+    view = viewMatrix;
 
     rot = 0;
 
@@ -89,7 +86,7 @@ void RenderSystem::processEntity(artemis::Entity &e){
 
     model = transMapper.get(e)->getModelMatrix();
 
-    MV = view * model;
+    MV = *view * model;
     glm::mat3 normalMatrix(MV);
     glm::transpose(normalMatrix);
     glFrontFace(GL_CW);

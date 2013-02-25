@@ -20,7 +20,9 @@ public:
 
     Spotlight(double brightness, glm::vec3* position, glm::vec3* lookAtPoint){
         this->perspectiveMatrix = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.f);
-        this->upVector = glm::vec3(0.0f, 0.0f, 1.0f);
+        this->upVector = glm::vec3(0.0f, 1.0f, 0.0f);
+        // this->upVector = glm::vec3(0.0f, 0.0f, 1.0f);
+        
         this->brightness = brightness;
         this->position = position;
         this->lookAtPoint = lookAtPoint;

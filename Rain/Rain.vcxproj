@@ -84,6 +84,7 @@
     <ClCompile Include="Artemis-Cpp\SystemManager.cpp" />
     <ClCompile Include="Artemis-Cpp\TagManager.cpp" />
     <ClCompile Include="Artemis-Cpp\World.cpp" />
+    <ClCompile Include="camera.cpp" />
     <ClCompile Include="compositeRenderer.cpp" />
     <ClCompile Include="entityFactory.cpp" />
     <ClCompile Include="geoBuilder.cpp" />
@@ -121,6 +122,7 @@
     <ClInclude Include="Artemis-Cpp\TagManager.h" />
     <ClInclude Include="Artemis-Cpp\TypeInfoComparator.h" />
     <ClInclude Include="Artemis-Cpp\World.h" />
+    <ClInclude Include="camera.h" />
     <ClInclude Include="components\geoComponent.h" />
     <ClInclude Include="components\phongComponent.h" />
     <ClInclude Include="components\pointLightComponent.h" />

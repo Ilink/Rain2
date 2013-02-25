@@ -1,9 +1,21 @@
-﻿Build started 2/24/2013 1:42:23 PM.
+﻿Build started 2/24/2013 7:27:55 PM.
      1>Project "L:\projects\Rain2\Rain\Rain.vcxproj" on node 2 (Build target(s)).
-     1>Link:
-         Rain.vcxproj -> L:\projects\Rain2\Debug\Rain.exe
-     1>Done Building Project "L:\projects\Rain2\Rain\Rain.vcxproj" (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IL:\projects\Rain\Rain\Rain\include /IL:\lib\SFML\include /ZI /nologo /W3 /WX- /Od /Oy- /D GLEW_STATIC /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
+         main.cpp
+     1>l:\projects\rain2\rain\artemis-cpp\typeinfocomparator.h(17): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
+     1>l:\projects\rain2\rain\main.cpp(37): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(234) : see declaration of 'fopen'
+     1>l:\projects\rain2\rain\main.cpp(40): warning C4018: '<' : signed/unsigned mismatch
+     1>l:\projects\rain2\rain\main.cpp(48): warning C4018: '<' : signed/unsigned mismatch
+     1>l:\projects\rain2\rain\main.cpp(204): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>l:\projects\rain2\rain\main.cpp(225): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>l:\projects\rain2\rain\main.cpp(226): error C2039: 'KeyHeld' : is not a member of 'sf::Event'
+                 l:\lib\sfml\include\sfml\window\event.hpp(44) : see declaration of 'sf::Event'
+     1>l:\projects\rain2\rain\main.cpp(226): error C2065: 'KeyHeld' : undeclared identifier
+     1>l:\projects\rain2\rain\main.cpp(227): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>Done Building Project "L:\projects\Rain2\Rain\Rain.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:00.04
+Time Elapsed 00:00:01.12
