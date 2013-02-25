@@ -45,6 +45,8 @@ void printParsedObj(vector<vertex>& verts, vector<GLuint>& indexes){
 
     fprintf(file, "\n\n\n");
 
+    fprintf(file, "num faces: %i\n", indexes.size()/3);
+
     for(int i = 0; i < indexes.size(); i++){
         // fprintf(file, "%i %i %i\n", indexes[i], indexes[i+1], indexes[i+2]);
         if(i%3==0 && i > 0){
@@ -84,10 +86,13 @@ int main(int argc, char* argv[]) {
     vector<mesh> meshes;
     // parseObj("meshes/cornellBox/cornell_box.obj", meshes);
     // parseObj("meshes/teapot.obj", meshes);
-    parseObj("meshes/crytek-sponza/sponza.obj", meshes);
+    // parseObj("meshes/crytek-sponza/sponza.obj", meshes);
+    // parseObj("meshes/CornellBox-Sphere.obj", meshes);
+    // parseObj("meshes/CornellBox-Empty-CO.obj", meshes);
+    parseObj("meshes/sibenik.obj", meshes);
     // parseObj("meshes/test.obj", meshes);
     if(meshes.size()){
-        //printParsedObj(meshes[0].verts, meshes[0].indexes);
+        printParsedObj(meshes[0].verts, meshes[0].indexes);
     }
 
     Shader shader;
@@ -178,7 +183,7 @@ int main(int argc, char* argv[]) {
 
     double __angle = 0.0;
     double *_angle = &__angle;
-    glm::vec3 scale = glm::vec3(0.005f);
+    glm::vec3 scale = glm::vec3(1.0f);
     // glm::vec3 scale = glm::vec3(1.0f);
     TransformationComponent *sceneTrans = new TransformationComponent(
         &scenePos,
@@ -212,6 +217,7 @@ int main(int argc, char* argv[]) {
         }
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
         sf::Event event;
         while (window.pollEvent(event)){
             if (event.type == sf::Event::Closed){
@@ -249,7 +255,7 @@ int main(int argc, char* argv[]) {
                     mouseHeld = true;
                 } else {
                     posDelta.x = prevPos.x - position.x;
-                    posDelta.y = prevPos.y - position.y;
+                    posDelta.y = position.y -prevPos.y;
                     prevPos.x = position.x;
                     prevPos.y = position.y;
                 }

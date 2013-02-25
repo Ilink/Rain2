@@ -8,6 +8,9 @@
 #include <fstream>
 #include "../types.h"
 #include <sstream>
+#include <algorithm>
+
+enum { FTN, FT, FN };
 
 using namespace std;
 
