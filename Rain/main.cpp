@@ -84,7 +84,7 @@ int main(int argc, char* argv[]) {
     vector<mesh> meshes;
     // parseObj("meshes/cornellBox/cornell_box.obj", meshes);
     // parseObj("meshes/teapot.obj", meshes);
-    // parseObj("meshes/crytek-sponza/sponza.obj", meshes);
+    parseObj("meshes/crytek-sponza/sponza.obj", meshes);
     // parseObj("meshes/test.obj", meshes);
     if(meshes.size()){
         //printParsedObj(meshes[0].verts, meshes[0].indexes);
@@ -103,7 +103,10 @@ int main(int argc, char* argv[]) {
 
     sf::Window window(sf::VideoMode(800, 600), "OpenGL");
     window.setVerticalSyncEnabled(true);
-    window.setKeyRepeatEnabled(false);
+    window.setKeyRepeatEnabled(true);
+
+    // const sf::Vector2i windowCenter( 400, 300 );
+    // sf::Mouse::setPosition( windowCenter, window );
 
     // note this must be called before any opengl operations
     GLenum glew_status = glewInit();
@@ -175,8 +178,8 @@ int main(int argc, char* argv[]) {
 
     double __angle = 0.0;
     double *_angle = &__angle;
-    // glm::vec3 scale = glm::vec3(0.001f);
-    glm::vec3 scale = glm::vec3(1.0f);
+    glm::vec3 scale = glm::vec3(0.005f);
+    // glm::vec3 scale = glm::vec3(1.0f);
     TransformationComponent *sceneTrans = new TransformationComponent(
         &scenePos,
         &scale,
@@ -184,8 +187,8 @@ int main(int argc, char* argv[]) {
         &glm::vec3(1.0f,0.5f, 0.5f)
     );
     artemis::Entity &scene = em->create();
-    // scene.addComponent(geoManager.create(meshes[0].verts, meshes[0].indexes));
-    scene.addComponent(geoManager.create(boxVerts, boxVertIndex));
+    scene.addComponent(geoManager.create(meshes[0].verts, meshes[0].indexes));
+    // scene.addComponent(geoManager.create(boxVerts, boxVertIndex));
     scene.addComponent(new PhongComponent(&phongShader, &brightness, &specularity, &lightDir));
     scene.addComponent(new DebugComponent(&glm::vec4(0.4, 0.3, 0.2, 1.0)));
     scene.addComponent(sceneTrans);
@@ -195,6 +198,9 @@ int main(int argc, char* argv[]) {
     bool running = true;
     double angle = 0;
     double x = 0;
+    sf::Vector2i posDelta(0,0);
+    sf::Vector2i prevPos(0,0);
+    bool mouseHeld = false;
 
     while (running){
         // planeRot += 0.5;
@@ -232,6 +238,31 @@ int main(int argc, char* argv[]) {
             } else if (event.key.code == sf::Keyboard::E && event.type == sf::Event::KeyPressed){
                 camera.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 1.0f);
             }
+            
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+                sf::Vector2i position = sf::Mouse::getPosition(window);
+                if(!mouseHeld){
+                    prevPos.x = position.x;
+                    prevPos.y = position.y;
+                    posDelta.x = 0;
+                    posDelta.y = 0;
+                    mouseHeld = true;
+                } else {
+                    posDelta.x = prevPos.x - position.x;
+                    posDelta.y = prevPos.y - position.y;
+                    prevPos.x = position.x;
+                    prevPos.y = position.y;
+                }
+
+                camera.pitch(((float) posDelta.x) / 10.0);
+                camera.yaw(((float) posDelta.y / 10.0));
+                
+                printf("%i, %i\n", posDelta.x, posDelta.y);
+            } else {
+                mouseHeld = false;
+            }
+
+
         }
 
         world.loopStart();
