@@ -33,10 +33,6 @@ void parseObj(string filename, vector<mesh>& meshes){
 
 
     /*
-    My parsing strategy is fairly simple.
-    It assumes (currently) that vertexes occur first, but that is fairly trivial to re-work.
-    The keeps track of how many secondary vertex properties we have found.
-    This means it assumes every vertex has a normal and a texture coordinate.
 
     The data is organized for optimal opengl usage. This means all the vertex properties get packed into
     a single struct. Then we can use interleaving when we send the data to the videocard. 
