@@ -17,6 +17,7 @@ using namespace std;
 struct mesh {
     vector<vertex> verts;
     vector<GLuint> indexes;
+    vector<GLuint> quadIndexes;
 };
 
 struct pos {

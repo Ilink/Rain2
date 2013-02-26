@@ -21,7 +21,7 @@ RenderSystem::RenderSystem(glm::mat4 *viewMatrix){
     addComponentType<GeoComponent>();
     addComponentType<PhongComponent>();
     
-    perspective = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 200.f);
+    perspective = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 1000.f);
     // view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
     view = viewMatrix;
 
@@ -96,6 +96,7 @@ void RenderSystem::processEntity(artemis::Entity &e){
     glUniformMatrix4fv(uMVPmat, 1, FALSE, (const GLfloat*) glm::value_ptr(perspective));
 
     glDrawElements(GL_TRIANGLES, geoMapper.get(e)->triIndex.size(), GL_UNSIGNED_INT, 0);
+    //glDrawElements(GL_TRIANGLE_STRIPS, geoMapper.get(e)->triIndex.size(), GL_UNSIGNED_INT, 0);
 
     //error = glGetError();
     //printGlError(error);

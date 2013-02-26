@@ -18,6 +18,7 @@ public:
     void yaw(const float& angle);
     void strafe(const float& amount);
     void translate(const float& amount);
+    void reset();
     glm::mat4 viewMatrix;
 };
 

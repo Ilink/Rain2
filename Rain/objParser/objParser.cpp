@@ -26,7 +26,9 @@ vector<normal>& normals, vector<pos>& positions, vector<tex>& texs){
                 vert.x = positions[index].x;
                 vert.y = positions[index].y;
                 vert.z = positions[index].z;
-                indexes.push_back(index);
+                int newIndex = verts.size();
+                // indexes.push_back(index);
+                indexes.push_back(newIndex);
                 numTokens++;
             } else if (numTokens==1){
                 vert.nx = normals[index].nx;
@@ -61,7 +63,9 @@ vector<normal>& normals, vector<pos>& positions, vector<tex>& texs){
                 vert.x = positions[index].x;
                 vert.y = positions[index].y;
                 vert.z = positions[index].z;
-                indexes.push_back(index);
+                int newIndex = verts.size();
+                // indexes.push_back(index);
+                indexes.push_back(newIndex);
                 numTokens++;
             } else if (numTokens==1){
                 vert.u = texs[index].u;
@@ -101,7 +105,9 @@ vector<normal>& normals, vector<pos>& positions, vector<tex>& texs){
                 vert.x = positions[index].x;
                 vert.y = positions[index].y;
                 vert.z = positions[index].z;
-                indexes.push_back(index);
+                int newIndex = verts.size();
+                // indexes.push_back(index);
+                indexes.push_back(newIndex);
                 numTokens++;
             } else if (numTokens==1){
                 vert.u = texs[index].u;
@@ -201,9 +207,11 @@ void parseObj(string filename, vector<mesh>& meshes){
                 int end = 2;
                 int length = line.length();
                 int numTokens = 0;
-                int numSlashes = count(line.begin(), line.end(), '/');
-                unsigned numDoubleSlashes = line.find("//");
+                
+                int numSpaces = count(line.begin()+2, line.end(), ' ');
+                unsigned doubleSlashes = line.find("//");
                 unsigned int mode;
+                string temp;
                 /*
                 There are three ways of specifying faces:
                     1. face index / tex index / normal index
@@ -213,8 +221,22 @@ void parseObj(string filename, vector<mesh>& meshes){
                 The way im doing this is a little brittle because it only works with triangles.
                 6 slashes is 2 per pair, with 3 pairs
                 */
-                if(numSlashes == 6){
-                    if(numDoubleSlashes != string::npos){
+
+                /*
+                i need to know two things:
+                    1: is it a quad or a triangle?
+                    2: which type of vertex is it? (position/normal/texture etc) 
+                */
+                string firstSet = line.substr(2, line.find(" ", 2)-2);
+                int numSlashes = count(firstSet.begin(), firstSet.end(), '/');
+                if(numSpaces == 3){ // triangle
+                    vector<GLuint>& indexes = meshes[0].indexes;
+                } else if(numSpaces == 4){ // quad
+                    vector<GLuint>& indexes = meshes[0].quadIndexes;
+                }
+
+                if(numSlashes == 2){
+                    if(doubleSlashes != string::npos){
                         mode = FN; // only this mode has 2 slashes like that
                         parseFN(line, meshes[0].verts, meshes[0].indexes, normals, positions, texs);
                     } else {
@@ -223,7 +245,7 @@ void parseObj(string filename, vector<mesh>& meshes){
                         // vector<GLfloat>& normals, vector<GLfloat>& positions, vector<GLfloat>& texs
                         parseFTN(line, meshes[0].verts, meshes[0].indexes, normals, positions, texs);
                     }
-                } else {
+                } else if(numSlashes == 1) {
                     mode = FT;
                     parseFT(line, meshes[0].verts, meshes[0].indexes, normals, positions, texs);
                 }

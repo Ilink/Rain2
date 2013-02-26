@@ -3,5 +3,6 @@
 
 extern bool isPaused;
 extern bool toggleCull;
+extern bool toggleWireframe;
 
 #endif
