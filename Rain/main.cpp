@@ -87,9 +87,9 @@ int main(int argc, char* argv[]) {
     // parseObj("meshes/cornellBox/cornell_box.obj", meshes);
     // parseObj("meshes/teapot.obj", meshes);
     // parseObj("meshes/crytek-sponza/sponza.obj", meshes);
-    // parseObj("meshes/CornellBox-Sphere.obj", meshes);
+    parseObj("meshes/CornellBox-Sphere.obj", meshes);
     // parseObj("meshes/CornellBox-Empty-CO.obj", meshes);
-    parseObj("meshes/sibenik.obj", meshes);
+    // parseObj("meshes/sibenik.obj", meshes);
     // parseObj("meshes/test.obj", meshes);
     if(meshes.size()){
         printParsedObj(meshes[0].verts, meshes[0].indexes);
@@ -183,8 +183,8 @@ int main(int argc, char* argv[]) {
 
     double __angle = 0.0;
     double *_angle = &__angle;
+    // glm::vec3 scale = glm::vec3(0.01f);
     glm::vec3 scale = glm::vec3(1.0f);
-    // glm::vec3 scale = glm::vec3(1.0f);
     TransformationComponent *sceneTrans = new TransformationComponent(
         &scenePos,
         &scale,
@@ -206,6 +206,10 @@ int main(int argc, char* argv[]) {
     sf::Vector2i posDelta(0,0);
     sf::Vector2i prevPos(0,0);
     bool mouseHeld = false;
+    float initialCameraPos = 0.0f;
+    float moveAmount = 1.0f;
+
+    camera.translate(initialCameraPos);
 
     while (running){
         // planeRot += 0.5;
@@ -217,7 +221,6 @@ int main(int argc, char* argv[]) {
         }
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
         sf::Event event;
         while (window.pollEvent(event)){
             if (event.type == sf::Event::Closed){
@@ -234,15 +237,25 @@ int main(int argc, char* argv[]) {
                     toggleCull = true;
                 }
             } else if (event.key.code == sf::Keyboard::S && event.type == sf::Event::KeyPressed){
-                camera.translate(-0.1);
+                camera.translate(-moveAmount);
             } else if (event.key.code == sf::Keyboard::W && event.type == sf::Event::KeyPressed){
-                camera.translate(0.1);
+                camera.translate(moveAmount);
             } else if (event.key.code == sf::Keyboard::A && event.type == sf::Event::KeyPressed){
-                camera.strafe(-1.0f);
+                camera.strafe(-moveAmount);
             } else if (event.key.code == sf::Keyboard::D && event.type == sf::Event::KeyPressed){
-                camera.strafe(1.0f);
-            } else if (event.key.code == sf::Keyboard::E && event.type == sf::Event::KeyPressed){
-                camera.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 1.0f);
+                camera.strafe(moveAmount);
+            } else if (event.key.code == sf::Keyboard::R && event.type == sf::Event::KeyPressed){
+                if(toggleWireframe){
+                    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+                    toggleWireframe = false;
+                } else {
+                    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+                    toggleWireframe = true;
+                }
+            } else if (event.key.code == sf::Keyboard::F && event.type == sf::Event::KeyPressed){
+                // reset camera position
+                camera.translate(initialCameraPos);
+                camera.reset();
             }
             
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){

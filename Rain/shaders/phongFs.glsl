@@ -19,6 +19,7 @@ void main(void) {
             + diffuseColor * diffuseLightWeighting;
 
     gl_FragColor = vec4(color*vLightWeighting*lightWeighting, 1.0);
+    
     // if(gl_FrontFacing){
     //     gl_FragColor = vec4(color*vLightWeighting*lightWeighting, 1.0);
     // } else {
