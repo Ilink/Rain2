@@ -90,6 +90,7 @@ int main(int argc, char* argv[]) {
     parseObj("meshes/CornellBox-Sphere.obj", meshes);
     // parseObj("meshes/CornellBox-Empty-CO.obj", meshes);
     // parseObj("meshes/sibenik.obj", meshes);
+    // parseObj("meshes/Lighthouse.obj", meshes);
     // parseObj("meshes/test.obj", meshes);
     if(meshes.size()){
         printParsedObj(meshes[0].verts, meshes[0].indexes);
@@ -273,8 +274,8 @@ int main(int argc, char* argv[]) {
                     prevPos.y = position.y;
                 }
 
-                camera.pitch(((float) posDelta.x) / 10.0);
-                camera.yaw(((float) posDelta.y / 10.0));
+                camera.pitch(((float) -posDelta.y) / 10.0);
+                camera.yaw(((float) posDelta.x / 10.0));
                 
                 printf("%i, %i\n", posDelta.x, posDelta.y);
             } else {
