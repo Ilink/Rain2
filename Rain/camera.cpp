@@ -10,7 +10,6 @@ Camera::Camera(){
 
 void Camera::rotate(const glm::vec3& axis, const float& angle){
     glm::vec3 forward = glm::normalize(lookAtPoint - eye);
-    // axis is wrong? needs to change when strafing?
     glm::quat rot = glm::angleAxis(angle, axis);
     forward = rot * forward;
     lookAtPoint = eye + forward;
@@ -18,11 +17,21 @@ void Camera::rotate(const glm::vec3& axis, const float& angle){
 }
 
 void Camera::pitch(const float& angle){
-    this->rotate(glm::vec3(0.0f, 1.0f, 0.0f), angle);
+    glm::vec3 forward = glm::normalize(lookAtPoint - eye);
+    glm::vec3 axis = glm::normalize(glm::cross(forward, upVector));
+    glm::quat rot = glm::angleAxis(angle, axis);
+    forward = rot * forward;
+    lookAtPoint = eye + forward;
+    viewMatrix = glm::lookAt(eye, lookAtPoint, upVector);
 }
 
 void Camera::yaw(const float& angle){
-    this->rotate(glm::vec3(1.0f, 0.0f, 0.0f), angle);
+    glm::vec3 axis = glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 forward = glm::normalize(lookAtPoint - eye);
+    glm::quat rot = glm::angleAxis(angle, axis);
+    forward = rot * forward;
+    lookAtPoint = eye + forward;
+    viewMatrix = glm::lookAt(eye, lookAtPoint, upVector);
 }
 
 void Camera::strafe(const float& amount){
