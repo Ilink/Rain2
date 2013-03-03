@@ -4,5 +4,6 @@
 extern bool isPaused;
 extern bool toggleCull;
 extern bool toggleWireframe;
+extern bool toggleCW;
 
 #endif

@@ -8,6 +8,14 @@ Camera::Camera(){
     // viewMatrix = glm::mat4(1.0f);
 }
 
+Camera::Camera(glm::vec3& initialPos){
+    lookAtPoint = glm::vec3(0.0f, 0.0f, 0.0f);
+    eye = initialPos;
+    upVector = glm::vec3(0.0f, 1.0f, 0.0f);
+    viewMatrix = glm::lookAt(eye, lookAtPoint, upVector);
+    // viewMatrix = glm::mat4(1.0f);
+}
+
 void Camera::rotate(const glm::vec3& axis, const float& angle){
     glm::vec3 forward = glm::normalize(lookAtPoint - eye);
     glm::quat rot = glm::angleAxis(angle, axis);

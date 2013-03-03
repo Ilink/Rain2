@@ -6,9 +6,7 @@ geometry data, i dont know what else it will have
 #define GEO_COMPONENT_H
 
 #include <GL/glew.h>
-// #include <Artemis-Cpp/Artemis.h>
-#include "../include/Artemis-Cpp/Component.h"
-#include <Artemis-Cpp/Component.h>
+#include "Artemis.h"
 #include <vector>
 #include "../types.h"
 #include <glm/glm.hpp>

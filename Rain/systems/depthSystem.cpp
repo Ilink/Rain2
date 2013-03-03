@@ -1,6 +1,6 @@
 #include "depthSystem.h"
 
-DepthSystem::DepthSystem(Spotlight& light){
+DepthSystem::DepthSystem(Spotlight& light, glm::mat4* viewMatrix){
     // Artemis Setup
     addComponentType<GeoComponent>();
 
@@ -29,7 +29,7 @@ DepthSystem::DepthSystem(Spotlight& light){
                         0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE,
                         NULL);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, depthMap);
+    
     
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); 
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
@@ -38,6 +38,23 @@ DepthSystem::DepthSystem(Spotlight& light){
     // glTexParameterfv(GL_TEXTURE_2D,GL_TEXTURE_BORDER_COLOR,border); 
     // glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_COMPARE_MODE,GL_COMPARE_REF_TO_TEXTURE); // this doesnt let us view the texture, so it is disabled for now
     // glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_COMPARE_FUNC,GL_LESS);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    // create a color texture (for debugging)
+    glGenTextures(1, &colorTex);
+    glBindTexture(GL_TEXTURE_2D, colorTex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 
+                        w, h, 
+                        0, GL_RGBA, GL_UNSIGNED_BYTE,
+                        NULL);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, colorTex);
+    
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); 
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER); 
 
     printGlError();
 
@@ -49,7 +66,8 @@ DepthSystem::DepthSystem(Spotlight& light){
     printGlError();
 
     // glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthMap, 0);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+    //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTex, 0);
 
     GLenum FBOstatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if(FBOstatus != GL_FRAMEBUFFER_COMPLETE)
@@ -77,7 +95,13 @@ void DepthSystem::begin(){
     glUseProgram(depthShader.program);
     glBindTexture(GL_TEXTURE_2D, depthMap);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
-    glDrawBuffer(GL_NONE);
+    
+    glBindTexture(GL_TEXTURE_2D, colorTex);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTex, 0);
+
+    // GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};
+    // glDrawBuffer(GL_COLOR_ATTACHMENT0);
+    // glDrawBuffer(GL_NONE);
     if(toggleCull){
         glEnable(GL_CULL_FACE);
         glCullFace(GL_FRONT);
@@ -104,26 +128,21 @@ void DepthSystem::processEntity(artemis::Entity &e){
     // rot += 0.5f;
     // MV = glm::rotate(shadowMVP, rot, glm::vec3(0.5f, 1.0f, 0.0f));
 
-    // glDepthRange(0.5, 10);
+    // glDepthRange(8.0, 10.0);
     // printf("depth: %f\n", depth);
     // view = glm::rotate(view, rot, glm::vec3(0.5f, 1.0f, 0.0f));
 
     light.update();
     TransformationComponent *trans = transformationMapper.get(e);
     model = trans->getModelMatrix();
-    // model = glm::translate(glm::mat4(1.0f), *trans->pos);
-    // model = glm::rotate(model, *trans->angle, *trans->axis);
-    // model = glm::scale(model, *trans->scale);
-    // model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-
-    perspective = glm::perspective(45.0f, 4.0f / 3.0f, 5.0f, 20.f);
+    perspective = light.perspectiveMatrix;
     MV = light.viewMatrix * model;
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
     // these need to go elsewhere, it's bad to get them every frame
-    GLuint uMVPmatDepth = glGetUniformLocationARB(depthShader.program, "uPMatrix");
+    GLuint uPmat = glGetUniformLocationARB(depthShader.program, "uPMatrix");
     GLuint uMVMatrixDepth = glGetUniformLocationARB(depthShader.program, "uMVMatrix");
     printGlError();
 
@@ -134,7 +153,7 @@ void DepthSystem::processEntity(artemis::Entity &e){
     printGlError();
 
     glUniformMatrix4fv(uMVMatrixDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(MV));
-    glUniformMatrix4fv(uMVPmatDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(perspective));
+    glUniformMatrix4fv(uPmat, 1, FALSE, (const GLfloat*) glm::value_ptr(perspective));
     
     printGlError();
     // error - FBO not setup correctly

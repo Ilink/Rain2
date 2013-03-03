@@ -568,6 +568,7 @@ LoadObj(
     }
 
     // load mtl
+    /*
     if ((0 == strncmp(token, "mtllib", 6)) && isSpace((token[6]))) {
       char namebuf[4096];
       token += 7;
@@ -587,6 +588,7 @@ LoadObj(
       
       continue;
     }
+    */
 
     // object name
     if (token[0] == 'o' && isSpace((token[1]))) {

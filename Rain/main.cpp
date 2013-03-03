@@ -12,6 +12,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <assimp/Importer.hpp>      // C++ importer interface
+#include <assimp/scene.h>           // Output data structure
+#include <assimp/postprocess.h>     // Post processing flags
 #include "main.h"
 #include "geoManager.h"
 #include <string>
@@ -30,6 +33,7 @@
 #include "settings.h"
 #include "objParser/objParser.h"
 #include "camera.h"
+#include "sceneLoader/sceneLoader.h"
 
 using namespace std;
 
@@ -60,7 +64,21 @@ void printParsedObj(vector<vertex>& verts, vector<GLuint>& indexes){
 }
 
 int main(int argc, char* argv[]) {
-    Camera camera;
+    aiScene scene;
+    SceneLoader sceneLoader;
+    Mesh compactMesh;
+    // bool loadSuccess = sceneLoader.load("meshes/spider.obj", &scene, compactMesh);
+    // bool loadSuccess = sceneLoader.load("meshes/crytek-sponza/sponza.obj", &scene, compactMesh);
+    // bool loadSuccess = sceneLoader.load("meshes/demondogtris.obj", &scene, compactMesh);
+    bool loadSuccess = sceneLoader.load("meshes/teapot.obj", &scene, compactMesh);
+    // bool loadSuccess = sceneLoader.load("meshes/test.obj", &scene, compactMesh);
+    // bool loadSuccess = sceneLoader.load("meshes/cube.obj", &scene, compactMesh);
+    // bool loadSuccess = sceneLoader.load("meshes/Lighthouse.obj", &scene, compactMesh);
+    // bool loadSuccess = sceneLoader.load("meshes/sibenik.obj", &scene, compactMesh);
+
+    printf("scene loaded: %i\n", loadSuccess);
+
+    Camera camera(glm::vec3(0.0f, 10.0f, -10.0f));
 
     string str = "1111/789/125433 2222/789/123345 3333/789/123456";
 
@@ -83,18 +101,79 @@ int main(int argc, char* argv[]) {
         }
     };
 
-    vector<mesh> meshes;
+    // vector<mesh> meshes;
     // parseObj("meshes/cornellBox/cornell_box.obj", meshes);
     // parseObj("meshes/teapot.obj", meshes);
     // parseObj("meshes/crytek-sponza/sponza.obj", meshes);
-    parseObj("meshes/CornellBox-Sphere.obj", meshes);
+    // parseObj("meshes/CornellBox-Sphere.obj", meshes);
     // parseObj("meshes/CornellBox-Empty-CO.obj", meshes);
     // parseObj("meshes/sibenik.obj", meshes);
     // parseObj("meshes/Lighthouse.obj", meshes);
-    // parseObj("meshes/test.obj", meshes);
-    if(meshes.size()){
-        printParsedObj(meshes[0].verts, meshes[0].indexes);
+    //parseObj("meshes/test.obj", meshes);
+    // parseObj("meshes/pitcher.obj", meshes);
+    // if(meshes.size()){
+    //     printParsedObj(meshes[0].verts, meshes[0].indexes);
+    // }
+
+    /*
+    std::string inputfile = "meshes/Lighthouse.obj";
+    // std::string inputfile = "meshes/crytek-sponza/sponza.obj";
+    std::vector<tinyobj::shape_t> shapes;
+
+    std::string err = tinyobj::LoadObj(shapes, inputfile.c_str());
+    
+    if (!err.empty()) {
+      std::cerr << err << std::endl;
     }
+
+    std::cout << "# of shapes : " << shapes.size() << std::endl;
+
+    for (size_t i = 0; i < shapes.size(); i++) {
+      printf("shape[%ld].name = %s\n", i, shapes[i].name.c_str());
+      printf("shape[%ld].indices: %ld\n", i, shapes[i].mesh.indices.size());
+      assert((shapes[i].mesh.indices.size() % 3) == 0);
+      for (size_t f = 0; f < shapes[i].mesh.indices.size(); f++) {
+        printf("  idx[%ld] = %d\n", f, shapes[i].mesh.indices[f]);
+      }
+
+      printf("shape[%ld].vertices: %ld\n", i, shapes[i].mesh.positions.size());
+      assert((shapes[i].mesh.positions.size() % 3) == 0);
+      for (size_t v = 0; v < shapes[i].mesh.positions.size() / 3; v++) {
+        printf("  v[%ld] = (%f, %f, %f)\n", v,
+          shapes[i].mesh.positions[3*v+0],
+          shapes[i].mesh.positions[3*v+1],
+          shapes[i].mesh.positions[3*v+2]);
+      }
+
+      printf("shape[%ld].material.name = %s\n", i, shapes[i].material.name.c_str());
+      std::map<std::string, std::string>::iterator it(shapes[i].material.unknown_parameter.begin());
+      std::map<std::string, std::string>::iterator itEnd(shapes[i].material.unknown_parameter.end());
+      for (; it != itEnd; it++) {
+        printf("  material.%s = %s\n", it->first.c_str(), it->second.c_str());
+      }
+      printf("\n");
+    }
+
+    vector<mesh> meshes;
+    mesh newMesh;
+    meshes.push_back(newMesh);
+    for(int i =0; i < shapes[0].mesh.indices.size(); i++){
+        vertex vert;
+        vert.x = shapes[0].mesh.positions[shapes[0].mesh.indices[i]];
+        vert.y = shapes[0].mesh.positions[shapes[0].mesh.indices[i]+1];
+        vert.z = shapes[0].mesh.positions[shapes[0].mesh.indices[i]+2];
+
+        vert.nx = shapes[0].mesh.normals[shapes[0].mesh.indices[i]];
+        vert.ny = shapes[0].mesh.normals[shapes[0].mesh.indices[i]+1];
+        vert.nz = shapes[0].mesh.normals[shapes[0].mesh.indices[i]+2];
+
+        vert.u = 0.0;
+        vert.v = 0.0;
+
+        meshes[0].verts.push_back(vert);
+    }
+    */
+
 
     Shader shader;
     vector<vertex> boxVerts;
@@ -125,10 +204,15 @@ int main(int argc, char* argv[]) {
     Shader phongShader;
     phongShader.load("shaders/phongVs.glsl", "shaders/phongFs.glsl");
 
-    // glm::vec3 lightPos = glm::vec3(-7.0f, 6.0f, 0.0f);
-    glm::vec3 lightPos = glm::vec3(0.0f, 10.0f, 0.0f);
-    glm::vec3 lightLookAtPoint = glm::vec3(0.0f, 0.5f, 0.0f);
+//    glm::vec3 lightPos = glm::vec3(0.0f, 10.0f, 0.0f);
+    glm::vec3 lightPos = glm::vec3(2.0f, 3.0f, -10.0f);
+    glm::vec3 lightLookAtPoint = glm::vec3(0.0f, 0.0f, 0.0f);
     Spotlight light(1.0, &lightPos, &lightLookAtPoint);
+
+    // lookAtPoint = glm::vec3(0.0f, 0.0f, 0.0f);
+    // eye = glm::vec3(0.0f, 0.0f, -10.0f);
+    // upVector = glm::vec3(0.0f, 1.0f, 0.0f);
+
     // Spotlight light(1.0, glm::vec3(10.0f, 0.0f, -5.0f), glm::vec3(0.0f, 0.0f, -1.0f));
     // light.rotate(90.0, glm::vec3(1.0, ))
 
@@ -140,8 +224,8 @@ int main(int argc, char* argv[]) {
     // GeoFactory geoFactory;
     
     RenderSystem* renderSystem = (RenderSystem*)sm->setSystem(new RenderSystem(&camera.viewMatrix));
-    DepthSystem* depthSystem = (DepthSystem*)sm->setSystem(new DepthSystem(light));
-    ShadowSystem* shadowSystem = (ShadowSystem*)sm->setSystem(new ShadowSystem(depthSystem->depthMap, light));
+    DepthSystem* depthSystem = (DepthSystem*)sm->setSystem(new DepthSystem(light, &camera.viewMatrix));
+    ShadowSystem* shadowSystem = (ShadowSystem*)sm->setSystem(new ShadowSystem(depthSystem->depthMap, light, &camera.viewMatrix));
     
     vector<GLuint> passes;
     passes.push_back(depthSystem->depthMap);
@@ -153,7 +237,7 @@ int main(int argc, char* argv[]) {
     sm->initializeAll();
 
     glm::vec3 squarePos = glm::vec3(0.0f, 0.5f, 0.0f);
-    glm::vec3 scenePos = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 scenePos = glm::vec3(0.0f, 0.5f, 0.0f);
     float planeRot = 300.0f;
     float squareRot = 0.0f;
     glm::vec3 lightDir = glm::vec3(0.4,0.5, 0.5);
@@ -182,23 +266,37 @@ int main(int argc, char* argv[]) {
     // square.addComponent(trans);
     // square.refresh();
 
-    double __angle = 0.0;
-    double *_angle = &__angle;
     // glm::vec3 scale = glm::vec3(0.01f);
     glm::vec3 scale = glm::vec3(1.0f);
+    // glm::vec3 scale = glm::vec3(6.0f);
     TransformationComponent *sceneTrans = new TransformationComponent(
         &scenePos,
         &scale,
         &squareRot,
         &glm::vec3(1.0f,0.5f, 0.5f)
     );
-    artemis::Entity &scene = em->create();
-    scene.addComponent(geoManager.create(meshes[0].verts, meshes[0].indexes));
-    // scene.addComponent(geoManager.create(boxVerts, boxVertIndex));
-    scene.addComponent(new PhongComponent(&phongShader, &brightness, &specularity, &lightDir));
-    scene.addComponent(new DebugComponent(&glm::vec4(0.4, 0.3, 0.2, 1.0)));
-    scene.addComponent(sceneTrans);
-    scene.refresh();
+
+    TransformationComponent *planeTrans = new TransformationComponent(
+        &scenePos,
+        &glm::vec3(2.0f),
+        new float (-90.0f),
+        &glm::vec3(1.0f,0.0f, 0.0f)
+    );
+
+    artemis::Entity &plane = entityFactory.makePlaneEntity();
+    plane.addComponent(new PhongComponent(&phongShader, &brightness, &specularity, &lightDir));
+    plane.addComponent(planeTrans);
+    plane.refresh();
+
+    artemis::Entity &geo = em->create();
+    // geo.addComponent(geoManager.create(meshes[0].verts, shapes[0].mesh.indices));
+    geo.addComponent(geoManager.create(compactMesh.verts, compactMesh.triIndexes));
+    //geo.addComponent(geoManager.create(meshes[0].verts, meshes[0].indexes));
+    // geo.addComponent(geoManager.create(boxVerts, boxVertIndex));
+    geo.addComponent(new PhongComponent(&phongShader, &brightness, &specularity, &lightDir));
+    geo.addComponent(new DebugComponent(&glm::vec4(0.4, 0.3, 0.2, 1.0)));
+    geo.addComponent(sceneTrans);
+    geo.refresh();
     
 
     bool running = true;
@@ -220,7 +318,8 @@ int main(int argc, char* argv[]) {
             squarePos[1] = 2.0+1.5*sin(x);
             // squareRot += 1;
         }
-
+        glEnable(GL_CULL_FACE);
+        // glFrontFace(GL_CW);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         sf::Event event;
         while (window.pollEvent(event)){
@@ -257,6 +356,17 @@ int main(int argc, char* argv[]) {
                 // reset camera position
                 camera.translate(initialCameraPos);
                 camera.reset();
+            } else if (event.key.code == sf::Keyboard::Q && event.type == sf::Event::KeyPressed){
+                if(toggleCW){
+                    glFrontFace(GL_CW);
+                    // glDisable(GL_CULL_FACE);
+                    toggleCW = false;
+                } else {
+                    glFrontFace(GL_CCW);
+                    // glEnable(GL_CULL_FACE);
+                    toggleCW = true;
+                }
+                
             }
             
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
@@ -282,7 +392,7 @@ int main(int argc, char* argv[]) {
                 mouseHeld = false;
             }
 
-
+            
         }
 
         world.loopStart();

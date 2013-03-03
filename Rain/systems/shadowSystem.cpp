@@ -1,8 +1,9 @@
 #include "shadowSystem.h"
 
-ShadowSystem::ShadowSystem(GLuint& depthMap, Spotlight& light){
+ShadowSystem::ShadowSystem(GLuint& depthMap, Spotlight& light, glm::mat4* viewMatrix){
     this->depthMap = depthMap;
     this->light = light;
+    this->viewMatrix = viewMatrix;
     addComponentType<GeoComponent>();
 
     rot = 0;
@@ -109,32 +110,21 @@ void ShadowSystem::end(){
 void ShadowSystem::processEntity(artemis::Entity &e){
     GLuint vbo = geoMapper.get(e)->vbo;
     GLuint ibo = geoMapper.get(e)->ibo;
-    glm::vec4 *color = debugMapper.get(e)->color;
+//    glm::vec4 *color = debugMapper.get(e)->color;
 
-    perspective = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.f);
-    view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
+    perspective = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 1000.f);
+    // view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
 
     TransformationComponent *trans = transformationMapper.get(e);
     model = trans->getModelMatrix();
-    
-    // model = glm::translate(glm::mat4(1.0f), *trans->pos);
-    // model = glm::rotate(model, *trans->angle, *trans->axis);
-    // model = glm::scale(model, *trans->scale);
-    // model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
 
     glm::mat4 inv = glm::inverse(light.viewMatrix);
     // shadowMatrix = shadowBias * perspective * inv * view * model;
     // shadowMatrix = shadowBias * perspective * light.viewMatrix * model;
     // shadowMatrix = shadowBias * perspective * view * model;
-    shadowMatrix = shadowBias * light.perspectiveMatrix * (light.viewMatrix) * model;
-
-    if(!isPaused) {
-        rot = 0.5f;
-    } else {
-        rot = 0;
-    }
+    shadowMatrix = shadowBias * light.perspectiveMatrix * light.viewMatrix * model;
     
-    MV = view * model;
+    MV = *viewMatrix * model;
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -145,7 +135,7 @@ void ShadowSystem::processEntity(artemis::Entity &e){
     GLuint uMVMatrixDepth = glGetUniformLocationARB(shadowShader.program, "uMVMatrix");
     GLuint uMMatrixDepth = glGetUniformLocationARB(shadowShader.program, "uMMatrix");
     GLuint uShadowMatrix = glGetUniformLocationARB(shadowShader.program, "uShadowMatrix");
-    GLuint uColor = glGetUniformLocationARB(shadowShader.program, "uColor");
+    //GLuint uColor = glGetUniformLocationARB(shadowShader.program, "uColor");
     printGlError();
 
     // Position
@@ -158,7 +148,7 @@ void ShadowSystem::processEntity(artemis::Entity &e){
     glUniformMatrix4fv(uMMatrixDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(model));
     glUniformMatrix4fv(uMVPmatDepth, 1, FALSE, (const GLfloat*) glm::value_ptr(perspective));
     glUniformMatrix4fv(uShadowMatrix, 1, FALSE, (const GLfloat*) glm::value_ptr(shadowMatrix));
-    glUniform4fv(uColor, 1, (const GLfloat*) glm::value_ptr(*color));
+    //glUniform4fv(uColor, 1, (const GLfloat*) glm::value_ptr(*color));
 
     glBindTexture(GL_TEXTURE_2D, depthMap);
     GLint uShadowmapSampler = glGetUniformLocation(shadowShader.program, "uShadowmapSampler");

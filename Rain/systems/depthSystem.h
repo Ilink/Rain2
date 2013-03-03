@@ -37,7 +37,7 @@ public:
     glm::mat4 shadowMVP;
     GLuint depthMap;
     GLuint colorTex;
-    DepthSystem(Spotlight& light);
+    DepthSystem(Spotlight& light, glm::mat4* viewMatrix);
     virtual void initialize();
     virtual void processEntity(artemis::Entity &e);
     virtual void begin();

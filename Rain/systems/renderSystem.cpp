@@ -47,8 +47,12 @@ void RenderSystem::vaoSetup(GLuint vao, GLuint vbo, GLuint ibo){
     glEnableVertexAttribArray(0);
 
     // Normals
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex),  BUFFER_OFFSET(sizeof(float)*3));
-    glEnableVertexAttribArray(1);
+    // glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex),  BUFFER_OFFSET(sizeof(float)*3));
+    // glEnableVertexAttribArray(1);
+
+    // // Textures
+    // glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(vertex),  BUFFER_OFFSET(sizeof(float)*2));
+    // glEnableVertexAttribArray(2);
 
     // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBindVertexArray(0);
@@ -89,14 +93,12 @@ void RenderSystem::processEntity(artemis::Entity &e){
     MV = *view * model;
     glm::mat3 normalMatrix(MV);
     glm::transpose(normalMatrix);
-    glFrontFace(GL_CW);
 
     glUniformMatrix3fv(uNormalMatrix, 1, false, (const GLfloat*) glm::value_ptr(normalMatrix));
     glUniformMatrix4fv(uMVMatrix, 1, FALSE, (const GLfloat*) glm::value_ptr(MV));
     glUniformMatrix4fv(uMVPmat, 1, FALSE, (const GLfloat*) glm::value_ptr(perspective));
 
     glDrawElements(GL_TRIANGLES, geoMapper.get(e)->triIndex.size(), GL_UNSIGNED_INT, 0);
-    //glDrawElements(GL_TRIANGLE_STRIPS, geoMapper.get(e)->triIndex.size(), GL_UNSIGNED_INT, 0);
 
     //error = glGetError();
     //printGlError(error);
@@ -108,4 +110,5 @@ void RenderSystem::processEntity(artemis::Entity &e){
     glUseProgram(0);
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
 }
