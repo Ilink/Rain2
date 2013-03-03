@@ -19,4 +19,7 @@
 .tags_sorted_by_file
 *.log
 
+# big file from MSVC
+*.sdf
+
 Debug/*
