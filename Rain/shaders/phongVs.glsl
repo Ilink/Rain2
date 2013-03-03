@@ -20,16 +20,18 @@ void main(void) {
     gl_Position = uPMatrix * vPosition;
     
     //todo: use the uniforms instead of these hardcoded values
-    vec3 ambientLight = vec3(0.85, 0.5, 0.5);
+    vec3 ambientLight = vec3(0.0, 0.0, 0.0);
+    // vec3 ambientLight = vec3(0.85, 0.5, 0.5);
     vec3 directionalLightColor = vec3(0.5, 0.5, 0.75);
     vec3 directionalVector = vec3(0.85, 0.8, 0.75);
     vLightDirection = directionalVector;
     
-    vec3 transformedNormal = uNormalMatrix * normal;
-    vNormal = transformedNormal;
+    // vec3 transformedNormal = uNormalMatrix * normal;
+    vNormal = normal;
+    // vNormal = transformedNormal;
     
     // we clamp to 0 because it doesn't make sense to have a negative value for the amount of light
-    float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);
+    float directional = max(dot(normal.xyz, directionalVector), 0.0);
     vLightWeighting = ambientLight + directional;
     // vLightWeighting = ambientLight + (directionalLightColor * directional);
 }

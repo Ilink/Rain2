@@ -1,6 +1,9 @@
-// we're only using the depth buffer - do not need anything else
+varying vec4 vPosition;
 void main(void) {
-    gl_FragColor[0] = 0.5;
-    gl_FragColor[1] = 0.0;
-    gl_FragColor[2] = 0.5;
+    float ndcDepth = vPosition.z =
+        (2.0 * gl_FragCoord.z - gl_DepthRange.near - gl_DepthRange.far) /
+        (gl_DepthRange.far - gl_DepthRange.near);
+
+    float clipDepth = ndcDepth / gl_FragCoord.w;
+    gl_FragColor = vec4((clipDepth * 0.5) + 0.5);
 };

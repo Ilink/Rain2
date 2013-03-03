@@ -13,6 +13,7 @@ class Camera {
     float i;
 public:
     Camera();
+    Camera(glm::vec3& initialPos);
     void rotate(const glm::vec3& axis, const float& angle);
     void pitch(const float& angle);
     void yaw(const float& angle);
