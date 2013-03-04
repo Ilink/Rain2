@@ -15,6 +15,7 @@
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/scene.h>           // Output data structure
 #include <assimp/postprocess.h>     // Post processing flags
+#include <fstream>
 #include "main.h"
 #include "geoManager.h"
 #include <string>
@@ -36,6 +37,76 @@
 #include "sceneLoader/sceneLoader.h"
 
 using namespace std;
+
+struct FileHeader {
+    int numVerts;
+    int numTriIndexes;
+    int numQuadIndexes;
+    int version;
+};
+
+struct FileData {
+    vector<int> A;
+    vector<double> B;
+};
+
+void writeMesh(Mesh mesh){
+    vector<vertex> verts;
+    vertex vert = {1.0f, 2.0f, 3.0f};
+    verts.push_back(vert);
+    vertex vert2 = {1.5f, 2.5f, 3.5f};
+    verts.push_back(vert2);
+
+    // Write
+    FileData fileDataWrite;
+    
+    FileHeader fileHeaderWrite = {2,2,2,0};
+    fstream fileOut("testFile.cmesh", ios::out | ios::binary);
+    fileOut.write((const char*) &fileHeaderWrite, sizeof(FileHeader));
+
+    for(int i=0; i < verts.size(); i++){
+        fileOut.write((const char*) &verts[i], sizeof(vertex));
+    }
+
+    fileOut.close();
+}
+
+void readMesh(){
+    // Read
+    FileData fileDataRead;
+    FileHeader fileHeaderRead;
+    
+    fstream fileIn("testFile.cmesh", ios::in | ios::binary);
+    fileIn.read((char*) &fileHeaderRead, sizeof(FileHeader));
+    printf("verts: %i num tri indexes: %i num quad indexes%i\n", fileHeaderRead.numVerts, fileHeaderRead.numTriIndexes, fileHeaderRead.numQuadIndexes);
+    
+    vertex vertBuffer;
+    vector<vertex> vertsRead(fileHeaderRead.numVerts);
+    for(int i = 0; i < fileHeaderRead.numVerts; i++){
+        fileIn.read((char*) &vertBuffer, sizeof(vertex));
+        // printf("vert from file: %f\n", vertBuffer.x);
+        vertsRead[i] = vertBuffer;
+    }
+
+    GLuint buffer;
+    vector<GLuint> triIndexRead(fileHeaderRead.numTriIndexes);
+    for(int i = 0; i < triIndexRead.size(); i++){
+        fileIn.read((char*) &buffer, sizeof(GLuint));
+        triIndexRead[i] = buffer;
+    }
+
+    vector<GLuint> quadIndexRead(fileHeaderRead.numQuadIndexes);
+    for(int i = 0; i < quadIndexRead.size(); i++){
+        fileIn.read((char*) &buffer, sizeof(GLuint));
+        quadIndexRead[i] = buffer;
+    }
+
+    for(int i = 0; i < vertsRead.size(); i++){
+        printf("vert from file: %f\n", vertsRead[i].x);
+    }
+
+    fileIn.close();
+}
 
 void printParsedObj(vector<vertex>& verts, vector<GLuint>& indexes){    
     FILE *file = fopen ("log/obj.txt","w");
@@ -64,116 +135,25 @@ void printParsedObj(vector<vertex>& verts, vector<GLuint>& indexes){
 }
 
 int main(int argc, char* argv[]) {
+
     aiScene scene;
     SceneLoader sceneLoader;
-    Mesh compactMesh;
-    // bool loadSuccess = sceneLoader.load("meshes/spider.obj", &scene, compactMesh);
-    // bool loadSuccess = sceneLoader.load("meshes/crytek-sponza/sponza.obj", &scene, compactMesh);
-    // bool loadSuccess = sceneLoader.load("meshes/demondogtris.obj", &scene, compactMesh);
-    bool loadSuccess = sceneLoader.load("meshes/teapot.obj", &scene, compactMesh);
-    // bool loadSuccess = sceneLoader.load("meshes/test.obj", &scene, compactMesh);
-    // bool loadSuccess = sceneLoader.load("meshes/cube.obj", &scene, compactMesh);
-    // bool loadSuccess = sceneLoader.load("meshes/Lighthouse.obj", &scene, compactMesh);
-    // bool loadSuccess = sceneLoader.load("meshes/sibenik.obj", &scene, compactMesh);
+    Mesh _compactMesh;
+    // bool loadSuccess = sceneLoader.objToCmesh("meshes/spider.obj", &scene, compactMesh);
+    // bool loadSuccess = sceneLoader.objToCmesh("meshes/crytek-sponza/sponza.obj", &scene, _compactMesh);
+    // bool loadSuccess = sceneLoader.objToCmesh("meshes/demondogtris.obj", &scene, compactMesh);
+    //bool loadSuccess = sceneLoader.objToCmesh("meshes/teapot.obj", &scene, _compactMesh);
+    // bool loadSuccess = sceneLoader.objToCmesh("meshes/test.obj", &scene, compactMesh);
+    // bool loadSuccess = sceneLoader.objToCmesh("meshes/cube.obj", &scene, compactMesh);
+    // bool loadSuccess = sceneLoader.objToCmesh("meshes/Lighthouse.obj", &scene, compactMesh);
+    // bool loadSuccess = sceneLoader.objToCmesh("meshes/sibenik.obj", &scene, compactMesh);
 
-    printf("scene loaded: %i\n", loadSuccess);
+    Mesh compactMesh;
+    sceneLoader.readMesh(compactMesh);
+
+    //printf("scene loaded: %i\n", loadSuccess);
 
     Camera camera(glm::vec3(0.0f, 10.0f, -10.0f));
-
-    string str = "1111/789/125433 2222/789/123345 3333/789/123456";
-
-    int num;
-    string curNum;
-    int start = 0;
-    int end = 0;
-    int length = str.length();
-    int numTokens = 0;
-    for(int i=0; i < length; i++){
-        if(str[i] == '/' || str[i] == ' '){
-            end = i;
-            curNum = str.substr(start, end-start);
-            num = strtol(curNum.c_str(), NULL, 10);
-            start = i+1;
-            if(numTokens%3 == 0){
-                // printf("num: %i\n", num);
-            }
-            numTokens++;
-        }
-    };
-
-    // vector<mesh> meshes;
-    // parseObj("meshes/cornellBox/cornell_box.obj", meshes);
-    // parseObj("meshes/teapot.obj", meshes);
-    // parseObj("meshes/crytek-sponza/sponza.obj", meshes);
-    // parseObj("meshes/CornellBox-Sphere.obj", meshes);
-    // parseObj("meshes/CornellBox-Empty-CO.obj", meshes);
-    // parseObj("meshes/sibenik.obj", meshes);
-    // parseObj("meshes/Lighthouse.obj", meshes);
-    //parseObj("meshes/test.obj", meshes);
-    // parseObj("meshes/pitcher.obj", meshes);
-    // if(meshes.size()){
-    //     printParsedObj(meshes[0].verts, meshes[0].indexes);
-    // }
-
-    /*
-    std::string inputfile = "meshes/Lighthouse.obj";
-    // std::string inputfile = "meshes/crytek-sponza/sponza.obj";
-    std::vector<tinyobj::shape_t> shapes;
-
-    std::string err = tinyobj::LoadObj(shapes, inputfile.c_str());
-    
-    if (!err.empty()) {
-      std::cerr << err << std::endl;
-    }
-
-    std::cout << "# of shapes : " << shapes.size() << std::endl;
-
-    for (size_t i = 0; i < shapes.size(); i++) {
-      printf("shape[%ld].name = %s\n", i, shapes[i].name.c_str());
-      printf("shape[%ld].indices: %ld\n", i, shapes[i].mesh.indices.size());
-      assert((shapes[i].mesh.indices.size() % 3) == 0);
-      for (size_t f = 0; f < shapes[i].mesh.indices.size(); f++) {
-        printf("  idx[%ld] = %d\n", f, shapes[i].mesh.indices[f]);
-      }
-
-      printf("shape[%ld].vertices: %ld\n", i, shapes[i].mesh.positions.size());
-      assert((shapes[i].mesh.positions.size() % 3) == 0);
-      for (size_t v = 0; v < shapes[i].mesh.positions.size() / 3; v++) {
-        printf("  v[%ld] = (%f, %f, %f)\n", v,
-          shapes[i].mesh.positions[3*v+0],
-          shapes[i].mesh.positions[3*v+1],
-          shapes[i].mesh.positions[3*v+2]);
-      }
-
-      printf("shape[%ld].material.name = %s\n", i, shapes[i].material.name.c_str());
-      std::map<std::string, std::string>::iterator it(shapes[i].material.unknown_parameter.begin());
-      std::map<std::string, std::string>::iterator itEnd(shapes[i].material.unknown_parameter.end());
-      for (; it != itEnd; it++) {
-        printf("  material.%s = %s\n", it->first.c_str(), it->second.c_str());
-      }
-      printf("\n");
-    }
-
-    vector<mesh> meshes;
-    mesh newMesh;
-    meshes.push_back(newMesh);
-    for(int i =0; i < shapes[0].mesh.indices.size(); i++){
-        vertex vert;
-        vert.x = shapes[0].mesh.positions[shapes[0].mesh.indices[i]];
-        vert.y = shapes[0].mesh.positions[shapes[0].mesh.indices[i]+1];
-        vert.z = shapes[0].mesh.positions[shapes[0].mesh.indices[i]+2];
-
-        vert.nx = shapes[0].mesh.normals[shapes[0].mesh.indices[i]];
-        vert.ny = shapes[0].mesh.normals[shapes[0].mesh.indices[i]+1];
-        vert.nz = shapes[0].mesh.normals[shapes[0].mesh.indices[i]+2];
-
-        vert.u = 0.0;
-        vert.v = 0.0;
-
-        meshes[0].verts.push_back(vert);
-    }
-    */
-
 
     Shader shader;
     vector<vertex> boxVerts;

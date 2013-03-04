@@ -5,7 +5,64 @@ SceneLoader::SceneLoader(){
 
 SceneLoader::~SceneLoader(){}
 
-bool SceneLoader::load(const char* fileName, const aiScene *scene, Mesh& compactMesh){
+bool SceneLoader::writeMesh(Mesh& mesh){
+    MeshFileHeader header;
+    header.numQuadIndexes = mesh.quadIndexes.size();
+    header.numTriIndexes = mesh.triIndexes.size();
+    header.numVerts = mesh.verts.size();
+    header.version = 0;
+
+    fstream fileOut("testFile.cmesh", ios::out | ios::binary);
+    fileOut.write((const char*) &header, sizeof(MeshFileHeader));
+
+    for(int i=0; i < mesh.verts.size(); i++){
+        fileOut.write((const char*) &mesh.verts[i], sizeof(vertex));
+    }
+
+    for(int i = 0; i < mesh.triIndexes.size(); i++){
+        fileOut.write((const char*) &mesh.triIndexes[i], sizeof(GLuint));
+    }
+
+    for(int i = 0; i < mesh.quadIndexes.size(); i++){
+        fileOut.write((const char*) &mesh.quadIndexes[i], sizeof(GLuint));
+    }
+
+    fileOut.close();
+    return true;
+}
+
+void SceneLoader::readMesh(Mesh& mesh){
+    MeshFileHeader header;
+    
+    fstream fileIn("testFile.cmesh", ios::in | ios::binary);
+    fileIn.read((char*) &header, sizeof(MeshFileHeader));
+    
+    vertex vertBuffer;
+    mesh.verts.resize(header.numVerts);
+    for(int i = 0; i < header.numVerts; i++){
+        fileIn.read((char*) &vertBuffer, sizeof(vertex));
+        // printf("vert from file: %f\n", vertBuffer.x);
+        mesh.verts[i] = vertBuffer;
+    }
+
+    // This isnt working
+    GLuint buffer;
+    mesh.triIndexes.resize(header.numTriIndexes);
+    for(int i = 0; i < mesh.triIndexes.size(); i++){
+        fileIn.read((char*) &buffer, sizeof(GLuint));
+        mesh.triIndexes[i] = buffer;
+    }
+
+    mesh.quadIndexes.resize(header.numQuadIndexes);
+    for(int i = 0; i < mesh.quadIndexes.size(); i++){
+        fileIn.read((char*) &buffer, sizeof(GLuint));
+        mesh.quadIndexes[i] = buffer;
+    }
+
+    fileIn.close();
+}
+
+bool SceneLoader::objToCmesh(const char* fileName, const aiScene *scene, Mesh& compactMesh){
     Assimp::Importer importer;
     //check if file exists
     std::ifstream fin(fileName);
@@ -34,6 +91,7 @@ bool SceneLoader::load(const char* fileName, const aiScene *scene, Mesh& compact
     //logInfo("Import of scene " + pFile + " succeeded.");
 
     compact(scene, compactMesh);
+    writeMesh(compactMesh);
 
     // We're done. Everything will be cleaned up by the importer destructor
     return true;

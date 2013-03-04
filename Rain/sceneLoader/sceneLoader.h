@@ -12,14 +12,23 @@
 #include "../types.h"
 #include "mesh.h"
 
+struct MeshFileHeader {
+    int numVerts;
+    int numTriIndexes;
+    int numQuadIndexes;
+    int version;
+};
+
 class SceneLoader
 {
 private:
     void compact(const aiScene* scene, Mesh& compactMesh);
 public:
     SceneLoader();
-    bool load(const char* fileName, const aiScene *scene, Mesh& compactMesh);
     ~SceneLoader();
+    bool SceneLoader::writeMesh(Mesh& mesh);
+    bool SceneLoader::objToCmesh(const char* fileName, const aiScene *scene, Mesh& compactMesh);
+    void SceneLoader::readMesh(Mesh& mesh);
 
     /* data */
 };
