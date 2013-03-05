@@ -1,0 +1,264 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GLCheck.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="geoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\Component.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\ComponentType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\ComponentTypeManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\DelayedEntityProcessingSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\DelayedEntitySystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\Entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\EntityManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\EntityProcessingSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\EntitySystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\GroupManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\SystemBitManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\SystemManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\TagManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Artemis-Cpp\World.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="normals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="geoBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="systems\shadowSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="entityFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="systems\renderSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="compositeRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="systems\depthSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="texturePlane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="settings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\tinyobj\tiny_obj_loader.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="objParser\objParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneLoader\sceneLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GLCheck.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\geoComponent.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="geoManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="geo.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\phongComponent.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\Artemis.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\BitSize.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\Component.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\ComponentMapper.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\ComponentType.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\ComponentTypeManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\DelayedEntityProcessingSystem.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\DelayedEntitySystem.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\Entity.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\EntityManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\EntityProcessingSystem.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\EntitySystem.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\GroupManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\ImmutableBag.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\SystemBitManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\SystemManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\TagManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\TypeInfoComparator.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Artemis-Cpp\World.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="types.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="normals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\pointLightComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="geoBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\shadowSystem.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="entityFactory.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\renderSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="compositeRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\depthSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="texturePlane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="spotlight.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tinyobj\tiny_obj_loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="objParser\objParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\transformationComponent.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneLoader\sceneLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneLoader\mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="include\Artemis-Cpp\README.md">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="Artemis-Cpp\README.md">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+</Project>
