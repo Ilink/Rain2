@@ -13,7 +13,7 @@ void main(void) {
     vec3 directionalVector = vec3(0.0, 2.0, -10.0);
 
     vec3 reflectionDirection = reflect(-directionalVector, vNormal);
-    float specularLightWeighting = pow(max(dot(reflectionDirection, eyeDirection), 0.0), 2.0);
+    float specularLightWeighting = pow(max(dot(reflectionDirection, eyeDirection), 0.0), 0.8);
     float diffuseLightWeighting = max(dot(vNormal, directionalVector), 0.0);
 
     vec3 lightWeighting = color
