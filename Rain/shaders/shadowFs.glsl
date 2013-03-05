@@ -7,7 +7,7 @@ varying vec4 vNormal;
 const float pi = 3.14159;
 
 // borrowed the sample vectors from: http://www.theorangeduck.com/page/pure-depth-ssao
-float3 sample_sphere[16] = {
+float3 samplesSphere[16] = {
     float3( 0.5381, 0.1856,-0.4319), float3( 0.1379, 0.2486, 0.4430),
     float3( 0.3371, 0.5679,-0.0057), float3(-0.6999,-0.0451,-0.0019),
     float3( 0.0689,-0.1598,-0.8547), float3( 0.0560, 0.0069,-0.1843),
@@ -49,7 +49,21 @@ void main() {
 
     const int samples = 16;
 
-    vec3 depthSpacePos = 
+    float depthFrag = texture2D(uShadowmapSampler,shadowCoord.st).z;
+    vec3 depthSpacePos = vec3(vShadowCoord, depthFrag);
+
+    for(int i = 0; i < samples; i++){
+        vec3 lookupRay = depthSpacePos + sign(dot(vNormal.xyz, samplesSphere[i])) + samplesSphere[i];
+        float sampledDepth = texture2D(uShadowmapSampler, lookupRay.xy).z;
+        float difference = sampledDepth - depthFrag;
+
+        // float occlusion += step(falloff, difference) * (1.0-smoothstep(falloff, area, difference));
+        float occlusion += difference;
+    }
+
+    // float ao = 1.0 - total_strength * occlusion * (1.0 / samples);
+    float ao = 1.0 - occlusion / samples;
+    gl_FragColor = clamp(ao, 0.0, 1.0);
 
     float aoFactor = (pair4factor);
 
