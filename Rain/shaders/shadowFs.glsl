@@ -3,6 +3,7 @@ uniform sampler2D uShadowmapSampler;
 varying vec4 vShadowCoord;
 uniform vec4 uColor;
 varying vec4 vNormal;
+varying vec2 uv;
 
 const float pi = 3.14159;
 
@@ -49,8 +50,8 @@ void main() {
 
     const int samples = 16;
 
-    float depthFrag = texture2D(uShadowmapSampler,shadowCoord.st).z;
-    vec3 depthSpacePos = vec3(vShadowCoord, depthFrag);
+    float depthFrag = texture2D(uShadowmapSampler, uv).z;
+    vec3 depthSpacePos = vec3(uv, depthFrag);
 
     for(int i = 0; i < samples; i++){
         vec3 lookupRay = depthSpacePos + sign(dot(vNormal.xyz, samplesSphere[i])) + samplesSphere[i];
