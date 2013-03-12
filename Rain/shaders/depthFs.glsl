@@ -5,5 +5,6 @@ void main(void) {
         (gl_DepthRange.far - gl_DepthRange.near);
 
     float clipDepth = ndcDepth / gl_FragCoord.w;
-    gl_FragColor = vec4((clipDepth * 0.5) + 0.5);
+    // gl_FragColor = vec4((clipDepth * 0.5) + 0.5);
+    gl_FragColor = vec4(0.2, 1.0, 0.4, 1.0);
 };

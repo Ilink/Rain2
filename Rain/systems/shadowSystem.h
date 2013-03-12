@@ -26,6 +26,8 @@ private:
     void vaoSetup(GLuint vao, GLuint vbo, GLuint ibo); // need this?
     GLuint fbo;
     GLuint vao;
+    GLuint uvBuffer;
+    
     glm::mat4 MVP;
     glm::mat4 shadowMatrix;
     glm::mat4 MV;

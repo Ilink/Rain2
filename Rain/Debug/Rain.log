@@ -1,19 +1,12 @@
-﻿Build started 3/3/2013 5:40:34 PM.
+﻿Build started 3/11/2013 10:38:05 PM.
      1>Project "L:\projects\Rain2\Rain\Rain.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         K:\vs12\VC\bin\CL.exe /c /I"L:\projects\Rain2\Rain\Artemis-Cpp" /IL:\projects\Rain2\Rain\include /IL:\lib\SFML\include /ZI /nologo /W3 /WX- /Od /Oy- /D GLEW_STATIC /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
+         K:\vs12\VC\bin\CL.exe /c /I"L:\projects\Rain2\Rain\Artemis-Cpp" /IL:\projects\Rain2\Rain\include /IL:\lib\SFML\include /ZI /nologo /W3 /WX- /Od /Oy- /D GLEW_STATIC /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp systems\DeferredRenderer.cpp systems\GBufferSystem.cpp
+         GBufferSystem.cpp
+         Generating Code...
+         Skipping... (no relevant changes detected)
+         DeferredRenderer.cpp
          main.cpp
-     1>l:\projects\rain2\rain\main.cpp(67): warning C4018: '<' : signed/unsigned mismatch
-     1>l:\projects\rain2\rain\main.cpp(93): warning C4018: '<' : signed/unsigned mismatch
-     1>l:\projects\rain2\rain\main.cpp(99): warning C4018: '<' : signed/unsigned mismatch
-     1>l:\projects\rain2\rain\main.cpp(104): warning C4018: '<' : signed/unsigned mismatch
-     1>l:\projects\rain2\rain\main.cpp(112): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 k:\vs12\vc\include\stdio.h(218) : see declaration of 'fopen'
-     1>l:\projects\rain2\rain\main.cpp(115): warning C4018: '<' : signed/unsigned mismatch
-     1>l:\projects\rain2\rain\main.cpp(125): warning C4018: '<' : signed/unsigned mismatch
-     1>l:\projects\rain2\rain\main.cpp(298): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>l:\projects\rain2\rain\main.cpp(367): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
-     1>l:\projects\rain2\rain\main.cpp(368): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
        Link:
          K:\vs12\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"L:\projects\Rain2\Debug\Rain.exe" /INCREMENTAL /NOLOGO /LIBPATH:L:\lib\assimp /LIBPATH:L:\lib\SFML\lib\Debug glew.lib "sfml-graphics-d.lib" "sfml-window-d.lib" "sfml-system-d.lib" "sfml-main-d.lib" opengl32.lib assimp.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"L:\projects\Rain2\Debug\Rain.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"L:\projects\Rain2\Debug\Rain.lib" /MACHINE:X86 Debug\Component.obj
          Debug\ComponentType.obj
@@ -42,7 +35,11 @@
          Debug\sceneLoader.obj
          Debug\settings.obj
          Debug\shader.obj
+         Debug\DeferredRenderer.obj
          Debug\depthSystem.obj
+         Debug\GBufferSystem.obj
+         Debug\LightSystem.obj
+         Debug\MovementSystem.obj
          Debug\renderSystem.obj
          Debug\shadowSystem.obj
          Debug\texturePlane.obj
@@ -52,4 +49,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:04.35
+Time Elapsed 00:00:01.93

@@ -46,10 +46,10 @@ void makeBox(double height, double width, double depth, vector <vertex>& verts, 
     verts[15].x = left;          verts[15].y = bottom;         verts[15].z = far;
 
     // Right
-    verts[16].x = right;        verts[16].y = bottom;          verts[16].z = far;
-    verts[17].x = right;        verts[17].y = top;             verts[17].z = far;
-    verts[18].x = right;        verts[18].y = top;             verts[18].z = close;
-    verts[19].x = right;        verts[19].y = bottom;          verts[19].z = close;
+    verts[16].x = right;        verts[16].y = bottom;          verts[16].z = close;
+    verts[17].x = right;        verts[17].y = bottom;          verts[17].z = far;
+    verts[18].x = right;        verts[18].y = top;             verts[18].z = far;
+    verts[19].x = right;        verts[19].y = top;             verts[19].z = close;
 
     // Left
     verts[20].x = left;          verts[20].y = bottom;          verts[20].z = close;
@@ -57,27 +57,29 @@ void makeBox(double height, double width, double depth, vector <vertex>& verts, 
     verts[22].x = left;          verts[22].y = top;             verts[22].z = far;
     verts[23].x = left;          verts[23].y = top;             verts[23].z = close;
 
-
-    /*
-    the vertex index should be flipped, not the verts?
-    */
+    // Front
     triIndex[0] = 0;    triIndex[1] = 1;    triIndex[2] = 2;
     triIndex[3] = 0;    triIndex[4] = 2;    triIndex[5] = 3;
 
+    // Back
     triIndex[6] = 4;    triIndex[7] = 5;    triIndex[8] = 6;
     triIndex[9] = 4;    triIndex[10] = 6;   triIndex[11] = 7;
 
-    triIndex[12] = 8;   triIndex[13] = 9;   triIndex[14] = 10;
-    triIndex[15] = 8;   triIndex[16] = 10;  triIndex[17] = 11;
+    // Top
+    triIndex[12] = 8;   triIndex[13] = 11;   triIndex[14] = 10;
+    triIndex[15] = 8;   triIndex[16] = 10;  triIndex[17] = 9;
 
-    triIndex[18] = 12;  triIndex[19] = 13;  triIndex[20] = 14;
-    triIndex[21] = 12;  triIndex[22] = 14;  triIndex[23] = 15;
+    // Bottom
+    triIndex[18] = 12;  triIndex[19] = 15;  triIndex[20] = 14;
+    triIndex[21] = 12;  triIndex[22] = 14;  triIndex[23] = 13;
 
+    // Right
     triIndex[24] = 16;  triIndex[25] = 17;  triIndex[26] = 18;
     triIndex[27] = 16;  triIndex[28] = 18;  triIndex[29] = 19;
 
-    triIndex[30] = 20;  triIndex[31] = 21;  triIndex[32] = 22;
-    triIndex[33] = 20;  triIndex[34] = 22;  triIndex[35] = 23;
+    // Left
+    triIndex[30] = 20;  triIndex[31] = 22;  triIndex[32] = 21;
+    triIndex[33] = 20;  triIndex[34] = 23;  triIndex[35] = 22;
 
 
 

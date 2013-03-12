@@ -60,6 +60,10 @@ ShadowSystem::ShadowSystem(GLuint& depthMap, Spotlight& light, glm::mat4* viewMa
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     //glClear(GL_DEPTH_BUFFER_BIT);
 
+    // glGenBuffers(1, &uvBuffer);
+    // glBindBuffer(ARRAY_BUFFER, uvBuffer);
+    // glBufferData(ARRAY_BUFFER, , GL_STATIC_DRAW);
+
     printGlError();
 
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, shadowMap, 0);
@@ -105,6 +109,8 @@ void ShadowSystem::end(){
     glBindVertexArray(0);
     glUseProgram(0);
     glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
 }
 
 void ShadowSystem::processEntity(artemis::Entity &e){
@@ -141,6 +147,14 @@ void ShadowSystem::processEntity(artemis::Entity &e){
     // Position
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), BUFFER_OFFSET(0));
     glEnableVertexAttribArray(0);
+
+    // Normal
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), BUFFER_OFFSET(sizeof(float)*3));
+    glEnableVertexAttribArray(1);
+
+    // Texture
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), BUFFER_OFFSET(sizeof(float)*2));
+    glEnableVertexAttribArray(2);
 
     printGlError();
 

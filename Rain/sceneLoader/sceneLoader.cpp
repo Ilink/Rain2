@@ -75,7 +75,7 @@ bool SceneLoader::objToCmesh(const char* fileName, const aiScene *scene, Mesh& c
     }
 
     //scene = importer.ReadFile( fileName, aiProcess_GenUVCoords | aiProcess_GenSmoothNormals);
-    scene = importer.ReadFile( fileName, aiProcess_GenUVCoords | aiProcess_GenNormals);
+    scene = importer.ReadFile( fileName, aiProcess_GenUVCoords | aiProcess_GenSmoothNormals);
     
     //scene = importer.ReadFile( fileName, aiProcess_GenUVCoords | aiProcess_GenSmoothNormals | aiProcess_Triangulate);
 

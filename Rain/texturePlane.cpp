@@ -29,6 +29,10 @@ TexturePlane::TexturePlane(GLuint& texture, double size, double x, double y){
     view = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, 0.0f));
 }
 
+TexturePlane::TexturePlane(){
+    
+}
+
 void TexturePlane::render(){
     glUseProgram(shader.program);
     glBindVertexArray(vao);

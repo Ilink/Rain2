@@ -157,7 +157,11 @@
     <ClCompile Include="sceneLoader\sceneLoader.cpp" />
     <ClCompile Include="settings.cpp" />
     <ClCompile Include="shader.cpp" />
+    <ClCompile Include="systems\DeferredRenderer.cpp" />
     <ClCompile Include="systems\depthSystem.cpp" />
+    <ClCompile Include="systems\GBufferSystem.cpp" />
+    <ClCompile Include="systems\LightSystem.cpp" />
+    <ClCompile Include="systems\MovementSystem.cpp" />
     <ClCompile Include="systems\renderSystem.cpp" />
     <ClCompile Include="systems\shadowSystem.cpp" />
     <ClCompile Include="texturePlane.cpp" />
@@ -185,6 +189,7 @@
     <ClInclude Include="Artemis-Cpp\World.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="components\geoComponent.h" />
+    <ClInclude Include="components\MovementComponent.h" />
     <ClInclude Include="components\phongComponent.h" />
     <ClInclude Include="components\pointLightComponent.h" />
     <ClInclude Include="components\transformationComponent.h" />
@@ -204,7 +209,11 @@
     <ClInclude Include="normals.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="spotlight.h" />
+    <ClInclude Include="systems\DeferredRenderer.h" />
     <ClInclude Include="systems\depthSystem.h" />
+    <ClInclude Include="systems\GBufferSystem.h" />
+    <ClInclude Include="systems\LightSystem.h" />
+    <ClInclude Include="systems\MovementSystem.h" />
     <ClInclude Include="systems\renderSystem.h" />
     <ClInclude Include="systems\shadowSystem.h" />
     <ClInclude Include="texturePlane.h" />

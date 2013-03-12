@@ -19,6 +19,6 @@
 attribute vec3 pos;
 uniform mat4 uMVPmat;
 void main(void) {
-	gl_Position = uMVPmat * vec4(pos, 1.0);
-	// gl_Position = vec4(pos, 1.0);
+	// gl_Position = uMVPmat * vec4(pos, 1.0);
+	gl_Position = vec4(pos, 1.0);
 };

@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-// #include <SFML/OpenGL.hpp>
 #include <SFML/Window.hpp>
 #include <tinyobj/tiny_obj_loader.h>
 #include <GL/glew.h>
@@ -9,6 +8,7 @@
 #include "systems/renderSystem.h"
 #include "systems/shadowSystem.h"
 #include "systems/depthSystem.h"
+#include "systems/DeferredRenderer.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -50,90 +50,6 @@ struct FileData {
     vector<double> B;
 };
 
-void writeMesh(Mesh mesh){
-    vector<vertex> verts;
-    vertex vert = {1.0f, 2.0f, 3.0f};
-    verts.push_back(vert);
-    vertex vert2 = {1.5f, 2.5f, 3.5f};
-    verts.push_back(vert2);
-
-    // Write
-    FileData fileDataWrite;
-    
-    FileHeader fileHeaderWrite = {2,2,2,0};
-    fstream fileOut("testFile.cmesh", ios::out | ios::binary);
-    fileOut.write((const char*) &fileHeaderWrite, sizeof(FileHeader));
-
-    for(int i=0; i < verts.size(); i++){
-        fileOut.write((const char*) &verts[i], sizeof(vertex));
-    }
-
-    fileOut.close();
-}
-
-void readMesh(){
-    // Read
-    FileData fileDataRead;
-    FileHeader fileHeaderRead;
-    
-    fstream fileIn("testFile.cmesh", ios::in | ios::binary);
-    fileIn.read((char*) &fileHeaderRead, sizeof(FileHeader));
-    printf("verts: %i num tri indexes: %i num quad indexes%i\n", fileHeaderRead.numVerts, fileHeaderRead.numTriIndexes, fileHeaderRead.numQuadIndexes);
-    
-    vertex vertBuffer;
-    vector<vertex> vertsRead(fileHeaderRead.numVerts);
-    for(int i = 0; i < fileHeaderRead.numVerts; i++){
-        fileIn.read((char*) &vertBuffer, sizeof(vertex));
-        // printf("vert from file: %f\n", vertBuffer.x);
-        vertsRead[i] = vertBuffer;
-    }
-
-    GLuint buffer;
-    vector<GLuint> triIndexRead(fileHeaderRead.numTriIndexes);
-    for(int i = 0; i < triIndexRead.size(); i++){
-        fileIn.read((char*) &buffer, sizeof(GLuint));
-        triIndexRead[i] = buffer;
-    }
-
-    vector<GLuint> quadIndexRead(fileHeaderRead.numQuadIndexes);
-    for(int i = 0; i < quadIndexRead.size(); i++){
-        fileIn.read((char*) &buffer, sizeof(GLuint));
-        quadIndexRead[i] = buffer;
-    }
-
-    for(int i = 0; i < vertsRead.size(); i++){
-        printf("vert from file: %f\n", vertsRead[i].x);
-    }
-
-    fileIn.close();
-}
-
-void printParsedObj(vector<vertex>& verts, vector<GLuint>& indexes){    
-    FILE *file = fopen ("log/obj.txt","w");
-    
-    fprintf(file, "num verts: %i\n", verts.size());
-    for(int i = 0; i < verts.size(); i++){
-        fprintf(file, "x: %f\ty: %f\tz: %f\n", verts[i].x, verts[i].y, verts[i].z);
-        fprintf(file, "nx: %f\tny: %f\tnz: %f\n", verts[i].nx, verts[i].ny, verts[i].nz);
-        fprintf(file, "u: %f\tu: %f\n\n", verts[i].u, verts[i].v);
-    }
-
-    fprintf(file, "\n\n\n");
-
-    fprintf(file, "num faces: %i\n", indexes.size()/3);
-
-    for(int i = 0; i < indexes.size(); i++){
-        // fprintf(file, "%i %i %i\n", indexes[i], indexes[i+1], indexes[i+2]);
-        if(i%3==0 && i > 0){
-            fprintf(file, "\n");
-        }
-        fprintf(file, "%i", i);
-        
-    }
-
-    fclose (file);
-}
-
 int main(int argc, char* argv[]) {
 
     aiScene scene;
@@ -141,17 +57,15 @@ int main(int argc, char* argv[]) {
     Mesh _compactMesh;
     // bool loadSuccess = sceneLoader.objToCmesh("meshes/spider.obj", &scene, compactMesh);
     // bool loadSuccess = sceneLoader.objToCmesh("meshes/crytek-sponza/sponza.obj", &scene, _compactMesh);
-    // bool loadSuccess = sceneLoader.objToCmesh("meshes/demondogtris.obj", &scene, compactMesh);
-    //bool loadSuccess = sceneLoader.objToCmesh("meshes/teapot.obj", &scene, _compactMesh);
+    // bool loadSuccess = sceneLoader.objToCmesh("meshes/demondogtris.obj", &scene, _compactMesh);
+    bool loadSuccess = sceneLoader.objToCmesh("meshes/teapot.obj", &scene, _compactMesh);
     // bool loadSuccess = sceneLoader.objToCmesh("meshes/test.obj", &scene, compactMesh);
-    // bool loadSuccess = sceneLoader.objToCmesh("meshes/cube.obj", &scene, compactMesh);
+    // bool loadSuccess = sceneLoader.objToCmesh("meshes/cube.obj", &scene, _compactMesh);
     // bool loadSuccess = sceneLoader.objToCmesh("meshes/Lighthouse.obj", &scene, compactMesh);
     // bool loadSuccess = sceneLoader.objToCmesh("meshes/sibenik.obj", &scene, compactMesh);
 
     Mesh compactMesh;
     sceneLoader.readMesh(compactMesh);
-
-    //printf("scene loaded: %i\n", loadSuccess);
 
     Camera camera(glm::vec3(0.0f, 10.0f, -10.0f));
 
@@ -170,9 +84,6 @@ int main(int argc, char* argv[]) {
     window.setVerticalSyncEnabled(true);
     window.setKeyRepeatEnabled(true);
 
-    // const sf::Vector2i windowCenter( 400, 300 );
-    // sf::Mouse::setPosition( windowCenter, window );
-
     // note this must be called before any opengl operations
     GLenum glew_status = glewInit();
     if (glew_status != GLEW_OK) {
@@ -184,17 +95,9 @@ int main(int argc, char* argv[]) {
     Shader phongShader;
     phongShader.load("shaders/phongVs.glsl", "shaders/phongFs.glsl");
 
-//    glm::vec3 lightPos = glm::vec3(0.0f, 10.0f, 0.0f);
     glm::vec3 lightPos = glm::vec3(2.0f, 3.0f, -10.0f);
     glm::vec3 lightLookAtPoint = glm::vec3(0.0f, 0.0f, 0.0f);
     Spotlight light(1.0, &lightPos, &lightLookAtPoint);
-
-    // lookAtPoint = glm::vec3(0.0f, 0.0f, 0.0f);
-    // eye = glm::vec3(0.0f, 0.0f, -10.0f);
-    // upVector = glm::vec3(0.0f, 1.0f, 0.0f);
-
-    // Spotlight light(1.0, glm::vec3(10.0f, 0.0f, -5.0f), glm::vec3(0.0f, 0.0f, -1.0f));
-    // light.rotate(90.0, glm::vec3(1.0, ))
 
     GeoManager geoManager;
     artemis::World world;
@@ -203,15 +106,20 @@ int main(int argc, char* argv[]) {
     EntityFactory entityFactory(em, geoManager);
     // GeoFactory geoFactory;
     
-    RenderSystem* renderSystem = (RenderSystem*)sm->setSystem(new RenderSystem(&camera.viewMatrix));
+    glm::vec3 lightPosition = glm::vec3(0.408248, -0.816497, 0.408248);
+
+    RenderSystem* renderSystem = (RenderSystem*)sm->setSystem(new RenderSystem(&camera.viewMatrix, &lightPosition));
     DepthSystem* depthSystem = (DepthSystem*)sm->setSystem(new DepthSystem(light, &camera.viewMatrix));
     ShadowSystem* shadowSystem = (ShadowSystem*)sm->setSystem(new ShadowSystem(depthSystem->depthMap, light, &camera.viewMatrix));
+    // MovementSystem* movementSystem = (MovementSystem*)sm->setSystem(new MovementSystem());
+    DeferredRenderer deferredRenderer(sm, camera);
     
     vector<GLuint> passes;
     passes.push_back(depthSystem->depthMap);
     // passes.push_back(shadowSystem->shadowMap);
     CompositeRenderer compositeRenderer(passes);
 
+    // TexturePlane depthDebugPanel(depthSystem->depthMap, 0.5, -0.7, 0.7);
     TexturePlane depthDebugPanel(depthSystem->depthMap, 0.5, -0.7, 0.7);
     
     sm->initializeAll();
@@ -225,26 +133,16 @@ int main(int argc, char* argv[]) {
     double brightness = 0.0;
     double specularity = 0.0;
 
-    // TransformationComponent *trans1 = new TransformationComponent(
-    //     &glm::vec3(0.0f, 0.0f, 0.0f),
-    //     &planeRot, &glm::vec3(1.0f, 0.0f, 0.0f)
-    // );
+    TransformationComponent* trans = new TransformationComponent(
+        &squarePos,
+        &squareRot, &glm::vec3(0.0f, 1.0f, 0.0f)
+    );
 
-    // artemis::Entity &plane = entityFactory.makePlaneEntity();
-    // plane.addComponent(new PhongComponent(&phongShader, &brightness, &specularity, &lightDir));
-    // plane.addComponent(trans1);
-    // plane.refresh();
-
-    // TransformationComponent* trans = new TransformationComponent(
-    //     &squarePos,
-    //     &squareRot, &glm::vec3(0.0f, 1.0f, 0.0f)
-    // );
-
-    // artemis::Entity &square = em->create();
-    // square.addComponent(geoManager.create(boxVerts, boxVertIndex));
-    // square.addComponent(new PhongComponent(&phongShader, &brightness, &specularity, &lightDir));
-    // square.addComponent(trans);
-    // square.refresh();
+    artemis::Entity &box = em->create();
+    box.addComponent(geoManager.create(boxVerts, boxVertIndex));
+    box.addComponent(new PhongComponent(phongShader, brightness, specularity, lightDir));
+    box.addComponent(trans);
+    box.refresh();
 
     // glm::vec3 scale = glm::vec3(0.01f);
     glm::vec3 scale = glm::vec3(1.0f);
@@ -263,17 +161,29 @@ int main(int argc, char* argv[]) {
         &glm::vec3(1.0f,0.0f, 0.0f)
     );
 
+    TransformationComponent *lightTrans = new TransformationComponent(
+        &lightPosition,
+        &glm::vec3(0.5)
+    );
+
     artemis::Entity &plane = entityFactory.makePlaneEntity();
-    plane.addComponent(new PhongComponent(&phongShader, &brightness, &specularity, &lightDir));
+    plane.addComponent(new PhongComponent(phongShader,brightness, specularity, lightDir));
     plane.addComponent(planeTrans);
     plane.refresh();
+
+    artemis::Entity &lightModel = em->create();
+    lightModel.addComponent(geoManager.create(boxVerts, boxVertIndex));
+    lightModel.addComponent(new PhongComponent(phongShader, brightness, specularity, lightDir));
+    lightModel.addComponent(lightTrans);
+    lightModel.refresh();
+
 
     artemis::Entity &geo = em->create();
     // geo.addComponent(geoManager.create(meshes[0].verts, shapes[0].mesh.indices));
     geo.addComponent(geoManager.create(compactMesh.verts, compactMesh.triIndexes));
-    //geo.addComponent(geoManager.create(meshes[0].verts, meshes[0].indexes));
+    // geo.addComponent(geoManager.create(meshes[0].verts, meshes[0].indexes));
     // geo.addComponent(geoManager.create(boxVerts, boxVertIndex));
-    geo.addComponent(new PhongComponent(&phongShader, &brightness, &specularity, &lightDir));
+    geo.addComponent(new PhongComponent(phongShader, brightness, specularity, lightDir));
     geo.addComponent(new DebugComponent(&glm::vec4(0.4, 0.3, 0.2, 1.0)));
     geo.addComponent(sceneTrans);
     geo.refresh();
@@ -288,14 +198,18 @@ int main(int argc, char* argv[]) {
     float initialCameraPos = 0.0f;
     float moveAmount = 1.0f;
 
+    glClearColor(0.8, 1.0, 0.85, 1.0);
+
     camera.translate(initialCameraPos);
 
     while (running){
         // planeRot += 0.5;
 
         if(!isPaused){
-            x+=0.1;
-            squarePos[1] = 2.0+1.5*sin(x);
+            x+=0.06;
+            // squarePos[1] = 2.0+1.5*sin(x);
+            lightPosition[1] = 10.5*sin(x);
+            lightPosition[2] = 10.5*cos(x);
             // squareRot += 1;
         }
         glEnable(GL_CULL_FACE);
@@ -379,9 +293,12 @@ int main(int argc, char* argv[]) {
         world.setDelta(0.0016f);
         // depthSystem->process();
         // shadowSystem->process();
-        renderSystem->process();
+        // renderSystem->process();
+        deferredRenderer.process();
+        deferredRenderer.renderDepthPanel();
+        deferredRenderer.renderColorPanel();
 
-        depthDebugPanel.render();
+        // depthDebugPanel.render();
 
         window.display();
     }

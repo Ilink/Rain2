@@ -20,7 +20,9 @@ public:
     void strafe(const float& amount);
     void translate(const float& amount);
     void reset();
+    glm::mat4 perspective;
     glm::mat4 viewMatrix;
+    int h; int w;
 };
 
 #endif

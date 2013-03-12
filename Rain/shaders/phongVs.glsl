@@ -1,6 +1,7 @@
 uniform mat4 uMVMatrix;
 uniform mat4 uPMatrix;
 uniform mat3 uNormalMatrix;
+uniform vec3 uLightPosition;
 
 //todo: use the uniforms instead of hardcoded values
 // uniform vec3 uAmbientColor;
@@ -9,29 +10,19 @@ uniform mat3 uNormalMatrix;
 
 attribute vec3 normal;
 attribute vec3 pos;
+attribute vec3 texCoord;
 
-varying vec4 vPosition;
 varying vec3 vNormal;
-varying vec3 vLightWeighting;
-varying vec3 vLightDirection;
+varying vec2 vTexCoord;
+varying vec3 vPositionE;
+varying vec3 vLightPositionE;
 
 void main(void) {
-    vPosition = uMVMatrix * vec4(pos, 1.0);
-    gl_Position = uPMatrix * vPosition;
+    // vTexCoord = texCoord;
+    vPositionE = vec3(uMVMatrix * vec4(pos, 1.0));
+    // vLightPositionE = mat3(uMVMatrix) * uLightPosition;
+    vLightPositionE = uMVMatrix * vec4(uLightPosition, 1.0);
+    gl_Position = uPMatrix * uMVMatrix * vec4(pos, 1.0);
     
-    //todo: use the uniforms instead of these hardcoded values
-    vec3 ambientLight = vec3(0.0, 0.0, 0.0);
-    // vec3 ambientLight = vec3(0.85, 0.5, 0.5);
-    vec3 directionalLightColor = vec3(0.5, 0.5, 0.75);
-    vec3 directionalVector = vec3(0.85, 0.8, 0.75);
-    vLightDirection = directionalVector;
-    
-    // vec3 transformedNormal = uNormalMatrix * normal;
-    vNormal = normal;
-    // vNormal = transformedNormal;
-    
-    // we clamp to 0 because it doesn't make sense to have a negative value for the amount of light
-    float directional = max(dot(normal.xyz, directionalVector), 0.0);
-    vLightWeighting = ambientLight + directional;
-    // vLightWeighting = ambientLight + (directionalLightColor * directional);
+    vNormal = mat3(uMVMatrix) * normal;
 }

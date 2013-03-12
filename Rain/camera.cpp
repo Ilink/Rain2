@@ -6,6 +6,10 @@ Camera::Camera(){
     upVector = glm::vec3(0.0f, 1.0f, 0.0f);
     viewMatrix = glm::lookAt(eye, lookAtPoint, upVector);
     // viewMatrix = glm::mat4(1.0f);
+
+    h = 600;
+    w = 800;
+    perspective = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 1000.f);
 }
 
 Camera::Camera(glm::vec3& initialPos){

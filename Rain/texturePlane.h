@@ -26,6 +26,7 @@ private:
     glm::mat4 view;
 public:
     TexturePlane(GLuint& texture, double size, double x, double y);
+    TexturePlane();
     void render();
     ~TexturePlane();
 };

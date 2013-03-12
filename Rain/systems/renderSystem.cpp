@@ -17,7 +17,7 @@ It should have a subsystem that looks at every light entity and gathers data fro
 I cant have the renderSystem itself look for light components because a renderable entity would never have one.
 */
 
-RenderSystem::RenderSystem(glm::mat4 *viewMatrix){
+RenderSystem::RenderSystem(glm::mat4 *viewMatrix, glm::vec3* lightPosition){
     addComponentType<GeoComponent>();
     addComponentType<PhongComponent>();
     
@@ -25,10 +25,9 @@ RenderSystem::RenderSystem(glm::mat4 *viewMatrix){
     // view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
     view = viewMatrix;
 
-    rot = 0;
+    this->lightPosition = lightPosition;
 
-    // gl state
-    glClearColor(0.8, 1.0, 0.85, 1.0);
+    rot = 0;
 }
 
 void RenderSystem::initialize(){
@@ -47,8 +46,8 @@ void RenderSystem::vaoSetup(GLuint vao, GLuint vbo, GLuint ibo){
     glEnableVertexAttribArray(0);
 
     // Normals
-    // glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex),  BUFFER_OFFSET(sizeof(float)*3));
-    // glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex),  BUFFER_OFFSET(sizeof(float)*3));
+    glEnableVertexAttribArray(1);
 
     // // Textures
     // glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(vertex),  BUFFER_OFFSET(sizeof(float)*2));
@@ -58,14 +57,13 @@ void RenderSystem::vaoSetup(GLuint vao, GLuint vbo, GLuint ibo){
     glBindVertexArray(0);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
 }
 
 void RenderSystem::processEntity(artemis::Entity &e){
     // printf("renderable entity\n");
-    GLuint shader = phongMapper.get(e)->shader->program; //todo: this only needs to be bound once!
+    GLuint shader = phongMapper.get(e)->shader.program; //todo: this only needs to be bound once!
                                                         //could be: startup => process => teardown
     GLuint vao = geoMapper.get(e)->vao;
     GLuint vbo = geoMapper.get(e)->vbo;
@@ -75,6 +73,7 @@ void RenderSystem::processEntity(artemis::Entity &e){
     GLuint uMVPmat = glGetUniformLocationARB(shader, "uPMatrix");
     GLuint uMVMatrix = glGetUniformLocationARB(shader, "uMVMatrix");
     GLuint uNormalMatrix = glGetUniformLocationARB(shader, "uNormalMatrix");
+    GLuint uLightPosition = glGetUniformLocationARB(shader, "uLightPosition");
 
     if(!geoMapper.get(e)->isVaoReady){
         vaoSetup(vao, vbo, ibo);
@@ -97,6 +96,7 @@ void RenderSystem::processEntity(artemis::Entity &e){
     glUniformMatrix3fv(uNormalMatrix, 1, false, (const GLfloat*) glm::value_ptr(normalMatrix));
     glUniformMatrix4fv(uMVMatrix, 1, FALSE, (const GLfloat*) glm::value_ptr(MV));
     glUniformMatrix4fv(uMVPmat, 1, FALSE, (const GLfloat*) glm::value_ptr(perspective));
+    glUniform3fv(uLightPosition, 1, (const GLfloat*) glm::value_ptr(*lightPosition));
 
     glDrawElements(GL_TRIANGLES, geoMapper.get(e)->triIndex.size(), GL_UNSIGNED_INT, 0);
 

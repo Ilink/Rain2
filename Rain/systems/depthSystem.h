@@ -28,6 +28,7 @@ private:
     glm::mat4 view;
     glm::mat4 shadowView;
     glm::mat4 perspective;
+    glm::mat4* viewMatrix;
     glm::mat4 model;
     Shader depthShader;
     float rot;

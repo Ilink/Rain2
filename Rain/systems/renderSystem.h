@@ -23,10 +23,11 @@ private:
     glm::mat4 perspective;
     glm::mat4 *view;
     glm::mat4 model;
+    glm::vec3 *lightPosition;
     float rot;
     void vaoSetup(GLuint vao, GLuint vbo, GLuint ibo);
 public:
-    RenderSystem(glm::mat4 *viewMatrix);
+    RenderSystem(glm::mat4 *viewMatrix, glm::vec3 *lightPosition);
     virtual void initialize();
     virtual void processEntity(artemis::Entity &e);
 };

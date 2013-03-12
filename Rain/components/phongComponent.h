@@ -19,21 +19,13 @@ using namespace std;
 
 class PhongComponent : public artemis::Component{
 public:
-    Shader* shader;
-    double* brightness;
-    double* specularity;
-    glm::vec3* color;
-
-    // filenames could be mapped elsewhere, so we can just say "phong"
-    PhongComponent(const char* vsFilename, const char* fsFilename, double* brightness, double* specularity, glm::vec3* color){
-       this->brightness = brightness;
-       this->specularity = specularity;
-       this->shader->load(vsFilename, fsFilename);
-       this->color = color;
-    };
+    Shader shader;
+    double brightness;
+    double specularity;
+    glm::vec3 color;
 
     // this lets you use preloaded/compiled shaders
-    PhongComponent(Shader* shader, double* brightness, double* specularity, glm::vec3* color){
+    PhongComponent(Shader& shader, double& brightness, double& specularity, glm::vec3& color){
        this->brightness = brightness;
        this->specularity = specularity;
        this->shader = shader;

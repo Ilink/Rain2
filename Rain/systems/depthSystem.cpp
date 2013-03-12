@@ -3,6 +3,7 @@
 DepthSystem::DepthSystem(Spotlight& light, glm::mat4* viewMatrix){
     // Artemis Setup
     addComponentType<GeoComponent>();
+    this->viewMatrix = viewMatrix;
 
     rot = 0;
     fbo = 0; // need this?
@@ -29,7 +30,6 @@ DepthSystem::DepthSystem(Spotlight& light, glm::mat4* viewMatrix){
                         0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE,
                         NULL);
     glActiveTexture(GL_TEXTURE0);
-    
     
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); 
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
@@ -66,7 +66,7 @@ DepthSystem::DepthSystem(Spotlight& light, glm::mat4* viewMatrix){
     printGlError();
 
     // glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthMap, 0);
-    //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTex, 0);
 
     GLenum FBOstatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -121,22 +121,15 @@ void DepthSystem::end(){
 }
 
 void DepthSystem::processEntity(artemis::Entity &e){
-    // glViewport(0, 0, 800, 600);
     GLuint vbo = geoMapper.get(e)->vbo;
     GLuint ibo = geoMapper.get(e)->ibo;
-
-    // rot += 0.5f;
-    // MV = glm::rotate(shadowMVP, rot, glm::vec3(0.5f, 1.0f, 0.0f));
-
-    // glDepthRange(8.0, 10.0);
-    // printf("depth: %f\n", depth);
-    // view = glm::rotate(view, rot, glm::vec3(0.5f, 1.0f, 0.0f));
 
     light.update();
     TransformationComponent *trans = transformationMapper.get(e);
     model = trans->getModelMatrix();
     perspective = light.perspectiveMatrix;
-    MV = light.viewMatrix * model;
+    // MV = light.viewMatrix * model;
+    MV = *viewMatrix * model;
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -156,7 +149,6 @@ void DepthSystem::processEntity(artemis::Entity &e){
     glUniformMatrix4fv(uPmat, 1, FALSE, (const GLfloat*) glm::value_ptr(perspective));
     
     printGlError();
-    // error - FBO not setup correctly
     glDrawElements(GL_TRIANGLES, geoMapper.get(e)->triIndex.size(), GL_UNSIGNED_INT, 0);
-    printGlError(); // error here    
+    printGlError();
 }
