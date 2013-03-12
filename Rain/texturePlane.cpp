@@ -1,6 +1,6 @@
 #include "texturePlane.h"
 
-TexturePlane::TexturePlane(GLuint& texture, double size, double x, double y){
+TexturePlane::TexturePlane(GLuint& texture, double size, double x, double y, int texIndex){
     shader.load("shaders/texVs.glsl", "shaders/texFs.glsl");
 
     this->texture = texture;
@@ -42,7 +42,7 @@ void TexturePlane::render(){
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-    //glActiveTexture(GL_TEXTURE0); // might be 1?
+    glActiveTexture(GL_TEXTURE0); // might be 1?
     glBindTexture(GL_TEXTURE_2D, texture);
     glUniform1i(uSampler, 0);
 
@@ -57,6 +57,8 @@ void TexturePlane::render(){
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), BUFFER_OFFSET(24));
     // glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertex),  ((GLubyte *)NULL + (24)));
     
+    printGlError();
+
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     
     // cleanup

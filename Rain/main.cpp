@@ -120,7 +120,7 @@ int main(int argc, char* argv[]) {
     CompositeRenderer compositeRenderer(passes);
 
     // TexturePlane depthDebugPanel(depthSystem->depthMap, 0.5, -0.7, 0.7);
-    TexturePlane depthDebugPanel(depthSystem->depthMap, 0.5, -0.7, 0.7);
+    //TexturePlane depthDebugPanel(depthSystem->depthMap, 0.5, -0.7, 0.7);
     
     sm->initializeAll();
 

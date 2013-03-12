@@ -24,8 +24,9 @@ private:
     GLuint uSampler;
     GLuint uView;
     glm::mat4 view;
+    int texIndex;
 public:
-    TexturePlane(GLuint& texture, double size, double x, double y);
+    TexturePlane(GLuint& texture, double size, double x, double y, int texIndex);
     TexturePlane();
     void render();
     ~TexturePlane();
