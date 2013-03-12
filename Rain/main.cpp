@@ -293,10 +293,11 @@ int main(int argc, char* argv[]) {
         world.setDelta(0.0016f);
         // depthSystem->process();
         // shadowSystem->process();
-        // renderSystem->process();
+        renderSystem->process();
         deferredRenderer.process();
         deferredRenderer.renderDepthPanel();
         deferredRenderer.renderColorPanel();
+        deferredRenderer.renderNormalsPanel();
 
         // depthDebugPanel.render();
 
