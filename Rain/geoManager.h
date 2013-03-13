@@ -31,7 +31,7 @@ public:
     GeoManager();
     ~GeoManager();
     GeoComponent* create(vector <vertex>& verts, vector<GLuint>& triIndex);
-    GeoComponent* create(std::vector<tinyobj::shape_t>* shapes);
+    //GeoComponent* create(std::vector<tinyobj::shape_t>* shapes);
     void freeAll();
 };
 

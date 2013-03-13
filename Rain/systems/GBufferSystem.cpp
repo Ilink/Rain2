@@ -1,6 +1,6 @@
 #include "GBufferSystem.h"
 
-GBufferSystem::GBufferSystem(Camera& cam):camera(cam){
+GBufferSystem::GBufferSystem(Camera& cam): camera(cam){
     // Artemis Setup
     addComponentType<GeoComponent>();
     // addComponentType<TransformationComponent>();
@@ -10,7 +10,6 @@ GBufferSystem::GBufferSystem(Camera& cam):camera(cam){
     gBuffer.normals = 0;
     gBuffer.depth = 0;
     gBuffer.spec = 0;
-    GLuint _color = 0;
     fbo = 0;
 
     shader.load("shaders/depthVs.glsl", "shaders/depthFs.glsl");

@@ -189,6 +189,7 @@
     <ClInclude Include="Artemis-Cpp\World.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="components\geoComponent.h" />
+    <ClInclude Include="components\LightComponent.h" />
     <ClInclude Include="components\MovementComponent.h" />
     <ClInclude Include="components\phongComponent.h" />
     <ClInclude Include="components\pointLightComponent.h" />

@@ -1,7 +1,10 @@
 #include "LightSystem.h"
 
-LightSystem::LightSystem(){
+LightSystem::LightSystem(Camera& camera)
+    :camera(camera)
+{
     // Artemis Setup
+
     perspective = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 1000.f);
 }
 

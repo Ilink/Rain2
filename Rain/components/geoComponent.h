@@ -28,33 +28,19 @@ public:
     // it doesn't really make sense to store this here, given that it isn't used and modification should happen at the level above...so it can regen VBOs etc
     vector<vertex> verts; // storage for later modification
     vector<GLuint> triIndex;
-    std::vector<tinyobj::shape_t>* shapes;
 
     // i could have the vbos and vaos as constructor parameters
     // that way the geometry manager would provide them
-    GeoComponent(vector <vertex>& verts, vector<GLuint>& triIndex, int start, int end, GLuint vbo, GLuint ibo, GLuint vao){
-        this->vbo = vbo;
-        this->ibo = ibo;
-        this->vao = vao;
-        this->verts = verts;
-        this->start = start;
-        this->end = end;
-        this->triIndex = triIndex;
-        // this gets set by the rendering system, not by the constructor
-        // we only want to make a single vao, and then reference that when it's ready
+    GeoComponent(vector <vertex>& verts, vector<GLuint>& triIndex, int& start, int& end, GLuint& vbo, GLuint& ibo, GLuint& vao)
+    :verts(verts),
+    triIndex(triIndex),
+    start(start),
+    end(end),
+    vbo(vbo),
+    vao(vao),
+    ibo(ibo)
+    {
         this->isVaoReady = false;
-    };
-
-    GeoComponent(std::vector<tinyobj::shape_t>* shapes, int start, int end, GLuint vbo, GLuint ibo, GLuint vao){
-        this->vbo = vbo;
-        this->ibo = ibo;
-        this->vao = vao;
-        this->start = start;
-        this->end = end;
-        // this gets set by the rendering system, not by the constructor
-        // we only want to make a single vao, and then reference that when it's ready
-        this->isVaoReady = false;
-        this->shapes = shapes;
     };
 
     ~GeoComponent(){

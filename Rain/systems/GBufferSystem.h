@@ -15,13 +15,6 @@
 #include "../shader.h"
 #include "../camera.h"
 
-struct GBuffer {
-    GLuint depth;
-    GLuint normals;
-    GLuint color;
-    GLuint spec;
-};
-
 class GBufferSystem : public artemis::EntityProcessingSystem {
 private:
     artemis::ComponentMapper<GeoComponent> geoMapper;
@@ -37,8 +30,7 @@ private:
     glm::mat4 MV;
 public:
     GBuffer gBuffer;
-    GLuint _color;
-    
+
     GBufferSystem(Camera& cam);
     virtual void initialize();
     virtual void processEntity(artemis::Entity &e);

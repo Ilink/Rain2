@@ -19,6 +19,13 @@ struct Color {
 	GLfloat x, y, z;
 };
 
+struct GBuffer {
+    GLuint depth;
+    GLuint normals;
+    GLuint color;
+    GLuint spec;
+};
+
 // i think we need more of these, but they are unused right now
 #define POSATTR 0
 #define MVPUNI 1
