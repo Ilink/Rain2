@@ -54,18 +54,35 @@ int main(int argc, char* argv[]) {
 
     aiScene scene;
     SceneLoader sceneLoader;
-    Mesh _compactMesh;
-    // bool loadSuccess = sceneLoader.objToCmesh("meshes/spider.obj", &scene, compactMesh);
-    // bool loadSuccess = sceneLoader.objToCmesh("meshes/crytek-sponza/sponza.obj", &scene, _compactMesh);
-    // bool loadSuccess = sceneLoader.objToCmesh("meshes/demondogtris.obj", &scene, _compactMesh);
-    bool loadSuccess = sceneLoader.objToCmesh("meshes/teapot.obj", &scene, _compactMesh);
-    // bool loadSuccess = sceneLoader.objToCmesh("meshes/test.obj", &scene, compactMesh);
-    // bool loadSuccess = sceneLoader.objToCmesh("meshes/cube.obj", &scene, _compactMesh);
-    // bool loadSuccess = sceneLoader.objToCmesh("meshes/Lighthouse.obj", &scene, compactMesh);
-    // bool loadSuccess = sceneLoader.objToCmesh("meshes/sibenik.obj", &scene, compactMesh);
+    Mesh tempMesh;
+    bool loadSuccess;
 
-    Mesh compactMesh;
-    sceneLoader.readMesh(compactMesh);
+    //////////////////////////////////////////////////////
+    // These regenerate the *.cmesh files
+    //////////////////////////////////////////////////////
+
+    // loadSuccess = sceneLoader.objToCmesh("meshes/spider.obj", &scene, tempMesh);
+    // loadSuccess = sceneLoader.objToCmesh("meshes/crytek-sponza/sponza.obj", &scene, tempMesh);
+    // loadSuccess = sceneLoader.objToCmesh("meshes/crytek-sponza/sponza_all_tris.obj", &scene, tempMesh);
+    loadSuccess = sceneLoader.objToCmesh("meshes/cone.obj", "meshes/cone.cmesh", &scene, tempMesh);
+    loadSuccess = sceneLoader.objToCmesh("meshes/sphere.obj", "meshes/sphere.cmesh", &scene, tempMesh);
+    // loadSuccess = sceneLoader.objToCmesh("meshes/demondogtris.obj", &scene, tempMesh);
+    loadSuccess = sceneLoader.objToCmesh("meshes/teapot.obj", "meshes/teapot.cmesh", &scene, tempMesh);
+    // loadSuccess = sceneLoader.objToCmesh("meshes/test.obj", &scene, tempMesh);
+    // loadSuccess = sceneLoader.objToCmesh("meshes/cube.obj", &scene, tempMesh);
+    // loadSuccess = sceneLoader.objToCmesh("meshes/Lighthouse.obj", &scene, tempMesh);
+    // loadSuccess = sceneLoader.objToCmesh("meshes/sibenik.obj", &scene, tempMesh);
+
+    // Mesh sceneMesh;
+    Mesh coneMesh;
+    Mesh sphereMesh;
+    Mesh teapotMesh;
+    // sceneLoader.readMesh("meshes/scene.cmesh", sceneMesh);
+    sceneLoader.readMesh("meshes/sphere.cmesh", coneMesh);
+    sceneLoader.readMesh("meshes/cone.cmesh", sphereMesh);
+    sceneLoader.readMesh("meshes/teapot.cmesh", teapotMesh);
+
+
 
     Camera camera(glm::vec3(0.0f, 10.0f, -10.0f));
 
@@ -144,7 +161,7 @@ int main(int argc, char* argv[]) {
     box.addComponent(trans);
     box.refresh();
 
-    // glm::vec3 scale = glm::vec3(0.01f);
+    // glm::vec3 scale = glm::vec3(0.1f);
     glm::vec3 scale = glm::vec3(1.0f);
     // glm::vec3 scale = glm::vec3(6.0f);
     TransformationComponent *sceneTrans = new TransformationComponent(
@@ -180,13 +197,30 @@ int main(int argc, char* argv[]) {
 
     artemis::Entity &geo = em->create();
     // geo.addComponent(geoManager.create(meshes[0].verts, shapes[0].mesh.indices));
-    geo.addComponent(geoManager.create(compactMesh.verts, compactMesh.triIndexes));
+    geo.addComponent(geoManager.create(teapotMesh.verts, teapotMesh.triIndexes));
     // geo.addComponent(geoManager.create(meshes[0].verts, meshes[0].indexes));
     // geo.addComponent(geoManager.create(boxVerts, boxVertIndex));
     geo.addComponent(new PhongComponent(phongShader, brightness, specularity, lightDir));
     geo.addComponent(new DebugComponent(&glm::vec4(0.4, 0.3, 0.2, 1.0)));
     geo.addComponent(sceneTrans);
     geo.refresh();
+
+    // artemis::Entity &geo = em->create();
+    // // geo.addComponent(geoManager.create(meshes[0].verts, shapes[0].mesh.indices));
+    // geo.addComponent(geoManager.create(sphereMesh.verts, sphereMesh.triIndexes));
+    // // geo.addComponent(geoManager.create(meshes[0].verts, meshes[0].indexes));
+    // // geo.addComponent(geoManager.create(boxVerts, boxVertIndex));
+    // geo.addComponent(new PhongComponent(phongShader, brightness, specularity, lightDir));
+    // geo.addComponent(new DebugComponent(&glm::vec4(0.4, 0.3, 0.2, 1.0)));
+    // geo.addComponent(sceneTrans);
+    // geo.refresh();
+
+    // artemis::Entity &cone = em->create();
+    // cone.addComponent(geoManager.create(coneMesh.verts, coneMesh.triIndexes));
+    // cone.addComponent(new PhongComponent(phongShader, brightness, specularity, lightDir));
+    // cone.addComponent(new DebugComponent(&glm::vec4(0.4, 0.3, 0.2, 1.0)));
+    // cone.addComponent(sceneTrans);
+    // cone.refresh();
     
 
     bool running = true;

@@ -5,14 +5,14 @@ SceneLoader::SceneLoader(){
 
 SceneLoader::~SceneLoader(){}
 
-bool SceneLoader::writeMesh(Mesh& mesh){
+bool SceneLoader::writeMesh(const char* filename, Mesh& mesh){
     MeshFileHeader header;
     header.numQuadIndexes = mesh.quadIndexes.size();
     header.numTriIndexes = mesh.triIndexes.size();
     header.numVerts = mesh.verts.size();
     header.version = 0;
 
-    fstream fileOut("testFile.cmesh", ios::out | ios::binary);
+    fstream fileOut(filename, ios::out | ios::binary);
     fileOut.write((const char*) &header, sizeof(MeshFileHeader));
 
     for(int i=0; i < mesh.verts.size(); i++){
@@ -31,10 +31,10 @@ bool SceneLoader::writeMesh(Mesh& mesh){
     return true;
 }
 
-void SceneLoader::readMesh(Mesh& mesh){
+void SceneLoader::readMesh(const char* filename, Mesh& mesh){
     MeshFileHeader header;
     
-    fstream fileIn("testFile.cmesh", ios::in | ios::binary);
+    fstream fileIn(filename, ios::in | ios::binary);
     fileIn.read((char*) &header, sizeof(MeshFileHeader));
     
     vertex vertBuffer;
@@ -62,10 +62,15 @@ void SceneLoader::readMesh(Mesh& mesh){
     fileIn.close();
 }
 
-bool SceneLoader::objToCmesh(const char* fileName, const aiScene *scene, Mesh& compactMesh){
+bool SceneLoader::objToCmesh(const char* filename, const char* filenameOut, const aiScene *scene, Mesh& compactMesh){
+    // empty compactMesh in case it was used before
+    compactMesh.quadIndexes.clear();
+    compactMesh.verts.clear();
+    compactMesh.triIndexes.clear();
+
     Assimp::Importer importer;
     //check if file exists
-    std::ifstream fin(fileName);
+    std::ifstream fin(filename);
     if(!fin.fail()){
         fin.close();
     } else {
@@ -74,10 +79,10 @@ bool SceneLoader::objToCmesh(const char* fileName, const aiScene *scene, Mesh& c
         return false;
     }
 
-    //scene = importer.ReadFile( fileName, aiProcess_GenUVCoords | aiProcess_GenSmoothNormals);
-    scene = importer.ReadFile( fileName, aiProcess_GenUVCoords | aiProcess_GenSmoothNormals);
+    //scene = importer.ReadFile( filename, aiProcess_GenUVCoords | aiProcess_GenSmoothNormals);
+    scene = importer.ReadFile( filename, aiProcess_GenUVCoords | aiProcess_GenSmoothNormals);
     
-    //scene = importer.ReadFile( fileName, aiProcess_GenUVCoords | aiProcess_GenSmoothNormals | aiProcess_Triangulate);
+    //scene = importer.ReadFile( filename, aiProcess_GenUVCoords | aiProcess_GenSmoothNormals | aiProcess_Triangulate);
 
     // If the import failed, report it
     if( !scene){
@@ -91,7 +96,7 @@ bool SceneLoader::objToCmesh(const char* fileName, const aiScene *scene, Mesh& c
     //logInfo("Import of scene " + pFile + " succeeded.");
 
     compact(scene, compactMesh);
-    writeMesh(compactMesh);
+    writeMesh(filenameOut, compactMesh);
 
     // We're done. Everything will be cleaned up by the importer destructor
     return true;
@@ -160,8 +165,8 @@ void SceneLoader::compact(const aiScene* scene, Mesh& compactMesh){
             vert.z = mesh->mVertices[vertexIndex].z;
 
             vert.nx = mesh->mNormals[vertexIndex].x;
-            vert.ny = mesh->mNormals[vertexIndex].x;
-            vert.nz = mesh->mNormals[vertexIndex].x;
+            vert.ny = mesh->mNormals[vertexIndex].y;
+            vert.nz = mesh->mNormals[vertexIndex].z;
 
             if(mesh->HasTextureCoords(0)){
                 vert.u = mesh->mTextureCoords[0][vertexIndex].x;

@@ -26,9 +26,9 @@ private:
 public:
     SceneLoader();
     ~SceneLoader();
-    bool SceneLoader::writeMesh(Mesh& mesh);
-    bool SceneLoader::objToCmesh(const char* fileName, const aiScene *scene, Mesh& compactMesh);
-    void SceneLoader::readMesh(Mesh& mesh);
+    bool SceneLoader::writeMesh(const char* filename, Mesh& mesh);
+    bool SceneLoader::objToCmesh(const char* filename, const char* filenameOut, const aiScene *scene, Mesh& compactMesh);
+    void SceneLoader::readMesh(const char* filename, Mesh& mesh);
 
     /* data */
 };

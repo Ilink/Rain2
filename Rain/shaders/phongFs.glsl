@@ -6,7 +6,7 @@ varying vec3 vLightPositionE;
 
 vec3 Ka =  vec3(0.8, 0.4, 0.1);
 vec3 Kd =  vec3(0.2, 0.1, 0.2);
-vec3 Ks = vec3(1.0, 1.0, 0.5);
+vec3 Ks = vec3(0.5, 0.5, 0.5);
 float Shininess = 1.0;
 vec3 LightIntensity = vec3(1.0,1.0,1.0);
 

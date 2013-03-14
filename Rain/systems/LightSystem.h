@@ -3,6 +3,7 @@
 
 #include "../Artemis-Cpp/Artemis.h"
 #include "../components/LightComponent.h"
+#include "../components/geoComponent.h"
 #include "../components/TransformationComponent.h"
 #include <GL/glew.h>
 #include "../util.h"
@@ -16,6 +17,9 @@
 class LightSystem : public artemis::EntityProcessingSystem {
 private:
     artemis::ComponentMapper<TransformationComponent> transMapper;
+    artemis::ComponentMapper<GeoComponent> geoMapper;
+    artemis::ComponentMapper<LightComponent> lightMapper;
+
     glm::mat4 perspective;
     GLuint uMVPmat;
     GLuint uMVMatrix;
@@ -26,9 +30,9 @@ private:
     glm::mat4 model;
     glm::mat4 MV;
 public:
-    // GBuffer& gBuffer;
+    GBuffer& gBuffer;
 
-    LightSystem(Camera& cam);
+    LightSystem(Camera& cam, GBuffer& gBuffer);
     virtual void initialize();
     virtual void processEntity(artemis::Entity &e);
     virtual void begin();
