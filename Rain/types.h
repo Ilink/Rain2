@@ -16,7 +16,7 @@ struct Position {
 };
 
 struct Color {
-	GLfloat x, y, z;
+	GLfloat r, g, b;
 };
 
 struct GBuffer {

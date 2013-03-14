@@ -12,7 +12,7 @@ DeferredRenderer::DeferredRenderer(artemis::SystemManager* sm, Camera& camera){
 
 void DeferredRenderer::process(){
     gBufferSystem->process();
-    // lightSystem->process();
+    lightSystem->process();
 }
 
 void DeferredRenderer::renderColorPanel(){

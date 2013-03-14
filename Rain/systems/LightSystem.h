@@ -23,9 +23,10 @@ private:
     glm::mat4 perspective;
     GLuint uMVPmat;
     GLuint uMVMatrix;
-    GLuint uNormalMatrix;
+    GLuint uNormalsSampler;
+    GLuint uColorSampler;
     GLuint fbo;
-    Shader shader;
+    Shader lightShader;
     Camera& camera;
     glm::mat4 model;
     glm::mat4 MV;

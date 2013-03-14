@@ -194,6 +194,19 @@ int main(int argc, char* argv[]) {
     lightModel.addComponent(lightTrans);
     lightModel.refresh();
 
+    glm::vec3 scaleLight = glm::vec3(0.1f);
+    TransformationComponent *mainLightTrans = new TransformationComponent(
+        &scenePos,
+        &scaleLight,
+        &squareRot,
+        &glm::vec3(1.0f,0.5f, 0.5f)
+    );
+
+    artemis::Entity &mainLight = em->create();
+    mainLight.addComponent(geoManager.create(coneMesh.verts, coneMesh.triIndexes));
+    mainLight.addComponent(mainLightTrans);
+    mainLight.addComponent(new LightComponent(glm::vec3(0.0, 0.0, 0.0), 1.0f));
+    mainLight.refresh();
 
     artemis::Entity &geo = em->create();
     // geo.addComponent(geoManager.create(meshes[0].verts, shapes[0].mesh.indices));
