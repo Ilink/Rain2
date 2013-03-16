@@ -12,6 +12,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "../types.h"
 #include "../settings.h"
+#include "../geoBuilder.h"
 #include "GBufferSystem.h"
 
 class LightSystem : public artemis::EntityProcessingSystem {
@@ -20,14 +21,22 @@ private:
     artemis::ComponentMapper<GeoComponent> geoMapper;
     artemis::ComponentMapper<LightComponent> lightMapper;
 
-    glm::mat4 perspective;
+    vector<vertex> planeVerts;
+    vector<GLuint> planeVertIndex;
+    GLuint vbo;
+    GLuint ibo;
+
     GLuint uMVPmat;
     GLuint uMVMatrix;
     GLuint uNormalsSampler;
     GLuint uColorSampler;
+    GLuint uLightPosition;
+    GLuint uLightDirection;
+
     GLuint fbo;
     Shader lightShader;
     Camera& camera;
+    glm::mat4 perspective;
     glm::mat4 model;
     glm::mat4 MV;
 public:

@@ -1,7 +1,7 @@
 uniform mat4 uMVMatrix;
 uniform mat4 uPMatrix;
-uniform sampler2D uNormalsSampler;
-uniform sampler2D uColorSampler;
+uniform vec3 lightPos;
+uniform vec3 lightDirection;
 
 //todo: use the uniforms instead of hardcoded values
 // uniform vec3 uAmbientColor;
@@ -9,30 +9,29 @@ uniform sampler2D uColorSampler;
 // uniform vec3 uDirectionalColor;
 
 attribute vec3 pos;
-// attribute vec3 texCoord;
+attribute vec2 texCoord;
 
-// varying vec2 vTexCoord;
-varying vec3 vPositionE;
-varying vec4 vPos;
-// varying vec4 vProjPos;
-// varying vec3 vLightPositionE;
+varying vec2 vTexCoord;
+varying vec3 vPos;
+varying vec3 vLightPositionS;
+varying vec3 vLightDirection; // does this need to be transformed? probably, but idc right now
+
+mat4 bias = mat4(
+    0.5, 0.0, 0.0, 0.0,
+    0.0, 0.5, 0.0, 0.0,
+    0.0, 0.0, 0.5, 0.0,
+    0.5, 0.5, 0.5, 1.0
+);
 
 void main(void) {
-    // vTexCoord = texCoord;
-    vPositionE = vec3(uMVMatrix * vec4(pos, 1.0));
+    vTexCoord = texCoord;
+    vec4 lightPos = uPMatrix * uMVMatrix * vec4(lightPos, 1.0);
     
-    mat4 bias = mat4(
-        0.5, 0.0, 0.0, 0.0,
-        0.0, 0.5, 0.0, 0.0,
-        0.0, 0.0, 0.5, 0.0,
-        0.5, 0.5, 0.5, 1.0
-    );
-    // vPos = bias * uPMatrix * uMVMatrix * vec4(pos, 1.0);
-    // vProjPos = bias * vPos;
-    // vLightPositionE = mat3(uMVMatrix) * uLightPosition;
-    // vLightPositionE = uMVMatrix * vec4(uLightPosition, 1.0);
-    gl_Position = uPMatrix * uMVMatrix * vec4(pos, 1.0);
-    vPos = bias*(gl_Position/gl_Position.w);
-    // vPos = gl_Position;
-    // vNormal = mat3(uMVMatrix) * normal;
+    vLightPositionS = bias*(lightPos / lightPos.w);
+
+    vec4 temp = uPMatrix * uMVMatrix * vec4(lightDirection, 1.0);
+    vLightDirection = bias * (temp / temp.w);
+
+    gl_Position = vec4(pos, 1.0);
+    vPos = bias*(gl_Position / gl_Position.w);
 }

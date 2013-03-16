@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <boost/thread.hpp>
+#include <boost/date_time.hpp>  
 #include <SFML/Window.hpp>
 #include <tinyobj/tiny_obj_loader.h>
 #include <GL/glew.h>
@@ -50,7 +52,19 @@ struct FileData {
     vector<double> B;
 };
 
+void threadFunc(){
+    printf("running from other thread\n");
+    boost::posix_time::seconds workTime(3);  
+    boost::this_thread::sleep(workTime);
+}
+
 int main(int argc, char* argv[]) {
+
+    boost::thread testThread(threadFunc);
+
+    printf("waiting on thread\n");
+
+    // testThread.join();
 
     aiScene scene;
     SceneLoader sceneLoader;

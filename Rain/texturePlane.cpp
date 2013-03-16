@@ -9,13 +9,12 @@ TexturePlane::TexturePlane(GLuint& texture, double size, double x, double y, int
     vector<GLuint> planeVertIndex;
     makePlane(size,size, planeVerts, planeVertIndex);
 
-    glGenVertexArrays(1, &vao);
     glGenBuffers(1, &vbo);
     glGenBuffers(1, &ibo);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertex)*planeVerts.size(), &planeVerts[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);  
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*planeVertIndex.size(), &planeVertIndex[0], GL_STATIC_DRAW);
@@ -35,14 +34,13 @@ TexturePlane::TexturePlane(){
 
 void TexturePlane::render(){
     glUseProgram(shader.program);
-    glBindVertexArray(vao);
     uSampler = glGetUniformLocation(shader.program, "sampler");
     uView = glGetUniformLocation(shader.program, "uView");
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-    glActiveTexture(GL_TEXTURE0); // might be 1?
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
     glUniform1i(uSampler, 0);
 
@@ -64,7 +62,6 @@ void TexturePlane::render(){
     // cleanup
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
     glUseProgram(0);
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(2);

@@ -19,7 +19,6 @@ private:
     GLuint texture;
     Shader shader;
     GLuint vbo;
-    GLuint vao;
     GLuint ibo;
     GLuint uSampler;
     GLuint uView;

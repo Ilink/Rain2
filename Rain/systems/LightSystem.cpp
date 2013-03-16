@@ -13,10 +13,27 @@ LightSystem::LightSystem(Camera& camera, GBuffer& gBuffer)
 
     lightShader.load("shaders/lightVs.glsl", "shaders/lightFs.glsl");
 
+    vector<vertex> planeVerts;
+    vector<GLuint> planeVertIndex;
+    makePlane(2,2, planeVerts, planeVertIndex);
+
+    glGenBuffers(1, &vbo);
+    glGenBuffers(1, &ibo);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertex)*planeVerts.size(), &planeVerts[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);  
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*planeVertIndex.size(), &planeVertIndex[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
     uMVPmat = glGetUniformLocation(lightShader.program, "uPMatrix");
     uMVMatrix = glGetUniformLocation(lightShader.program, "uMVMatrix");
     uNormalsSampler = glGetUniformLocation(lightShader.program, "uNormalsSampler");
     uColorSampler = glGetUniformLocation(lightShader.program, "uColorSampler");
+    uLightPosition = glGetUniformLocation(lightShader.program, "uLightPosition");
+    uLightDirection = glGetUniformLocation(lightShader.program, "uLightDirection");
 
     perspective = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 1000.f);
 }
@@ -34,15 +51,19 @@ void LightSystem::begin(){
 
 void LightSystem::processEntity(artemis::Entity &e){
     // printf("processing light entity\n");
-    GLuint vbo = geoMapper.get(e)->vbo;
-    GLuint ibo = geoMapper.get(e)->ibo;
+    // GLuint vbo = geoMapper.get(e)->vbo;
+    // GLuint ibo = geoMapper.get(e)->ibo;
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
     // Position
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), BUFFER_OFFSET(0));
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), BUFFER_OFFSET(0));
+
+    // Tex
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), BUFFER_OFFSET(24));
 
     model = transMapper.get(e)->getModelMatrix();
 
@@ -56,7 +77,9 @@ void LightSystem::processEntity(artemis::Entity &e){
 
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, gBuffer.normals);
-    glUniform1i(uNormalsSampler, 0);
+    glUniform1i(uNormalsSampler, 1);
+
+    // need depth
 
     printGlError();
 
