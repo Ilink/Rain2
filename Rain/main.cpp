@@ -37,6 +37,8 @@
 #include "objParser/objParser.h"
 #include "camera.h"
 #include "sceneLoader/sceneLoader.h"
+#include <boost/timer/timer.hpp>
+#include <cmath>
 
 using namespace std;
 
@@ -52,22 +54,18 @@ struct FileData {
     vector<double> B;
 };
 
-void threadFunc(){
-    printf("running from other thread\n");
-    boost::posix_time::seconds workTime(3);  
-    boost::this_thread::sleep(workTime);
+void tester(const char* a, const char* b){
+    bool loadSuccess;
+    SceneLoader sceneLoader;
+    loadSuccess = sceneLoader.objToCmesh(a, b);
 }
 
 int main(int argc, char* argv[]) {
+    boost::timer::auto_cpu_timer timer;
+    timer.stop();
 
-    boost::thread testThread(threadFunc);
-
-    printf("waiting on thread\n");
-
-    // testThread.join();
-
-    aiScene scene;
     SceneLoader sceneLoader;
+    aiScene scene;
     Mesh tempMesh;
     bool loadSuccess;
 
@@ -78,24 +76,43 @@ int main(int argc, char* argv[]) {
     // loadSuccess = sceneLoader.objToCmesh("meshes/spider.obj", &scene, tempMesh);
     // loadSuccess = sceneLoader.objToCmesh("meshes/crytek-sponza/sponza.obj", &scene, tempMesh);
     // loadSuccess = sceneLoader.objToCmesh("meshes/crytek-sponza/sponza_all_tris.obj", &scene, tempMesh);
-    loadSuccess = sceneLoader.objToCmesh("meshes/cone.obj", "meshes/cone.cmesh", &scene, tempMesh);
-    loadSuccess = sceneLoader.objToCmesh("meshes/sphere.obj", "meshes/sphere.cmesh", &scene, tempMesh);
+    // loadSuccess = sceneLoader.objToCmesh("meshes/cone.obj", "meshes/cone.cmesh");
+    // loadSuccess = sceneLoader.objToCmesh("meshes/sphere.obj", "meshes/sphere.cmesh");
     // loadSuccess = sceneLoader.objToCmesh("meshes/demondogtris.obj", &scene, tempMesh);
-    loadSuccess = sceneLoader.objToCmesh("meshes/teapot.obj", "meshes/teapot.cmesh", &scene, tempMesh);
+    // loadSuccess = sceneLoader.objToCmesh("meshes/teapot.obj", "meshes/teapot.cmesh");
     // loadSuccess = sceneLoader.objToCmesh("meshes/test.obj", &scene, tempMesh);
     // loadSuccess = sceneLoader.objToCmesh("meshes/cube.obj", &scene, tempMesh);
     // loadSuccess = sceneLoader.objToCmesh("meshes/Lighthouse.obj", &scene, tempMesh);
     // loadSuccess = sceneLoader.objToCmesh("meshes/sibenik.obj", &scene, tempMesh);
 
+    timer.start();
+
+    boost::thread coneThread(tester, "meshes/cone.obj", "meshes/cone.cmesh");
+    boost::thread sphereThread(tester, "meshes/sphere.obj", "meshes/sphere.cmesh");
+    boost::thread teapotThread(tester, "meshes/teapot.obj", "meshes/teapot.cmesh");
+    // boost::thread sponzaThread1(tester, "meshes/crytek-sponza/sponza.obj", "meshes/sponza.cmesh");
+    // boost::thread sponzaThread2(tester, "meshes/crytek-sponza/sponza.obj", "meshes/sponza2.cmesh");
+
+    printf("waiting on obj to cmesh conversion\n");
+
+    coneThread.join();
+    sphereThread.join();
+    teapotThread.join();
+    // sponzaThread1.join();
+    // sponzaThread2.join();
+
+    timer.stop();
+    timer.report();
+
     // Mesh sceneMesh;
     Mesh coneMesh;
     Mesh sphereMesh;
     Mesh teapotMesh;
+    Mesh sponzaMesh;
     // sceneLoader.readMesh("meshes/scene.cmesh", sceneMesh);
     sceneLoader.readMesh("meshes/sphere.cmesh", coneMesh);
     sceneLoader.readMesh("meshes/cone.cmesh", sphereMesh);
     sceneLoader.readMesh("meshes/teapot.cmesh", teapotMesh);
-
 
 
     Camera camera(glm::vec3(0.0f, 10.0f, -10.0f));
@@ -219,7 +236,7 @@ int main(int argc, char* argv[]) {
     artemis::Entity &mainLight = em->create();
     mainLight.addComponent(geoManager.create(coneMesh.verts, coneMesh.triIndexes));
     mainLight.addComponent(mainLightTrans);
-    mainLight.addComponent(new LightComponent(glm::vec3(0.0, 0.0, 0.0), 1.0f));
+    mainLight.addComponent(new LightComponent(glm::vec3(1.0, 0.0, 0.0), 1.0f));
     mainLight.refresh();
 
     artemis::Entity &geo = em->create();
@@ -354,7 +371,7 @@ int main(int argc, char* argv[]) {
         world.setDelta(0.0016f);
         // depthSystem->process();
         // shadowSystem->process();
-        renderSystem->process();
+        // renderSystem->process();
         deferredRenderer.process();
         deferredRenderer.renderDepthPanel();
         deferredRenderer.renderColorPanel();

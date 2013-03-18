@@ -62,7 +62,9 @@ void SceneLoader::readMesh(const char* filename, Mesh& mesh){
     fileIn.close();
 }
 
-bool SceneLoader::objToCmesh(const char* filename, const char* filenameOut, const aiScene *scene, Mesh& compactMesh){
+bool SceneLoader::objToCmesh(const char* filename, const char* filenameOut){
+    const aiScene* scene;
+    Mesh compactMesh;
     // empty compactMesh in case it was used before
     compactMesh.quadIndexes.clear();
     compactMesh.verts.clear();

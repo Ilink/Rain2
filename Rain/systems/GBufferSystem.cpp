@@ -22,6 +22,7 @@ GBufferSystem::GBufferSystem(Camera& cam): camera(cam){
 
     uMVPmat = glGetUniformLocationARB(shader.program, "uPMatrix");
     uMVMatrix = glGetUniformLocationARB(shader.program, "uMVMatrix");
+    uVMatrix = glGetUniformLocationARB(shader.program, "uVMatrix");
     uNormalMatrix = glGetUniformLocationARB(shader.program, "uNormalMatrix");
 
     //todo: make thse not hardcoded - they should be in the camera, or something

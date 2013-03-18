@@ -2,11 +2,11 @@ varying vec4 vPosition;
 varying vec3 vNormal;
 
 void main(void) {
-    float ndcDepth = vPosition.z =
+    float depth = vPosition.z =
         (2.0 * gl_FragCoord.z - gl_DepthRange.near - gl_DepthRange.far) /
         (gl_DepthRange.far - gl_DepthRange.near);
 
-    float clipDepth = ndcDepth / gl_FragCoord.w;
+    float clipDepth = depth / gl_FragCoord.w;
     // gl_FragColor = vec4((clipDepth * 0.5) + 0.5);
     // gl_FragColor = vec4(0.2, 1.0, 0.4, 1.0);
 

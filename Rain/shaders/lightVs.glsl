@@ -13,6 +13,8 @@ attribute vec2 texCoord;
 
 varying vec2 vTexCoord;
 varying vec3 vPos;
+varying vec4 vPosV;
+varying vec4 vLightPosV;
 varying vec3 vLightPositionS;
 varying vec3 vLightDirection; // does this need to be transformed? probably, but idc right now
 
@@ -25,12 +27,21 @@ mat4 bias = mat4(
 
 void main(void) {
     vTexCoord = texCoord;
-    vec4 lightPos = uPMatrix * uMVMatrix * vec4(lightPos, 1.0);
-    
-    vLightPositionS = bias*(lightPos / lightPos.w);
+    vPosV = uMVMatrix * vec4(pos, 1.0);
+    // vLightPosV = uMVMatrix * vec4(lightPos, 1.0);
+    vLightPosV = uMVMatrix * vec4(0.0, 0.0, 0.0, 1.0);
+    // gl_ModelViewMatrix * vec4(0.0, 0.0, 0.0, 1.0);
 
-    vec4 temp = uPMatrix * uMVMatrix * vec4(lightDirection, 1.0);
-    vLightDirection = bias * (temp / temp.w);
+    
+    
+    /*
+    go from view space to texture coords:
+    object => world => view => clip => ndc => texture
+    */
+    // vLightPositionS = bias*(uMVMatrix*lightPosV / lightPos.w);
+
+    // vec4 temp = uPMatrix * uMVMatrix * vec4(lightDirection, 1.0);
+    // vLightDirection = bias * (temp / temp.w);
 
     gl_Position = vec4(pos, 1.0);
     vPos = bias*(gl_Position / gl_Position.w);

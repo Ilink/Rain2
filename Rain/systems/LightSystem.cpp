@@ -30,8 +30,10 @@ LightSystem::LightSystem(Camera& camera, GBuffer& gBuffer)
 
     uMVPmat = glGetUniformLocation(lightShader.program, "uPMatrix");
     uMVMatrix = glGetUniformLocation(lightShader.program, "uMVMatrix");
+    uVMatrix = glGetUniformLocation(lightShader.program, "uVMatrix");
     uNormalsSampler = glGetUniformLocation(lightShader.program, "uNormalsSampler");
     uColorSampler = glGetUniformLocation(lightShader.program, "uColorSampler");
+    uDepthSampler = glGetUniformLocation(lightShader.program, "uDepthSampler");
     uLightPosition = glGetUniformLocation(lightShader.program, "uLightPosition");
     uLightDirection = glGetUniformLocation(lightShader.program, "uLightDirection");
 
@@ -70,6 +72,7 @@ void LightSystem::processEntity(artemis::Entity &e){
     MV = camera.viewMatrix * model;
     glUniformMatrix4fv(uMVMatrix, 1, FALSE, (const GLfloat*) glm::value_ptr(MV));
     glUniformMatrix4fv(uMVPmat, 1, FALSE, (const GLfloat*) glm::value_ptr(perspective));
+    glUniformMatrix4fv(uVMatrix, 1, FALSE, (const GLfloat*) glm::value_ptr(camera.viewMatrix));
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, gBuffer.color);
@@ -79,7 +82,9 @@ void LightSystem::processEntity(artemis::Entity &e){
     glBindTexture(GL_TEXTURE_2D, gBuffer.normals);
     glUniform1i(uNormalsSampler, 1);
 
-    // need depth
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, gBuffer.depth);
+    glUniform1i(uDepthSampler, 1);
 
     printGlError();
 

@@ -10,5 +10,6 @@ uniform mat3 uNormalMatrix;
 void main(void) {
     vPosition = uPMatrix * uMVMatrix * vec4(pos, 1.0);
     gl_Position = vPosition;
-    vNormal = uNormalMatrix * normal;
+    vNormal = mat3(uMVMatrix) * normal;
+    errormaker
 };

@@ -22,6 +22,7 @@ private:
     glm::mat4 perspective;
     GLuint uMVPmat;
     GLuint uMVMatrix;
+    GLuint uVMatrix;
     GLuint uNormalMatrix;
     GLuint fbo;
     Shader shader;

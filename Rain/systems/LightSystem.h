@@ -30,8 +30,10 @@ private:
     GLuint uMVMatrix;
     GLuint uNormalsSampler;
     GLuint uColorSampler;
+    GLuint uDepthSampler;
     GLuint uLightPosition;
     GLuint uLightDirection;
+    GLuint uVMatrix;
 
     GLuint fbo;
     Shader lightShader;
