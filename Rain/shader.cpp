@@ -24,24 +24,18 @@ bool Shader::load(const char* vsFilename, const char* fsFilename){
 Shader::~Shader(){
 }
 
-// printShaderInfoLog
-// From OpenGL Shading Language 3rd Edition, p215-216
-// Display (hopefully) useful error messages if shader fails to compile
-void printShaderInfoLog(GLint shader){
-    int infoLogLen = 0;
-    int charsWritten = 0;
-    GLchar *infoLog;
+// from http://content.gpwiki.org/index.php/OpenGL:Codes:Simple_GLSL_example
+void printShaderInfoLog(GLuint shader){
+    int infologLength = 0;
+    char infoLog[1024];
  
-    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLen);
+	if (glIsShader(shader))
+		glGetShaderInfoLog(shader, 1024, &infologLength, infoLog);
+	else
+		glGetProgramInfoLog(shader, 1024, &infologLength, infoLog);
  
-    if (infoLogLen > 0)
-    {
-        infoLog = new GLchar[infoLogLen];
-        // error check for fail to allocate memory omitted
-        glGetShaderInfoLog(shader, infoLogLen, &charsWritten, infoLog);
-        cout << "InfoLog : " << endl << infoLog << endl;
-        delete [] infoLog;
-    }
+    if (infologLength > 0)
+		printf("%s\n", infoLog);
 }
 
 bool Shader::compile(string& _vs, string& _fs){
@@ -90,6 +84,7 @@ bool Shader::compile(string& _vs, string& _fs){
 
     cout << "handling binding: ";
     printGlError();
+    printShaderInfoLog(program);
 
     return true;
 }
